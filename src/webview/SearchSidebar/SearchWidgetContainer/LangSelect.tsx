@@ -1,58 +1,59 @@
 import * as stylex from '@stylexjs/stylex'
 import { Icon, icons } from '../SearchResultList/Icon'
-import { type ChangeEvent, useCallback } from 'react'
-import { VscListFlat } from 'react-icons/vsc'
+import { type ChangeEvent, useCallback, useState } from 'react'
+import { VscCaseSensitive, VscListFlat, VscRegex, VscWholeWord } from 'react-icons/vsc'
 import { useSearchField } from '../../hooks/useQuery'
+import {
+  VSCodeButton,
+} from '@vscode/webview-ui-toolkit/react'
 
 const styles = stylex.create({
-  langButton: {
+
+  buttonContainer: {
     position: 'absolute',
-    height: '20px',
-    width: '20px',
-    border: '1px solid transparent',
-    right: 2,
-    top: 3,
-    borderRadius: '3px',
+    top: '3px',
+    right: '3px',
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '4px',
+  },
+  button: {
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '18px',
+    height: '18px',
+    borderRadius: '2px', // 调整圆角
+    padding: 0, // 移除内边距
+    border: 'none',
+    background: 'transparent',
+    cursor: 'pointer',
+    color: 'var(--vscode-icon-foreground)',
+    opacity: 0.7,
+    transition: 'opacity 0.1s ease-in-out',
     ':hover': {
+      opacity: 1,
       backgroundColor: 'var(--vscode-inputOption-hoverBackground)',
     },
   },
-  langActive: {
-    borderColor: 'var(--vscode-inputOption-activeBorder)',
+  activeButton: {
+    opacity: 1,
+    backgroundColor: 'var(--vscode-inputOption-activeBackground)',
+    boxShadow: '0 0 0 1px var(--vscode-inputOption-activeBorder)',
+    color: 'var(--vscode-inputOption-activeForeground)',
     ':hover': {
-      background: 'none',
-      filter: 'drop-shadow(1px 1px 3px rgba(0,0,0,0.2))',
+      backgroundColor: 'var(--vscode-inputOption-activeBackground)', // 保持激活状态的背景色
     },
-  },
-  langDropdown: {
-    height: '100%',
-    width: '100%',
-    border: 'none',
-    background: 'transparent',
-    position: 'absolute',
-    appearance: 'none',
-    outline: 'none',
-    color: 'transparent',
-    cursor: 'pointer',
-    ':focus': {
-      outline: 'none',
-    },
-  },
-  langIcon: {
-    marginTop: 1,
-    marginLeft: 1,
   },
 })
 
-function capitalize(word: string) {
-  return word.charAt(0).toUpperCase() + word.slice(1)
-}
+export function SearchToggles() {
 
-export function LangSelect() {
+  const [caseSensitive, setCaseSensitive] = useState(false)
+  const [regex, setRegex] = useState(false)
+  const [wholeWord, setWholeWord] = useState(false)
+
   const [lang, setLang] = useSearchField('lang')
-  const title = lang
-    ? `Search pattern in ${lang}`
-    : 'Search pattern in specific language'
   const onChange = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
       setLang(e.target.value)
@@ -60,25 +61,32 @@ export function LangSelect() {
     [setLang],
   )
   return (
-    <label
-      {...stylex.props(styles.langButton, lang ? styles.langActive : null)}
-      title={title}
-    >
-      <select
-        {...stylex.props(styles.langDropdown)}
-        style={{ outline: 'none' }}
-        value={lang}
-        onChange={onChange}
+    <div {...stylex.props(styles.buttonContainer)}>
+      <VSCodeButton
+        appearance="icon"
+        title="Match Case"
+        onClick={() => setCaseSensitive(!caseSensitive)}
+        {...stylex.props(styles.button, caseSensitive && styles.activeButton)}
       >
-        <option value="">Auto Detect</option>
-        {icons.map(icon => (
-          <option key={icon} value={icon}>
-            {capitalize(icon)}
-          </option>
-        ))}
-      </select>
-      {/* {lang ? <Icon name={lang} style={styles.langIcon} /> : <VscListFlat />} */}
-      {/* {<VscListFlat />} */}
-    </label>
+        <VscCaseSensitive />
+      </VSCodeButton>
+      <VSCodeButton
+        appearance="icon"
+        title="Match Whole Word"
+        onClick={() => setWholeWord(!wholeWord)}
+        {...stylex.props(styles.button, wholeWord && styles.activeButton)}
+      >
+        <VscWholeWord />
+      </VSCodeButton>
+      <VSCodeButton
+        appearance="icon"
+        title="Use Regular Expression"
+        onClick={() => setRegex(!regex)}
+        {...stylex.props(styles.button, regex && styles.activeButton)}
+      >
+        <VscRegex />
+      </VSCodeButton>
+    </div>
+
   )
 }

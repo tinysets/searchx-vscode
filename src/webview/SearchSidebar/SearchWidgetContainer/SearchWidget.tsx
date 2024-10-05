@@ -7,7 +7,7 @@ import {
 import { childPort } from '../../postMessage'
 import { useSearchResult, acceptAllChanges } from '../../hooks/useSearch'
 import { SearchInput } from './SearchInput'
-import { LangSelect } from './LangSelect'
+import { SearchToggles } from './LangSelect'
 import { useBoolean, useEffectOnce } from 'react-use'
 import { VscChevronRight, VscChevronDown, VscReplaceAll } from 'react-icons/vsc'
 import * as stylex from '@stylexjs/stylex'
@@ -100,7 +100,7 @@ function SearchWidgetContainer() {
           onChange={setPattern}
           onKeyEnterUp={refreshResult}
         />
-        <LangSelect />
+        <SearchToggles />
         {isExpanded ? <ReplaceBar /> : null}
       </div>
     </div>
