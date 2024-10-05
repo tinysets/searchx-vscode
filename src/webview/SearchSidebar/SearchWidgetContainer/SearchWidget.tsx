@@ -45,13 +45,17 @@ const styles = stylex.create({
     height: 24,
     marginRight: -2,
   },
+  // 新增：禁用状态下的样式
+  disabledButton: {
+    cursor: 'default', // 使用默认光标而不是"禁止"光标
+  },
 })
 
 function ReplaceBar() {
   const [rewrite, setRewrite] = useSearchField('rewrite')
   const { searching, groupedByFileSearchResult } = useSearchResult()
   let disabled = !rewrite || searching || groupedByFileSearchResult.length === 0
-  disabled = false
+  // disabled = false
   // sadly unport does not support unsub
   useEffectOnce(() => {
     childPort.onMessage('clearSearchResults', () => {
@@ -71,7 +75,7 @@ function ReplaceBar() {
         appearance="icon"
         disabled={disabled}
         onClick={acceptAllChanges}
-        {...stylex.props(styles.replaceAll)}
+        {...stylex.props(styles.replaceAll, disabled && styles.disabledButton)}
       >
         <VscReplaceAll />
       </VSCodeButton>
