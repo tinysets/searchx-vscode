@@ -50,8 +50,8 @@ const styles = stylex.create({
 function ReplaceBar() {
   const [rewrite, setRewrite] = useSearchField('rewrite')
   const { searching, groupedByFileSearchResult } = useSearchResult()
-  const disabled =
-    !rewrite || searching || groupedByFileSearchResult.length === 0
+  let disabled = !rewrite || searching || groupedByFileSearchResult.length === 0
+  disabled = false
   // sadly unport does not support unsub
   useEffectOnce(() => {
     childPort.onMessage('clearSearchResults', () => {
