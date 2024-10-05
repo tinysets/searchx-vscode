@@ -1,0 +1,151 @@
+{
+  "name": "searchx-vscode",
+  "description": "SearchX",
+  "version": "0.0.1",
+  "publisher": "zlh",
+  "preview": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/vscode-extension-samples"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "icon": "media/favicon.png",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "node ./scripts/build.mjs",
+    "watch": "node ./scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "ast-grep.searchInFolder",
+        "title": "SG: Find ast-grep Pattern in Folder"
+      },
+      {
+        "command": "ast-grep.clearSearchResults",
+        "title": "Clear Search Results",
+        "icon": {
+          "light": "media/clear-light.svg",
+          "dark": "media/clear-dark.svg"
+        }
+      },
+      {
+        "command": "ast-grep.refreshSearch",
+        "title": "Refresh Search",
+        "icon": {
+          "light": "media/refresh-light.svg",
+          "dark": "media/refresh-dark.svg"
+        }
+      },
+      {
+        "command": "ast-grep.collapseAll",
+        "title": "Collapse All",
+        "icon": {
+          "light": "media/collapse-light.svg",
+          "dark": "media/collapse-dark.svg"
+        }
+      },
+      {
+        "command": "ast-grep.expandAll",
+        "title": "Expand All",
+        "icon": {
+          "light": "media/expand-light.svg",
+          "dark": "media/expand-dark.svg"
+        }
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "ast-grep.searchInFolder",
+          "group": "4_search",
+          "when": "explorerResourceIsFolder"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "ast-grep.collapseAll",
+          "when": "view == ast-grep.search.input",
+          "group": "navigation"
+        },
+        {
+          "command": "ast-grep.expandAll",
+          "when": "view == ast-grep.search.input",
+          "group": "navigation"
+        },
+        {
+          "command": "ast-grep.clearSearchResults",
+          "when": "view == ast-grep.search.input",
+          "group": "navigation"
+        },
+        {
+          "command": "ast-grep.refreshSearch",
+          "when": "view == ast-grep.search.input",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ast-grep-sidebar-view",
+          "title": "ast-grep",
+          "icon": "media/favicon.svg"
+        }
+      ]
+    },
+    "views": {
+      "ast-grep-sidebar-view": [
+        {
+          "type": "webview",
+          "id": "ast-grep.search.input",
+          "name": "SearchX"
+        }
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/vscode": "^1.73.0",
+    "@types/vscode-webview": "^1.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.14.0",
+    "@typescript-eslint/parser": "^7.14.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.6.2",
+    "@biomejs/biome": "1.8.3",
+    "@stylexjs/esbuild-plugin": "0.7.5",
+    "@stylexjs/stylex": "0.7.5",
+    "@types/glob": "8.1.0",
+    "@types/mocha": "10.0.8",
+    "@types/react": "18.3.5",
+    "@types/react-dom": "18.3.0",
+    "@vscode/test-electron": "2.4.1",
+    "@vscode/webview-ui-toolkit": "1.4.0",
+    "babel-plugin-syntax-hermes-parser": "0.23.1",
+    "esbuild": "0.23.1",
+    "glob": "11.0.0",
+    "husky": "9.1.6",
+    "lint-staged": "15.2.10",
+    "mocha": "10.7.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-icons": "5.3.0",
+    "react-use": "17.5.1",
+    "react-virtuoso": "4.10.1",
+    "tslib": "2.7.0",
+    "tsx": "4.19.0",
+    "unport": "0.6.0",
+    "vscode-languageclient": "9.0.1"
+  }
+}
