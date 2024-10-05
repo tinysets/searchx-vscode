@@ -1,6 +1,6 @@
-import type { ChildPort, ChildToParent } from '../types'
+import { MessageType, type ChildPort, type ChildToParent } from '../types.js'
 import { Unport } from 'unport'
-export type { DisplayResult, RangeInfo } from '../types'
+export type { DisplayResult, RangeInfo } from '../types.js'
 export type OpenPayload = ChildToParent['openFile']
 
 // 
@@ -20,21 +20,21 @@ childPort.implementChannel({
 })
 
 export const openFile = (data: OpenPayload) => {
-  childPort.postMessage('openFile', data)
+  childPort.postMessage(MessageType.OpenFile, data)
 }
 
 export function previewDiff(data: ChildToParent['previewDiff']) {
-  childPort.postMessage('previewDiff', data)
+  childPort.postMessage(MessageType.PreviewDiff, data)
 }
 
 export function dismissDiff(data: ChildToParent['dismissDiff']) {
-  childPort.postMessage('dismissDiff', data)
+  childPort.postMessage(MessageType.DismissDiff, data)
 }
 
 export function commitChange(diff: ChildToParent['commitChange']) {
-  childPort.postMessage('commitChange', diff)
+  childPort.postMessage(MessageType.CommitChange, diff)
 }
 
 export function replaceAll(payload: ChildToParent['replaceAll']) {
-  childPort.postMessage('replaceAll', payload)
+  childPort.postMessage(MessageType.ReplaceAll, payload)
 }

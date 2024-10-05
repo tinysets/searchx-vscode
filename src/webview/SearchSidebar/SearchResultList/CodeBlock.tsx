@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import type { DisplayResult } from '../../../types'
+import type { DisplayResult } from '../../../types.js'
 import { openAction } from '../../hooks/useSearch'
 import * as stylex from '@stylexjs/stylex'
 

@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useBoolean } from 'react-use'
 import { onResultChange, findIndex } from '../../hooks/useSearch'
-import type { DisplayResult } from '../../../types'
+import { MessageType, type DisplayResult } from '../../../types.js'
 import type { VirtuosoHandle } from 'react-virtuoso'
 import { childPort } from '../../postMessage'
 
@@ -49,7 +49,7 @@ export function useToggleResult(filePath: string) {
   return [isExpanded, toggleIsExpanded] as const
 }
 
-childPort.onMessage('toggleAllSearch', () => {
+childPort.onMessage(MessageType.ToggleAllSearch, () => {
   expandStateMap.clear()
   defaultOpen = !defaultOpen
   for (const toggle of toggleSet) {

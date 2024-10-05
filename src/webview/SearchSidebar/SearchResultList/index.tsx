@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import type { DisplayResult } from '../../../types'
+import type { DisplayResult } from '../../../types.js'
 import TreeItem from './TreeItem'
 import { refScroller } from './useListState'
 import * as stylex from '@stylexjs/stylex'

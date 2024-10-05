@@ -1,6 +1,6 @@
 import { FileLink } from './FileLink'
 import { FileActions } from './Actions'
-import type { DisplayResult } from '../../../types'
+import type { DisplayResult } from '../../../types.js'
 import { useActiveItem } from './useListState'
 import { VscChevronDown, VscChevronRight } from 'react-icons/vsc'
 import { VSCodeBadge } from '@vscode/webview-ui-toolkit/react'

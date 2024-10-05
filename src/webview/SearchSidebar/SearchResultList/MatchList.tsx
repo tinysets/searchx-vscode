@@ -1,6 +1,6 @@
 import { CodeBlock } from './CodeBlock'
 import { MatchActions } from './Actions'
-import type { DisplayResult } from '../../../types'
+import type { DisplayResult } from '../../../types.js'
 import { useHover } from 'react-use'
 import { useActiveItem } from './useListState'
 

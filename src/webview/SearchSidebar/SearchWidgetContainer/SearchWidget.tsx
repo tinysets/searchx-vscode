@@ -11,6 +11,7 @@ import { SearchToggles } from './LangSelect'
 import { useBoolean, useEffectOnce } from 'react-use'
 import { VscChevronRight, VscChevronDown, VscReplaceAll } from 'react-icons/vsc'
 import * as stylex from '@stylexjs/stylex'
+import { MessageType } from '../../../types.js'
 
 const styles = stylex.create({
   container: {
@@ -58,7 +59,7 @@ function ReplaceBar() {
   // disabled = false
   // sadly unport does not support unsub
   useEffectOnce(() => {
-    childPort.onMessage('clearSearchResults', () => {
+    childPort.onMessage(MessageType.ClearSearchResults, () => {
       setRewrite('')
     })
   })
@@ -88,7 +89,7 @@ function SearchWidgetContainer() {
   const [isExpanded, toggleIsExpanded] = useBoolean(hasInitialRewrite())
   // sadly unport does not support unsub
   useEffectOnce(() => {
-    childPort.onMessage('clearSearchResults', () => {
+    childPort.onMessage(MessageType.ClearSearchResults, () => {
       setPattern('')
     })
   })

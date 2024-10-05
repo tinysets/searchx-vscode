@@ -1,5 +1,5 @@
 import TreeHeader from './TreeHeader'
-import type { DisplayResult } from '../../../types'
+import type { DisplayResult } from '../../../types.js'
 import { MatchList } from './MatchList'
 import { memo } from 'react'
 import { useToggleResult, useStickyShadow, useActiveFile } from './useListState'

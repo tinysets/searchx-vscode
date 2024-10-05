@@ -125,3 +125,22 @@ export type Definition = {
 
 export type ChildPort = Unport<Definition, 'child'>
 export type ParentPort = Unport<Definition, 'parent'>
+
+
+export enum MessageType {
+  Search = 'search',
+  Reload = 'reload',
+  OpenFile = 'openFile',
+  PreviewDiff = 'previewDiff',
+  DismissDiff = 'dismissDiff',
+  CommitChange = 'commitChange',
+  ReplaceAll = 'replaceAll',
+  SearchEnd = 'searchEnd',
+  Error = 'error',
+  SetIncludeFile = 'setIncludeFile',
+  RefreshSearchResult = 'refreshSearchResult',
+  RefreshAllSearch = 'refreshAllSearch',
+  ClearSearchResults = 'clearSearchResults',
+  ToggleAllSearch = 'toggleAllSearch',
+  SearchResultStreaming = 'searchResultStreaming',
+}

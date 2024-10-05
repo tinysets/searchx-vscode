@@ -11,6 +11,7 @@ import {
 } from '../postMessage'
 import { useSyncExternalStore } from 'react'
 import type { SearchQuery } from './useQuery'
+import { MessageType } from '../../types.js'
 
 // id should not overflow, the MOD is large enough
 // for most cases (unless there is buggy search)
@@ -60,14 +61,14 @@ function byFilePath(a: [string, unknown], b: [string, unknown]) {
 // this function is also called in useQuery
 function postSearch(searchQuery: SearchQuery) {
   id = (id + 1) % MOD
-  childPort.postMessage('search', { id, ...searchQuery })
+  childPort.postMessage(MessageType.Search, { id, ...searchQuery })
   searching = true
   hasStaleResult = true
   searchError = null
   notify()
 }
 
-childPort.onMessage('searchResultStreaming', event => {
+childPort.onMessage(MessageType.SearchResultStreaming, event => {
   const { id: eventId, ...query } = event
   if (eventId !== id) {
     return
@@ -79,7 +80,7 @@ childPort.onMessage('searchResultStreaming', event => {
   notify()
 })
 
-childPort.onMessage('searchEnd', event => {
+childPort.onMessage(MessageType.SearchEnd, event => {
   const { id: eventId, ...query } = event
   if (eventId !== id) {
     return
@@ -90,7 +91,7 @@ childPort.onMessage('searchEnd', event => {
   notify()
 })
 
-childPort.onMessage('error', event => {
+childPort.onMessage(MessageType.Error, event => {
   if (event.id !== id) {
     return
   }
@@ -100,7 +101,7 @@ childPort.onMessage('error', event => {
   notify()
 })
 
-childPort.onMessage('refreshSearchResult', event => {
+childPort.onMessage(MessageType.RefreshSearchResult, event => {
   if (event.id !== id) {
     return
   }

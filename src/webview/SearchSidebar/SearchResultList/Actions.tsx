@@ -1,5 +1,5 @@
 import { type MouseEvent, useCallback } from 'react'
-import type { DisplayResult } from '../../../types'
+import type { DisplayResult } from '../../../types.js'
 import {
   acceptChangeAndRefresh,
   acceptFileChanges,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocalStorage, useDebounce, useBoolean } from 'react-use'
-import { SearchQuery } from '../../types'
+import { MessageType, SearchQuery } from '../../types.js'
 import { childPort } from '../postMessage'
 export { SearchQuery }
 // this is the single sole point of communication
@@ -29,8 +29,8 @@ const LS_KEYS: Record<Exclude<keyof SearchQuery, PatternKeys>, string> = {
 export function refreshResult() {
   postSearch(searchQuery)
 }
-childPort.onMessage('refreshAllSearch', refreshResult)
-childPort.onMessage('clearSearchResults', () => {
+childPort.onMessage(MessageType.RefreshAllSearch, refreshResult)
+childPort.onMessage(MessageType.ClearSearchResults, () => {
   searchQuery.pattern = ''
   refreshResult()
 })
@@ -60,7 +60,7 @@ export function useSearchOption() {
   const [showOptions, toggleOptions] = useBoolean(Boolean(includeFile))
 
   useEffect(() => {
-    childPort.onMessage('setIncludeFile', val => {
+    childPort.onMessage(MessageType.SetIncludeFile, val => {
       setIncludeFile(val.includeFile)
       toggleOptions(true)
     })

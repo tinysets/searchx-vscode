@@ -2,6 +2,7 @@ import type { ChannelMessage } from 'unport'
 import { parentPort } from './common'
 import * as vscode from 'vscode'
 import { window, commands } from 'vscode'
+import { MessageType } from '../types.js'
 
 /**
  * Set up webviews for UI display, e.g. sidebar.
@@ -33,7 +34,7 @@ function setupParentPort(webviewView: vscode.WebviewView) {
       })
     },
   })
-  parentPort.onMessage('reload', _payload => {
+  parentPort.onMessage(MessageType.Reload, _payload => {
     const nonce = getNonce()
     webviewView.webview.html = webviewView.webview.html.replace(
       /(nonce="\w+?")|(nonce-\w+?)/g,
@@ -48,7 +49,7 @@ class SearchSidebarProvider implements vscode.WebviewViewProvider {
   // @ts-expect-error
   private _view?: vscode.WebviewView
 
-  constructor(private readonly _extensionUri: vscode.Uri) {}
+  constructor(private readonly _extensionUri: vscode.Uri) { }
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -116,17 +117,17 @@ function getNonce() {
 }
 
 function refreshSearch() {
-  parentPort.postMessage('refreshAllSearch', {})
+  parentPort.postMessage(MessageType.RefreshAllSearch, {})
 }
 
 function clearSearchResults() {
-  parentPort.postMessage('clearSearchResults', {})
+  parentPort.postMessage(MessageType.ClearSearchResults, {})
 }
 
 let defaultCollapse = false
 
 // reset default collapse when starting a new search
-parentPort.onMessage('search', async () => {
+parentPort.onMessage(MessageType.Search, async () => {
   defaultCollapse = false
   vscode.commands.executeCommand(
     'setContext',
@@ -136,7 +137,7 @@ parentPort.onMessage('search', async () => {
 })
 
 function toggleAllSearch() {
-  parentPort.postMessage('toggleAllSearch', {})
+  parentPort.postMessage(MessageType.ToggleAllSearch, {})
   defaultCollapse = !defaultCollapse
   vscode.commands.executeCommand(
     'setContext',
