@@ -19,11 +19,11 @@ const searchQuery: Record<keyof SearchQuery, string> = {
 type PatternKeys = 'selector'
 
 const LS_KEYS: Record<Exclude<keyof SearchQuery, PatternKeys>, string> = {
-  pattern: 'ast-grep-search-panel-input-value',
-  includeFile: 'ast-grep-search-panel-include-value',
-  rewrite: 'ast-grep-search-panel-rewrite-value',
-  strictness: 'ast-grep-search-panel-strictness-value',
-  lang: 'ast-grep-search-panel-lang-value',
+  pattern: 'searchx-search-panel-input-value',
+  includeFile: 'searchx-search-panel-include-value',
+  rewrite: 'searchx-search-panel-rewrite-value',
+  strictness: 'searchx-search-panel-strictness-value',
+  lang: 'searchx-search-panel-lang-value',
 }
 
 export function refreshResult() {

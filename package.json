@@ -29,11 +29,11 @@
   "contributes": {
     "commands": [
       {
-        "command": "ast-grep.searchInFolder",
-        "title": "SG: Find ast-grep Pattern in Folder"
+        "command": "searchx.searchInFolder",
+        "title": "SG: Find searchx Pattern in Folder"
       },
       {
-        "command": "ast-grep.clearSearchResults",
+        "command": "searchx.clearSearchResults",
         "title": "Clear Search Results",
         "icon": {
           "light": "media/clear-light.svg",
@@ -41,7 +41,7 @@
         }
       },
       {
-        "command": "ast-grep.refreshSearch",
+        "command": "searchx.refreshSearch",
         "title": "Refresh Search",
         "icon": {
           "light": "media/refresh-light.svg",
@@ -49,7 +49,7 @@
         }
       },
       {
-        "command": "ast-grep.collapseAll",
+        "command": "searchx.collapseAll",
         "title": "Collapse All",
         "icon": {
           "light": "media/collapse-light.svg",
@@ -57,7 +57,7 @@
         }
       },
       {
-        "command": "ast-grep.expandAll",
+        "command": "searchx.expandAll",
         "title": "Expand All",
         "icon": {
           "light": "media/expand-light.svg",
@@ -68,30 +68,30 @@
     "menus": {
       "explorer/context": [
         {
-          "command": "ast-grep.searchInFolder",
+          "command": "searchx.searchInFolder",
           "group": "4_search",
           "when": "explorerResourceIsFolder"
         }
       ],
       "view/title": [
         {
-          "command": "ast-grep.collapseAll",
-          "when": "view == ast-grep.search.input",
+          "command": "searchx.collapseAll",
+          "when": "view == searchx.search.input",
           "group": "navigation"
         },
         {
-          "command": "ast-grep.expandAll",
-          "when": "view == ast-grep.search.input",
+          "command": "searchx.expandAll",
+          "when": "view == searchx.search.input",
           "group": "navigation"
         },
         {
-          "command": "ast-grep.clearSearchResults",
-          "when": "view == ast-grep.search.input",
+          "command": "searchx.clearSearchResults",
+          "when": "view == searchx.search.input",
           "group": "navigation"
         },
         {
-          "command": "ast-grep.refreshSearch",
-          "when": "view == ast-grep.search.input",
+          "command": "searchx.refreshSearch",
+          "when": "view == searchx.search.input",
           "group": "navigation"
         }
       ]
@@ -99,17 +99,17 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "ast-grep-sidebar-view",
-          "title": "ast-grep",
+          "id": "searchx-sidebar-view",
+          "title": "SearchX",
           "icon": "media/favicon.svg"
         }
       ]
     },
     "views": {
-      "ast-grep-sidebar-view": [
+      "searchx-sidebar-view": [
         {
           "type": "webview",
-          "id": "ast-grep.search.input",
+          "id": "searchx.search.input",
           "name": "SearchX"
         }
       ]

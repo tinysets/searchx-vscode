@@ -10,7 +10,7 @@ import { type SgSearch, type DisplayResult, type SearchQuery, MessageType } from
  */
 export function activateSearch(context: ExtensionContext) {
   context.subscriptions.push(
-    commands.registerCommand('ast-grep.searchInFolder', findInFolder),
+    commands.registerCommand('searchx.searchInFolder', findInFolder),
   )
 }
 
@@ -20,10 +20,10 @@ function findInFolder(data: any) {
   // compute relative path to the workspace folder
   const relative = workspacePath && path.relative(workspacePath, data.fsPath)
   if (!relative) {
-    window.showErrorMessage('ast-grep Error: folder is not in the workspace')
+    window.showErrorMessage('searchx Error: folder is not in the workspace')
     return
   }
-  commands.executeCommand('ast-grep.search.input.focus')
+  commands.executeCommand('searchx.search.input.focus')
   parentPort.postMessage(MessageType.SetIncludeFile, {
     includeFile: relative,
   })

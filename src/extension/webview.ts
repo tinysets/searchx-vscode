@@ -16,10 +16,10 @@ export function activateWebview(context: vscode.ExtensionContext) {
       provider,
       { webviewOptions: { retainContextWhenHidden: true } },
     ),
-    commands.registerCommand('ast-grep.refreshSearch', refreshSearch),
-    commands.registerCommand('ast-grep.clearSearchResults', clearSearchResults),
-    commands.registerCommand('ast-grep.expandAll', toggleAllSearch),
-    commands.registerCommand('ast-grep.collapseAll', toggleAllSearch),
+    commands.registerCommand('searchx.refreshSearch', refreshSearch),
+    commands.registerCommand('searchx.clearSearchResults', clearSearchResults),
+    commands.registerCommand('searchx.expandAll', toggleAllSearch),
+    commands.registerCommand('searchx.collapseAll', toggleAllSearch),
   )
 }
 
@@ -44,7 +44,7 @@ function setupParentPort(webviewView: vscode.WebviewView) {
 }
 
 class SearchSidebarProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = 'ast-grep.search.input'
+  public static readonly viewType = 'searchx.search.input'
 
   // @ts-expect-error
   private _view?: vscode.WebviewView
@@ -131,7 +131,7 @@ parentPort.onMessage(MessageType.Search, async () => {
   defaultCollapse = false
   vscode.commands.executeCommand(
     'setContext',
-    'ast-grep.searchDefaultCollapse',
+    'searchx.searchDefaultCollapse',
     false,
   )
 })
@@ -141,7 +141,7 @@ function toggleAllSearch() {
   defaultCollapse = !defaultCollapse
   vscode.commands.executeCommand(
     'setContext',
-    'ast-grep.searchDefaultCollapse',
+    'searchx.searchDefaultCollapse',
     defaultCollapse,
   )
 }
