@@ -3,6 +3,7 @@ import IncludeFile from './IncludeFile'
 import PatternConfig from './PatternConfig'
 import * as stylex from '@stylexjs/stylex'
 import { useSearchOption, refreshResult } from '../../hooks/useQuery'
+import ExcludeFile from './ExcludeFile'
 
 const styles = stylex.create({
   button: {
@@ -27,7 +28,11 @@ const styles = stylex.create({
 })
 
 export default function SearchOptions() {
-  const { showOptions, toggleOptions, includeFile, setIncludeFile } =
+  const {
+    showOptions, toggleOptions,
+    includeFile, setIncludeFile,
+    excludeFile, setExcludeFile,
+  } =
     useSearchOption()
   return (
     <div {...stylex.props(styles.options)}>
@@ -45,8 +50,13 @@ export default function SearchOptions() {
             setIncludeFile={setIncludeFile}
             refreshResult={refreshResult}
           />
+          <ExcludeFile
+            excludeFile={excludeFile}
+            setExcludeFile={setExcludeFile}
+            refreshResult={refreshResult}
+          />
           {/* TODO: add file exclude*/}
-          <PatternConfig />
+          {/* <PatternConfig /> */}
         </div>
       )}
     </div>

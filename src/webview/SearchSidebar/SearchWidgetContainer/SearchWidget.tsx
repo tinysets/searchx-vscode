@@ -95,9 +95,9 @@ function SearchWidgetContainer() {
   })
   return (
     <div {...stylex.props(styles.container)}>
-      <div {...stylex.props(styles.replaceToggle)} onClick={toggleIsExpanded}>
+      {/* <div {...stylex.props(styles.replaceToggle)} onClick={toggleIsExpanded}>
         {isExpanded ? <VscChevronDown /> : <VscChevronRight />}
-      </div>
+      </div> */}
       <div {...stylex.props(styles.inputs)}>
         <SearchInput
           placeholder="Search"
@@ -106,7 +106,7 @@ function SearchWidgetContainer() {
           onKeyEnterUp={refreshResult}
         />
         <SearchToggles />
-        {isExpanded ? <ReplaceBar /> : null}
+        {/* {isExpanded ? <ReplaceBar /> : null} */}
       </div>
     </div>
   )

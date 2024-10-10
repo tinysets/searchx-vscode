@@ -12,6 +12,7 @@ const searchQuery: Record<keyof SearchQuery, string> = {
   strictness: 'smart',
   selector: '',
   includeFile: '',
+  excludeFile: '',
   rewrite: '',
   lang: '',
 }
@@ -21,6 +22,7 @@ type PatternKeys = 'selector'
 const LS_KEYS: Record<Exclude<keyof SearchQuery, PatternKeys>, string> = {
   pattern: 'searchx-search-panel-input-value',
   includeFile: 'searchx-search-panel-include-value',
+  excludeFile: 'searchx-search-panel-exclude-value',
   rewrite: 'searchx-search-panel-rewrite-value',
   strictness: 'searchx-search-panel-strictness-value',
   lang: 'searchx-search-panel-lang-value',
@@ -57,19 +59,22 @@ export function usePatternConfig(key: PatternKeys) {
 
 export function useSearchOption() {
   const [includeFile = '', setIncludeFile] = useSearchField('includeFile')
-  const [showOptions, toggleOptions] = useBoolean(Boolean(includeFile))
+  const [excludeFile = '', setExcludeFile] = useSearchField('excludeFile')
+  const [showOptions, toggleOptions] = useBoolean(Boolean(includeFile || excludeFile))
 
   useEffect(() => {
     childPort.onMessage(MessageType.SetIncludeFile, val => {
       setIncludeFile(val.includeFile)
       toggleOptions(true)
     })
-  }, [toggleOptions, setIncludeFile])
+  }, [toggleOptions, setIncludeFile, setExcludeFile])
   return {
     includeFile,
     setIncludeFile,
     showOptions,
     toggleOptions,
+    excludeFile,
+    setExcludeFile,
   }
 }
 

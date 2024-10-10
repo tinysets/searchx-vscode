@@ -1,7 +1,7 @@
 import * as stylex from '@stylexjs/stylex'
 import { Icon, icons } from '../SearchResultList/Icon'
 import { type ChangeEvent, useCallback, useState } from 'react'
-import { VscCaseSensitive, VscListFlat, VscRegex, VscWholeWord } from 'react-icons/vsc'
+import { VscArrowSmallRight, VscCaseSensitive, VscListFlat, VscRegex, VscWholeWord } from 'react-icons/vsc'
 import { useSearchField } from '../../hooks/useQuery'
 import {
   VSCodeButton,
@@ -50,7 +50,7 @@ const styles = stylex.create({
 export function SearchToggles() {
 
   const [caseSensitive, setCaseSensitive] = useState(false)
-  const [regex, setRegex] = useState(false)
+  const [forward, setForward] = useState(false)
   const [wholeWord, setWholeWord] = useState(false)
 
   const [lang, setLang] = useSearchField('lang')
@@ -80,11 +80,11 @@ export function SearchToggles() {
       </VSCodeButton>
       <VSCodeButton
         appearance="icon"
-        title="Use Regular Expression"
-        onClick={() => setRegex(!regex)}
-        {...stylex.props(styles.button, regex && styles.activeButton)}
+        title="Forward Search"
+        onClick={() => setForward(!forward)}
+        {...stylex.props(styles.button, forward && styles.activeButton)}
       >
-        <VscRegex />
+        <VscArrowSmallRight />
       </VSCodeButton>
     </div>
 

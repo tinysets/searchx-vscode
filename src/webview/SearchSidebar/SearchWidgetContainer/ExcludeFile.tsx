@@ -9,25 +9,25 @@ const titleStyle = {
   lineHeight: '19px',
 }
 
-interface IncludeFileProps {
-  includeFile: string
-  setIncludeFile: (value: string) => void
+interface ExcludeFileProps {
+  excludeFile: string
+  setExcludeFile: (value: string) => void
   refreshResult: () => void
 }
 
-export default function IncludeFile({
-  includeFile,
-  setIncludeFile,
+export default function ExcludeFile({
+  excludeFile,
+  setExcludeFile,
   refreshResult,
-}: IncludeFileProps) {
+}: ExcludeFileProps) {
   return (
     <div>
-      <h4 style={titleStyle}>files to include</h4>
+      <h4 style={titleStyle}>files to exclude</h4>
       <SearchInput
         isSingleLine={true}
         placeholder="e.g. *.ts, src/**/include. Glob pattern"
-        value={includeFile}
-        onChange={setIncludeFile}
+        value={excludeFile}
+        onChange={setExcludeFile}
         onKeyEnterUp={refreshResult}
       />
     </div>

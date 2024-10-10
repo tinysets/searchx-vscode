@@ -37,6 +37,7 @@ interface SearchQueryBasic {
 
 export interface SearchQuery extends SearchQueryBasic {
   includeFile: string
+  excludeFile: string
 }
 
 export type SgSearch = {
