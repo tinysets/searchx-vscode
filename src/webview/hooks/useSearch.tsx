@@ -23,7 +23,6 @@ let grouped: [string, DisplayResult[]][] = []
 let queryInFlight: SearchQuery = {
   pattern: '',
   includeFile: '',
-  excludeFile: '',
   rewrite: '',
   strictness: 'smart',
   selector: '',

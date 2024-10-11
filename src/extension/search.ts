@@ -71,16 +71,16 @@ export function splitByHighLightToken(search: SgSearch): DisplayResult {
     file: search.file,
     range: search.range,
     language: search.language,
-    ...handleReplacement(search.replacement),
+    // ...handleReplacement(search.replacement),
   }
 }
 
-function handleReplacement(replacement?: string) {
-  if (replacement) {
-    return { replacement }
-  }
-  return {}
-}
+// function handleReplacement(replacement?: string) {
+//   if (replacement) {
+//     return { replacement }
+//   }
+//   return {}
+// }
 
 
 type StreamingHandler = (r: SgSearch[]) => void
