@@ -35,8 +35,15 @@ const LEADING_SPACES_RE = /^\s*/
 const PRE_CTX = 30
 const POST_CTX = 100
 
+
+let testSGSearch = { "text": "if", "range": { "byteOffset": { "start": 1713, "end": 1715 }, "start": { "line": 67, "column": 2 }, "end": { "line": 67, "column": 4 } }, "file": "src\\extension.ts", "lines": "\t\tif (this._view) {\r", "charCount": { "leading": 2, "trailing": 16 }, "language": "TypeScript" }
+
+
+
 export function splitByHighLightToken(search: SgSearch, result: QueryResult): DisplayResult {
 
+  if (search == null)
+    search = testSGSearch as SgSearch;
   if (search == null)
     return null as any;
 
@@ -75,16 +82,16 @@ export function splitByHighLightToken(search: SgSearch, result: QueryResult): Di
     file: search.file,
     range: search.range,
     language: search.language,
-    // ...handleReplacement(search.replacement),
+    ...handleReplacement(search.replacement),
   }
 }
 
-// function handleReplacement(replacement?: string) {
-//   if (replacement) {
-//     return { replacement }
-//   }
-//   return {}
-// }
+function handleReplacement(replacement?: string) {
+  if (replacement) {
+    return { replacement }
+  }
+  return {}
+}
 
 
 type StreamingHandler = (r: QueryResult[]) => void
@@ -198,10 +205,10 @@ parentPort.onMessage(MessageType.Search, async payload => {
   await getPatternRes(payload, {
     onData,
     onError(error) {
-      // parentPort.postMessage(MessageType.Error, {
-      //   error,
-      //   ...payload,
-      // })
+      parentPort.postMessage(MessageType.Error, {
+        error,
+        ...payload,
+      })
     },
   })
 
