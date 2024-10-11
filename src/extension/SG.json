@@ -1,0 +1,24 @@
+{
+    "text": "if",
+    "range": {
+        "byteOffset": {
+            "start": 1507,
+            "end": 1509
+        },
+        "start": {
+            "line": 60,
+            "column": 2
+        },
+        "end": {
+            "line": 60,
+            "column": 4
+        }
+    },
+    "file": "src\\extension.ts",
+    "lines": "\t\tif (this._view) {\r",
+    "charCount": {
+        "leading": 2,
+        "trailing": 16
+    },
+    "language": "TypeScript"
+}

@@ -4,7 +4,7 @@ import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
 
 import { parentPort, resolveBinary, streamedPromise } from './common.js'
 import { type SgSearch, type DisplayResult, type SearchQuery, MessageType } from '../types.js'
-import { QueryArgs } from './interfaces.js'
+import { QueryArgs, QueryResult } from './interfaces.js'
 import { Base64 } from './base64.js'
 
 /**
@@ -35,7 +35,11 @@ const LEADING_SPACES_RE = /^\s*/
 const PRE_CTX = 30
 const POST_CTX = 100
 
-export function splitByHighLightToken(search: SgSearch): DisplayResult {
+export function splitByHighLightToken(search: SgSearch, result: QueryResult): DisplayResult {
+
+  if (search == null)
+    return null as any;
+
   const { start, end } = search.range
   let startIdx = start.column
   let endIdx = end.column
@@ -83,7 +87,7 @@ export function splitByHighLightToken(search: SgSearch): DisplayResult {
 // }
 
 
-type StreamingHandler = (r: SgSearch[]) => void
+type StreamingHandler = (r: QueryResult[]) => void
 let child: ChildProcessWithoutNullStreams | undefined
 
 async function uniqueCommand(
@@ -161,7 +165,7 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
     return;
   }
 
-  let testQueryArgs: QueryArgs = {
+  let queryArgs: QueryArgs = {
     dir: dir,
     ignoreList: ignoreList,
     includeList: includeList,
@@ -172,7 +176,7 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
     windowSize: 1
   }
 
-  const proc = buildCommand(testQueryArgs)
+  const proc = buildCommand(queryArgs)
   if (proc) {
     proc.on('error', error => {
       console.debug('searchx CLI runs error')
@@ -184,11 +188,11 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
 
 
 parentPort.onMessage(MessageType.Search, async payload => {
-  const onData = (ret: SgSearch[]) => {
-    // parentPort.postMessage(MessageType.SearchResultStreaming, {
-    //   ...payload,
-    //   searchResult: ret.map(splitByHighLightToken),
-    // })
+  const onData = (ret: QueryResult[]) => {
+    parentPort.postMessage(MessageType.SearchResultStreaming, {
+      ...payload,
+      searchResult: ret.map((v) => { return splitByHighLightToken(null as any, v) }).filter((v) => v != null),
+    })
   }
 
   await getPatternRes(payload, {

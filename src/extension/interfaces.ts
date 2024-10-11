@@ -1,4 +1,5 @@
 export interface IDocInfo {
+    fileAbsPath: string
     filePath: string
     doc: string
     docLines: IDocLine[]
