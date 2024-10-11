@@ -36,8 +36,17 @@ const PRE_CTX = 30
 const POST_CTX = 100
 
 
-let testSGSearch = { "text": "if", "range": { "byteOffset": { "start": 1713, "end": 1715 }, "start": { "line": 67, "column": 2 }, "end": { "line": 67, "column": 4 } }, "file": "src\\extension.ts", "lines": "\t\tif (this._view) {\r", "charCount": { "leading": 2, "trailing": 16 }, "language": "TypeScript" }
-
+let testSGSearch = {
+  "text": "getNonce()",
+  "range": {
+    "byteOffset": { "start": 5627, "end": 5637 }, "start": { "line": 184, "column": 16 },
+    "end": { "line": 184, "column": 26 }
+  },
+  "file": "src\\extension.ts",
+  "lines": "\t\tconst nonce = getNonce();\r",
+  "charCount": { "leading": 16, "trailing": 2 },
+  "language": "TypeScript"
+}
 
 
 export function splitByHighLightToken(search: SgSearch, result: QueryResult): DisplayResult {
