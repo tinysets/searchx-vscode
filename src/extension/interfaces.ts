@@ -27,12 +27,6 @@ export interface KeywordShot {
     end: number
 }
 
-export interface KeywordShot {
-    line: number
-    pos: number
-    end: number
-}
-
 export interface LineKeywordShot {
     line: number
     shots: KeywordShot[]
@@ -64,5 +58,16 @@ export interface QueryArgs {
     caseSensitive: boolean
     forward: boolean
     windowSize: number
-    queryId: number
 }
+
+export interface QueryResultLines {
+    [key: number]: string
+}
+export interface QueryResult {
+    filePath: string
+    lineStart: number
+    lineEnd: number
+    lines: QueryResultLines
+    shots: KeywordShot[]
+}
+

@@ -169,8 +169,7 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
     caseSensitive: false,
     search: query.pattern,
     forward: true,
-    windowSize: 1,
-    queryId: 0
+    windowSize: 1
   }
 
   const proc = buildCommand(testQueryArgs)
@@ -186,10 +185,10 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
 
 parentPort.onMessage(MessageType.Search, async payload => {
   const onData = (ret: SgSearch[]) => {
-    parentPort.postMessage(MessageType.SearchResultStreaming, {
-      ...payload,
-      searchResult: ret.map(splitByHighLightToken),
-    })
+    // parentPort.postMessage(MessageType.SearchResultStreaming, {
+    //   ...payload,
+    //   searchResult: ret.map(splitByHighLightToken),
+    // })
   }
 
   await getPatternRes(payload, {
