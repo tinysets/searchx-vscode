@@ -2,8 +2,10 @@ import path from 'node:path'
 import { type ExtensionContext, commands, workspace, window } from 'vscode'
 import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
 
-import { parentPort } from './common'
+import { parentPort, resolveBinary, streamedPromise } from './common.js'
 import { type SgSearch, type DisplayResult, type SearchQuery, MessageType } from '../types.js'
+import { QueryArgs } from './interfaces.js'
+import { Base64 } from './base64.js'
 
 /**
  * Set up search query handling and search commands
@@ -81,6 +83,107 @@ function handleReplacement(replacement?: string) {
 }
 
 
+type StreamingHandler = (r: SgSearch[]) => void
+let child: ChildProcessWithoutNullStreams | undefined
+
+async function uniqueCommand(
+  proc: ChildProcessWithoutNullStreams | undefined,
+  handler: StreamingHandler,
+) {
+  // kill previous search
+  if (child) {
+    child.kill('SIGTERM')
+  }
+  if (!proc) {
+    return Promise.resolve()
+  }
+  try {
+    // set current proc to child
+    child = proc
+    await streamedPromise(proc, handler)
+    // unset child only when the promise succeed
+    // interrupted proc will be replaced by latter proc
+    child = undefined
+  } catch (e) {
+    console.info('search aborted: ', e)
+  }
+}
+
+// TODO: add unit test for commandBuilder
+export function buildCommand(query: QueryArgs) {
+  const command = resolveBinary()
+  const args = ['--base64', Base64.jsonToBase64(query)]
+  return spawn(command, args, {
+    cwd: query.dir,
+    shell: process.platform === 'win32', // it is safe because it is end user input
+  })
+}
+interface Handlers {
+  onData: StreamingHandler
+  onError: (e: Error) => void
+}
+
+
+const dataDir = './data';
+const clientDir = 'E:\\wp\\THS\\Branches\\SBT\\Client\\Assets\\';
+const netbookDir = 'C:\\Users\\lihang.zhao\\Desktop\\GoogleDriver\\workdoc';
+
+let ignoreList = [
+  '**/node_modules',
+  '**/.git',
+  '.gitignore',
+  '.vscode',
+  'Library',
+  'Logs',
+  'Temp',
+  'obj',
+  '**/LICENSE.txt',
+  '**/readme.txt',
+  '**/*vcxproj*.txt'
+];
+
+let includeList: string[] = [
+  // '**/*.js',
+  '**/*.ts',
+  '**/*.txt',
+  '**/Scripts/**/*.cs',
+];
+
+
+function getPatternRes(query: SearchQuery, handlers: Handlers) {
+
+  if (!query.pattern) {
+    return;
+  }
+  const uris = workspace.workspaceFolders?.map(i => i.uri?.fsPath) ?? []
+  let dir = uris[0]
+  if (!dir) {
+    return;
+  }
+
+  let testQueryArgs: QueryArgs = {
+    dir: dir,
+    ignoreList: ignoreList,
+    includeList: includeList,
+    fzfList: [],
+    caseSensitive: false,
+    search: query.pattern,
+    forward: true,
+    windowSize: 1,
+    queryId: 0
+  }
+
+  const proc = buildCommand(testQueryArgs)
+  if (proc) {
+    proc.on('error', error => {
+      console.debug('searchx CLI runs error')
+      handlers.onError(error)
+    })
+  }
+  return uniqueCommand(proc, handlers.onData)
+}
+
+
 parentPort.onMessage(MessageType.Search, async payload => {
   const onData = (ret: SgSearch[]) => {
     parentPort.postMessage(MessageType.SearchResultStreaming, {
@@ -88,6 +191,16 @@ parentPort.onMessage(MessageType.Search, async payload => {
       searchResult: ret.map(splitByHighLightToken),
     })
   }
+
+  await getPatternRes(payload, {
+    onData,
+    onError(error) {
+      // parentPort.postMessage(MessageType.Error, {
+      //   error,
+      //   ...payload,
+      // })
+    },
+  })
 
   parentPort.postMessage(MessageType.SearchEnd, payload)
 })
