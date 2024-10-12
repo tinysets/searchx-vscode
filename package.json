@@ -24,7 +24,8 @@
     "vscode:prepublish": "npm run compile",
     "compile": "node ./scripts/build.mjs",
     "watch": "node ./scripts/build.mjs --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "gen": "vsce package --no-dependencies"
   },
   "contributes": {
     "commands": [
