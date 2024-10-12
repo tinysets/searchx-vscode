@@ -4,7 +4,7 @@ import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
 
 import { parentPort, resolveBinary, streamedPromise } from './common.js'
 import { type SgSearch, type DisplayResult, type SearchQuery, MessageType } from '../types.js'
-import { QueryArgs, QueryResult } from './interfaces.js'
+import { QueryArgs, QueryResult } from '../interfaces.js'
 import { Base64 } from './base64.js'
 
 /**
@@ -39,22 +39,37 @@ const POST_CTX = 100
 let testSGSearch = {
   "text": "getNonce()",
   "range": {
-    "byteOffset": { "start": 5627, "end": 5637 }, "start": { "line": 184, "column": 16 },
+    "byteOffset": { "start": 5627, "end": 5637 },
+    "start": { "line": 184, "column": 16 },
     "end": { "line": 184, "column": 26 }
   },
   "file": "src\\extension.ts",
   "lines": "\t\tconst nonce = getNonce();\r",
-  "charCount": { "leading": 16, "trailing": 2 },
   "language": "TypeScript"
 }
 
+function getFileExtension(filePath: string) {
+  return path.extname(filePath);
+}
 
-export function splitByHighLightToken(search: SgSearch, result: QueryResult): DisplayResult {
+export function splitByHighLightToken(searchQuery: SearchQuery, result: QueryResult): DisplayResult {
 
-  if (search == null)
-    search = testSGSearch as SgSearch;
-  if (search == null)
+  if (result.shots.length == 0)
     return null as any;
+
+  let startShot = result.shots[0]
+  let endShot = result.shots[result.shots.length - 1]
+
+  let search: SgSearch = {} as SgSearch;
+  search.text = searchQuery.pattern;
+  search.file = result.filePath;
+  search.language = getFileExtension(result.filePath)
+  search.lines = result.lines[startShot.line];
+  search.range = {
+    byteOffset: { start: result.posStart, end: result.posEnd },
+    start: { line: startShot.line, column: startShot.pos },
+    end: { line: endShot.line, column: endShot.end }
+  };
 
   const { start, end } = search.range
   let startIdx = start.column
@@ -166,6 +181,7 @@ let includeList: string[] = [
   // '**/*.js',
   '**/*.ts',
   '**/*.txt',
+  '**/*.json',
   '**/Scripts/**/*.cs',
 ];
 
@@ -207,7 +223,7 @@ parentPort.onMessage(MessageType.Search, async payload => {
   const onData = (ret: QueryResult[]) => {
     parentPort.postMessage(MessageType.SearchResultStreaming, {
       ...payload,
-      searchResult: ret.map((v) => { return splitByHighLightToken(null as any, v) }).filter((v) => v != null),
+      searchResult: ret.map((v) => { return splitByHighLightToken(payload, v) }).filter((v) => v != null),
     })
   }
 

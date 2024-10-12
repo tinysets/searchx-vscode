@@ -10,6 +10,13 @@ export interface IDocLine {
     text: string
     line: number
     pos: number
+    tokens: IToken[]
+}
+
+export interface IToken {
+    text: string
+    pos: number
+    end: number
 }
 
 export enum KeywordType {
@@ -69,6 +76,8 @@ export interface QueryResult {
     lineStart: number
     lineEnd: number
     lines: QueryResultLines
+    posStart: number
+    posEnd: number
     shots: KeywordShot[]
 }
 
