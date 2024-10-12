@@ -188,49 +188,49 @@ parentPort.onMessage(MessageType.OpenFile, openFile)
 parentPort.onMessage('previewDiff', previewDiff)
 parentPort.onMessage('dismissDiff', dismissDiff)
 parentPort.onMessage('search', refreshDiff)
-parentPort.onMessage('commitChange', onCommitChange)
-parentPort.onMessage('replaceAll', onReplaceAll)
+// parentPort.onMessage('commitChange', onCommitChange)
+// parentPort.onMessage('replaceAll', onReplaceAll)
 
-async function onReplaceAll(payload: ChildToParent['replaceAll']) {
-  const confirmed = await window.showInformationMessage(
-    'Replace all occurrences across all files?',
-    { modal: true },
-    'Replace',
-  )
-  if (confirmed !== 'Replace') {
-    return
-  }
-  const { id, pattern, rewrite, selector, strictness, lang } = payload
-  for (const change of payload.changes) {
-    // TODO: chunk change
-    await onCommitChange({
-      id,
-      pattern,
-      rewrite,
-      selector,
-      strictness,
-      lang,
-      ...change,
-    })
-  }
-}
+// async function onReplaceAll(payload: ChildToParent['replaceAll']) {
+//   const confirmed = await window.showInformationMessage(
+//     'Replace all occurrences across all files?',
+//     { modal: true },
+//     'Replace',
+//   )
+//   if (confirmed !== 'Replace') {
+//     return
+//   }
+//   const { id, pattern, rewrite, selector, strictness, lang } = payload
+//   for (const change of payload.changes) {
+//     // TODO: chunk change
+//     await onCommitChange({
+//       id,
+//       pattern,
+//       rewrite,
+//       selector,
+//       strictness,
+//       lang,
+//       ...change,
+//     })
+//   }
+// }
 
-async function onCommitChange(payload: ChildToParent['commitChange']) {
-  const { filePath, pattern, rewrite, strictness, selector, lang } = payload
-  const fileUri = workspaceUriFromFilePath(filePath)
-  if (!fileUri) {
-    return
-  }
-  await doChange(fileUri, payload)
-  await refreshSearchResult(payload.id, fileUri, {
-    pattern,
-    rewrite,
-    strictness,
-    selector,
-    lang,
-    includeFile: filePath,
-  })
-}
+// async function onCommitChange(payload: ChildToParent['commitChange']) {
+//   const { filePath, pattern, rewrite, strictness, selector, lang } = payload
+//   const fileUri = workspaceUriFromFilePath(filePath)
+//   if (!fileUri) {
+//     return
+//   }
+//   await doChange(fileUri, payload)
+//   await refreshSearchResult(payload.id, fileUri, {
+//     pattern,
+//     rewrite,
+//     strictness,
+//     selector,
+//     lang,
+//     includeFile: filePath,
+//   })
+// }
 
 async function doChange(
   fileUri: Uri,

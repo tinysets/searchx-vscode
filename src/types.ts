@@ -38,6 +38,9 @@ interface SearchQueryBasic {
 export interface SearchQuery extends SearchQueryBasic {
   includeFile: string
   excludeFile?: string
+  caseSensitive: string
+  fullSearch: string
+  forward: string
 }
 
 export type SgSearch = {

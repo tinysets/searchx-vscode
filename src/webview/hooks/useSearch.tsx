@@ -27,6 +27,9 @@ let queryInFlight: SearchQuery = {
   strictness: 'smart',
   selector: '',
   lang: '',
+  caseSensitive: '',
+  fullSearch: '',
+  forward: 'true',
 }
 let searching = true
 let searchError: Error | null = null

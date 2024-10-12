@@ -217,11 +217,11 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
     ignoreList: ignoreList,
     includeList: includeList,
     fzfList: [],
-    caseSensitive: false,
+    caseSensitive: query.caseSensitive == 'true',
     search: query.pattern,
-    forward: true,
+    forward: query.forward == 'true',
     windowSize: 1,
-    fullSearch: true
+    fullSearch: query.fullSearch == 'true'
   }
 
   const proc = buildCommand(queryArgs)

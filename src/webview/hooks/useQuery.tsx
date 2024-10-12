@@ -15,6 +15,9 @@ const searchQuery: Record<keyof SearchQuery, string> = {
   excludeFile: '',
   rewrite: '',
   lang: '',
+  caseSensitive: '',
+  fullSearch: '',
+  forward: 'true',
 }
 
 type PatternKeys = 'selector'
@@ -26,6 +29,9 @@ const LS_KEYS: Record<Exclude<keyof SearchQuery, PatternKeys>, string> = {
   rewrite: 'searchx-search-panel-rewrite-value',
   strictness: 'searchx-search-panel-strictness-value',
   lang: 'searchx-search-panel-lang-value',
+  caseSensitive: 'searchx-search-panel-caseSensitive-value',
+  fullSearch: 'searchx-search-panel-fullSearch-value',
+  forward: 'searchx-search-panel-forward-value',
 }
 
 export function refreshResult() {

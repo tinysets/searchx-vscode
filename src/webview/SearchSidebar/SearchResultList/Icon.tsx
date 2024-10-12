@@ -31,7 +31,10 @@ export const icons = `
   scala,
   swift,
   tsx,
-  typescript
+  typescript,
+  ts,
+  js,
+  cs,
 `
   .split(',')
   .map(icon => icon.trim())
@@ -43,6 +46,7 @@ interface IconProps {
 }
 
 export function Icon({ name, style }: IconProps) {
+  name = name.toLowerCase()
   const iconName = icons.includes(name) ? name : 'file'
   // @ts-expect-error
   const src = window.ICON_SRC + `/${iconName}.svg`
