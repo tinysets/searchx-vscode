@@ -174,15 +174,16 @@ let ignoreList = [
   'obj',
   '**/LICENSE.txt',
   '**/readme.txt',
-  '**/*vcxproj*.txt'
+  '**/*vcxproj*.txt',
+  '**/*.pdf',
 ];
 
 let includeList: string[] = [
   // '**/*.js',
   '**/*.ts',
   '**/*.txt',
+  '**/*.cs',
   '**/*.json',
-  '**/Scripts/**/*.cs',
 ];
 
 
