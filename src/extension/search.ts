@@ -49,7 +49,11 @@ let testSGSearch = {
 }
 
 function getFileExtension(filePath: string) {
-  return path.extname(filePath);
+  const { ext } = path.parse(filePath);
+  if (ext && ext.length > 1 && ext[0] === '.') {
+    return ext.slice(1);
+  }
+  return ext;
 }
 
 export function splitByHighLightToken(searchQuery: SearchQuery, result: QueryResult | QueryResultFullSearch): DisplayResult {
