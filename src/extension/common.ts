@@ -6,10 +6,57 @@ import type { ChildProcessWithoutNullStreams } from 'node:child_process'
 
 export const parentPort: ParentPort = new Unport()
 
-let defaultBinary: string = 'searchx.cmd'
+let defaultBinary: string;
+
+export async function detectDefaultBinaryAtStart() {
+	if (defaultBinary) {
+		return
+	}
+	if (process.platform !== 'win32') {
+		defaultBinary = 'searchx'
+		return
+	}
+	// on windows, binary command is confusing like sh*t
+	// different installation method and different shell will
+	// resolve totally different binary
+	// See:
+	// https://zenn.dev/hd_nvim/articles/e49ef2c812ae8d#comment-0b861171ac40cb
+	// https://github.com/ast-grep/ast-grep-vscode/issues/235
+	// https://github.com/nodejs/node/issues/29532#issue-492569087
+	for (const cmd of ['searchx', 'searchx.exe', 'searchx.cmd']) {
+		if (await testBinaryExist(cmd)) {
+			defaultBinary = cmd
+			return
+		}
+	}
+	// every possible command tried, fallback to ast-grep
+	defaultBinary = 'searchx'
+}
 
 export function resolveBinary() {
-	return defaultBinary
+	const config = workspace.getConfiguration('searchx').get('serverPath', '')
+	if (!config) {
+		return defaultBinary
+	}
+	return config
+}
+
+export async function testBinaryExist(command: string) {
+	const uris = workspace.workspaceFolders?.map(i => i.uri?.fsPath) ?? []
+	return new Promise(r => {
+		execFile(
+			command,
+			['-h'],
+			{
+				// for windows
+				shell: process.platform === 'win32',
+				cwd: uris[0],
+			},
+			err => {
+				r(!err)
+			},
+		)
+	})
 }
 
 export function streamedPromise<T>(
