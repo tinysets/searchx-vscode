@@ -4,7 +4,7 @@ import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
 
 import { parentPort, resolveBinary, streamedPromise } from './common.js'
 import { type SgSearch, type DisplayResult, type SearchQuery, MessageType } from '../types.js'
-import { QueryArgs, QueryResult } from '../interfaces.js'
+import { QueryArgs, QueryResult, QueryResultFullSearch } from '../interfaces.js'
 import { Base64 } from './base64.js'
 
 /**
@@ -52,24 +52,38 @@ function getFileExtension(filePath: string) {
   return path.extname(filePath);
 }
 
-export function splitByHighLightToken(searchQuery: SearchQuery, result: QueryResult): DisplayResult {
-
-  if (result.shots.length == 0)
-    return null as any;
-
-  let startShot = result.shots[0]
-  let endShot = result.shots[result.shots.length - 1]
+export function splitByHighLightToken(searchQuery: SearchQuery, result: QueryResult | QueryResultFullSearch): DisplayResult {
 
   let search: SgSearch = {} as SgSearch;
-  search.text = searchQuery.pattern;
-  search.file = result.filePath;
-  search.language = getFileExtension(result.filePath)
-  search.lines = result.lines[startShot.line];
-  search.range = {
-    byteOffset: { start: result.posStart, end: result.posEnd },
-    start: { line: startShot.line, column: startShot.pos },
-    end: { line: endShot.line, column: endShot.end }
-  };
+  if (result.fullSearch) {
+    let queryResult = result as QueryResultFullSearch
+    search.text = searchQuery.pattern;
+    search.file = queryResult.filePath;
+    search.language = getFileExtension(queryResult.filePath)
+    search.lines = queryResult.startLineText;
+    search.range = {
+      byteOffset: { start: queryResult.posStart, end: queryResult.posEnd },
+      start: { line: queryResult.lineStart, column: queryResult.posStartAtLine },
+      end: { line: queryResult.lineEnd, column: queryResult.posEndAtLine }
+    };
+  } else {
+    let queryResult = result as QueryResult
+    if (queryResult.shots.length == 0)
+      return null as any;
+
+    let startShot = queryResult.shots[0]
+    let endShot = queryResult.shots[queryResult.shots.length - 1]
+
+    search.text = searchQuery.pattern;
+    search.file = queryResult.filePath;
+    search.language = getFileExtension(queryResult.filePath)
+    search.lines = queryResult.lines[startShot.line];
+    search.range = {
+      byteOffset: { start: queryResult.posStart, end: queryResult.posEnd },
+      start: { line: startShot.line, column: startShot.pos },
+      end: { line: endShot.line, column: endShot.end }
+    };
+  }
 
   const { start, end } = search.range
   let startIdx = start.column
@@ -206,7 +220,8 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
     caseSensitive: false,
     search: query.pattern,
     forward: true,
-    windowSize: 1
+    windowSize: 1,
+    fullSearch: true
   }
 
   const proc = buildCommand(queryArgs)

@@ -63,6 +63,7 @@ export interface QueryArgs {
     ignoreList: string[]
     includeList: string[]
     fzfList: string[]
+    fullSearch: boolean
     caseSensitive: boolean
     forward: boolean
     windowSize: number
@@ -71,13 +72,29 @@ export interface QueryArgs {
 export interface QueryResultLines {
     [key: number]: string
 }
-export interface QueryResult {
+
+export interface IIsFullSearch {
+    fullSearch: boolean
+}
+
+export interface QueryResult extends IIsFullSearch {
     filePath: string
     lineStart: number
     lineEnd: number
-    lines: QueryResultLines
     posStart: number
     posEnd: number
+    lines: QueryResultLines
     shots: KeywordShot[]
+}
+
+export interface QueryResultFullSearch extends IIsFullSearch {
+    filePath: string
+    lineStart: number
+    lineEnd: number
+    posStart: number
+    posEnd: number
+    startLineText: string
+    posStartAtLine: number
+    posEndAtLine: number
 }
 
