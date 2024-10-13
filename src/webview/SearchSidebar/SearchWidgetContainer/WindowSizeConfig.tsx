@@ -72,10 +72,11 @@ export default function WindowSizeConfig() {
         style={{ width: '100%', zIndex: '2' }}
       >
         <VSCodeOption value="1">Every 1 Line</VSCodeOption>
-        <VSCodeOption value="3">Every 2 Lines</VSCodeOption>
+        <VSCodeOption value="3">Every 3 Lines</VSCodeOption>
         <VSCodeOption value="5">Every 5 Lines</VSCodeOption>
         <VSCodeOption value="10">Every 10 Lines</VSCodeOption>
         <VSCodeOption value="20">Every 20 Lines</VSCodeOption>
+        <VSCodeOption value="50">Every 20 Lines</VSCodeOption>
       </VSCodeDropdown>
     </div>
   )
