@@ -47,14 +47,14 @@ export default function SearchOptions() {
       </button>
       {showOptions && (
         <div style={{ paddingBottom: '6px' }}>
-          <FzfFile
-            fzfFile={fzfFile}
-            setFzfFile={setFzfFile}
-            refreshResult={refreshResult}
-          />
           <IncludeFile
             includeFile={includeFile}
             setIncludeFile={setIncludeFile}
+            refreshResult={refreshResult}
+          />
+          <FzfFile
+            fzfFile={fzfFile}
+            setFzfFile={setFzfFile}
             refreshResult={refreshResult}
           />
           <ExcludeFile
