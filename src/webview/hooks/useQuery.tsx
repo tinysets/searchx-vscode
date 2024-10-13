@@ -18,6 +18,7 @@ const searchQuery: Record<keyof SearchQuery, string> = {
   caseSensitive: '',
   fullSearch: '',
   forward: 'true',
+  fzfFile: '',
 }
 
 type PatternKeys = 'selector'
@@ -32,6 +33,7 @@ const LS_KEYS: Record<Exclude<keyof SearchQuery, PatternKeys>, string> = {
   caseSensitive: 'searchx-search-panel-caseSensitive-value',
   fullSearch: 'searchx-search-panel-fullSearch-value',
   forward: 'searchx-search-panel-forward-value',
+  fzfFile: 'searchx-search-panel-fileFzf-value',
 }
 
 export function refreshResult() {
@@ -66,14 +68,15 @@ export function usePatternConfig(key: PatternKeys) {
 export function useSearchOption() {
   const [includeFile = '', setIncludeFile] = useSearchField('includeFile')
   const [excludeFile = '', setExcludeFile] = useSearchField('excludeFile')
-  const [showOptions, toggleOptions] = useBoolean(Boolean(includeFile || excludeFile))
+  const [fzfFile = '', setFzfFile] = useSearchField('fzfFile')
+  const [showOptions, toggleOptions] = useBoolean(Boolean(includeFile || excludeFile || fzfFile))
 
   useEffect(() => {
     childPort.onMessage(MessageType.SetIncludeFile, val => {
       setIncludeFile(val.includeFile)
       toggleOptions(true)
     })
-  }, [toggleOptions, setIncludeFile, setExcludeFile])
+  }, [toggleOptions, setIncludeFile, setExcludeFile, setFzfFile])
   return {
     includeFile,
     setIncludeFile,
@@ -81,6 +84,8 @@ export function useSearchOption() {
     toggleOptions,
     excludeFile,
     setExcludeFile,
+    fzfFile,
+    setFzfFile,
   }
 }
 

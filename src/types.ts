@@ -41,6 +41,7 @@ export interface SearchQuery extends SearchQueryBasic {
   caseSensitive: string
   fullSearch: string
   forward: string
+  fzfFile: string
 }
 
 export type SgSearch = {

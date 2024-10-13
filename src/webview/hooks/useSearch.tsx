@@ -30,6 +30,7 @@ let queryInFlight: SearchQuery = {
   caseSensitive: '',
   fullSearch: '',
   forward: 'true',
+  fzfFile: '',
 }
 let searching = true
 let searchError: Error | null = null

@@ -1,4 +1,5 @@
 import path from 'node:path'
+import * as vscode from 'vscode';
 import { type ExtensionContext, commands, workspace, window } from 'vscode'
 import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
 
@@ -165,7 +166,9 @@ async function uniqueCommand(
 // TODO: add unit test for commandBuilder
 export function buildCommand(query: QueryArgs) {
   const command = resolveBinary()
-  const args = ['--base64', Base64.jsonToBase64(query)]
+  let base64 = Base64.jsonToBase64(query)
+  console.log(base64)
+  const args = ['--base64', base64]
   return spawn(command, args, {
     cwd: query.dir,
     shell: process.platform === 'win32', // it is safe because it is end user input
@@ -204,9 +207,44 @@ let includeList: string[] = [
   '**/*.json',
 ];
 
+function getFilesExclude() {
+  let ignoreList: string[] = [];
+  const filesConfig = vscode.workspace.getConfiguration('files');
+  const filesExclude = filesConfig.get<{ [key: string]: boolean }>('exclude');
+  const searchConfig = vscode.workspace.getConfiguration('search');
+  const useIgnoreFiles = searchConfig.get<boolean>('useIgnoreFiles');
+  const searchExclude = searchConfig.get<{ [key: string]: boolean }>('exclude');
+
+  if (filesExclude) {
+    for (const key in filesExclude) {
+      if (filesExclude[key]) {
+        ignoreList.push(key);
+      }
+    }
+  }
+
+  if (searchExclude) {
+    for (const key in searchExclude) {
+      if (searchExclude[key]) {
+        ignoreList.push(key);
+      }
+    }
+  }
+  // console.log(JSON.stringify(ignoreList, null, 2));
+
+  return ignoreList;
+}
+
+function getStringList(str: string | undefined) {
+  if (!str) {
+    return [];
+  }
+  str = str.replace(/(\r\n|\r)/g, '\n');
+  let strs = str.split('\n').map((v) => v.split(',')).flat().map(v => v.trim()).filter((v) => v);
+  return strs;
+}
 
 function getPatternRes(query: SearchQuery, handlers: Handlers) {
-
   if (!query.pattern) {
     return;
   }
@@ -216,11 +254,18 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
     return;
   }
 
+  let ignoreList = getFilesExclude()
+  ignoreList.push(...getStringList(query.excludeFile));
+  let includeList: string[] = []
+  includeList.push(...getStringList(query.includeFile));
+  let fzfList: string[] = []
+  fzfList.push(...getStringList(query.fzfFile));
+
   let queryArgs: QueryArgs = {
     dir: dir,
     ignoreList: ignoreList,
     includeList: includeList,
-    fzfList: [],
+    fzfList: fzfList,
     caseSensitive: query.caseSensitive == 'true',
     search: query.pattern,
     forward: query.forward == 'true',

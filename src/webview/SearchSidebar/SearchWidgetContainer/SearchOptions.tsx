@@ -1,9 +1,10 @@
 import { VscEllipsis } from 'react-icons/vsc'
-import IncludeFile from './IncludeFile'
 import PatternConfig from './PatternConfig'
 import * as stylex from '@stylexjs/stylex'
 import { useSearchOption, refreshResult } from '../../hooks/useQuery'
+import IncludeFile from './IncludeFile'
 import ExcludeFile from './ExcludeFile'
+import FzfFile from './FzfFile'
 
 const styles = stylex.create({
   button: {
@@ -14,7 +15,7 @@ const styles = stylex.create({
     alignSelf: 'end',
     textAlign: 'end',
     padding: '0 4px',
-    height: '16px',
+    height: '20px',
     flex: '0 0 auto',
     position: 'absolute',
     top: '0',
@@ -32,6 +33,7 @@ export default function SearchOptions() {
     showOptions, toggleOptions,
     includeFile, setIncludeFile,
     excludeFile, setExcludeFile,
+    fzfFile, setFzfFile,
   } =
     useSearchOption()
   return (
@@ -45,6 +47,11 @@ export default function SearchOptions() {
       </button>
       {showOptions && (
         <div style={{ paddingBottom: '6px' }}>
+          <FzfFile
+            fzfFile={fzfFile}
+            setFzfFile={setFzfFile}
+            refreshResult={refreshResult}
+          />
           <IncludeFile
             includeFile={includeFile}
             setIncludeFile={setIncludeFile}
