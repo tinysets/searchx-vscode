@@ -42,6 +42,7 @@ export interface SearchQuery extends SearchQueryBasic {
   fullSearch: string
   forward: string
   fzfFile: string
+  windowSize: string
 }
 
 export type SgSearch = {

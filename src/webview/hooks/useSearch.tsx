@@ -31,6 +31,7 @@ let queryInFlight: SearchQuery = {
   fullSearch: '',
   forward: 'true',
   fzfFile: '',
+  windowSize: '1',
 }
 let searching = true
 let searchError: Error | null = null

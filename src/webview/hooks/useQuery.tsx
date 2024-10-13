@@ -19,6 +19,7 @@ const searchQuery: Record<keyof SearchQuery, string> = {
   fullSearch: '',
   forward: 'true',
   fzfFile: '',
+  windowSize: '1',
 }
 
 type PatternKeys = 'selector'
@@ -34,6 +35,7 @@ const LS_KEYS: Record<Exclude<keyof SearchQuery, PatternKeys>, string> = {
   fullSearch: 'searchx-search-panel-fullSearch-value',
   forward: 'searchx-search-panel-forward-value',
   fzfFile: 'searchx-search-panel-fileFzf-value',
+  windowSize: 'searchx-search-panel-windowSize-value',
 }
 
 export function refreshResult() {
