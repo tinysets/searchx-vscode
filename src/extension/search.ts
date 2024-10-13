@@ -244,6 +244,22 @@ function getStringList(str: string | undefined) {
   return strs;
 }
 
+function getWindowSize(str: string | undefined) {
+  if (!str) {
+    return 1;
+  }
+  try {
+    let num = parseInt(str);
+    if (num <= 0) {
+      num = 1;
+    }
+    return num;
+  } catch (e) {
+    return 1;
+  }
+}
+
+
 function getPatternRes(query: SearchQuery, handlers: Handlers) {
   if (!query.pattern) {
     return;
@@ -269,7 +285,7 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
     caseSensitive: query.caseSensitive == 'true',
     search: query.pattern,
     forward: query.forward == 'true',
-    windowSize: 1,
+    windowSize: getWindowSize(query.windowSize),
     fullSearch: query.fullSearch == 'true'
   }
 
