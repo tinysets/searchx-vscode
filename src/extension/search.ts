@@ -250,6 +250,9 @@ function getWindowSize(str: string | undefined) {
   }
   try {
     let num = parseInt(str);
+    if (num == Number.NaN) {
+      num = 1;
+    }
     if (num <= 0) {
       num = 1;
     }
