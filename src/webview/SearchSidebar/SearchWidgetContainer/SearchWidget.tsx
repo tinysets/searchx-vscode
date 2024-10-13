@@ -62,7 +62,7 @@ function ReplaceBar() {
     childPort.onMessage(MessageType.ClearSearchResults, () => {
       setRewrite('')
     })
-  })
+  })  
   return (
     <div {...stylex.props(styles.replaceToolbar)}>
       <SearchInput

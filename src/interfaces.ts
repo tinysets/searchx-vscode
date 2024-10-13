@@ -69,6 +69,11 @@ export interface QueryArgs {
     windowSize: number
 }
 
+export interface QueryKeywordArgs {
+    keywords: Keyword[]
+    windowSize: number
+}
+
 export interface QueryResultLines {
     [key: number]: string
 }
