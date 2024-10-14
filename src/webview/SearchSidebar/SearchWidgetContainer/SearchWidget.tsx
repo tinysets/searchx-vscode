@@ -108,12 +108,12 @@ function SearchWidgetContainer() {
         {isExpanded ? <VscChevronDown /> : <VscChevronRight />}
       </div> */}
       <div {...stylex.props(styles.inputs)}>
-        {/* <SearchInput
+        <SearchInput
           placeholder="Search"
           value={pattern}
           onChange={setPattern}
           onKeyEnterUp={refreshResult}
-        /> */}
+        />
         <SearchToggles />
         <Editor
           value={code}
