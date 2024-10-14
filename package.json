@@ -136,6 +136,6 @@
     "tsx": "4.19.0",
     "unport": "0.6.0",
     "dedent": "^0.7.0",
-    "react-simple-code-editor": "^0.11.2"
+    "react-simple-code-editor": "^0.14.1"
   }
 }

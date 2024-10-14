@@ -12,6 +12,8 @@ import { useBoolean, useEffectOnce } from 'react-use'
 import { VscChevronRight, VscChevronDown, VscReplaceAll } from 'react-icons/vsc'
 import * as stylex from '@stylexjs/stylex'
 import { MessageType } from '../../../types.js'
+import Editor from 'react-simple-code-editor';
+import { useState } from 'react'
 
 const styles = stylex.create({
   container: {
@@ -62,7 +64,7 @@ function ReplaceBar() {
     childPort.onMessage(MessageType.ClearSearchResults, () => {
       setRewrite('')
     })
-  })  
+  })
   return (
     <div {...stylex.props(styles.replaceToolbar)}>
       <SearchInput
@@ -87,25 +89,43 @@ function ReplaceBar() {
 function SearchWidgetContainer() {
   const [pattern, setPattern] = useSearchField('pattern')
   const [isExpanded, toggleIsExpanded] = useBoolean(hasInitialRewrite())
+
+  const [code, setCode] = useState(
+    `function add(a, b) {\n  return a + b;\n}`
+  );
+
   // sadly unport does not support unsub
   useEffectOnce(() => {
     childPort.onMessage(MessageType.ClearSearchResults, () => {
       setPattern('')
     })
   })
+
+  let padding = { right: 70, left: 5, top: 5, bottom: 5 } as any
   return (
     <div {...stylex.props(styles.container)}>
       {/* <div {...stylex.props(styles.replaceToggle)} onClick={toggleIsExpanded}>
         {isExpanded ? <VscChevronDown /> : <VscChevronRight />}
       </div> */}
       <div {...stylex.props(styles.inputs)}>
-        <SearchInput
+        {/* <SearchInput
           placeholder="Search"
           value={pattern}
           onChange={setPattern}
           onKeyEnterUp={refreshResult}
-        />
+        /> */}
         <SearchToggles />
+        <Editor
+          value={code}
+          onValueChange={code => setCode(code)}
+          highlight={code => code}
+          padding={padding}
+          style={{
+            // fontFamily: '"Fira code", "Fira Mono", monospace',
+            // fontSize: 12,
+            // width: "calc(100% - 66px)",
+          }}
+        />
         {/* {isExpanded ? <ReplaceBar /> : null} */}
       </div>
     </div>
