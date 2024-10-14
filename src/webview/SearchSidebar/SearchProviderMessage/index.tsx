@@ -26,7 +26,7 @@ function Empty({ query }: { query: SearchQuery }) {
   }
   return (
     <div style={style}>
-      No results found for <code style={codeStyle}>{pattern}</code>
+      {/* No results found for <code style={codeStyle}>{pattern}</code>
       {includeFile ? ` in '${includeFile}'` : null}.
       <br />
       If this is unexpected, you can try:
@@ -77,7 +77,7 @@ function Empty({ query }: { query: SearchQuery }) {
             See doc
           </VSCodeLink>
         </li>
-      </ul>
+      </ul> */}
     </div>
   )
 }
