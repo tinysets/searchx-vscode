@@ -2,11 +2,53 @@ import path from 'node:path'
 import * as vscode from 'vscode';
 import { type ExtensionContext, commands, workspace, window } from 'vscode'
 import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
-
 import { parentPort, resolveBinary, streamedPromise } from './common.js'
 import { type SgSearch, type DisplayResult, type SearchQuery, MessageType } from '../types.js'
 import { QueryArgs, QueryResult, QueryResultFullSearch } from '../interfaces.js'
 import { Base64 } from './base64.js'
+
+
+let testSGSearch = {
+  "text": "getNonce()",
+  "range": {
+    "byteOffset": { "start": 5627, "end": 5637 },
+    "start": { "line": 184, "column": 16 },
+    "end": { "line": 184, "column": 26 }
+  },
+  "file": "src\\extension.ts",
+  "lines": "\t\tconst nonce = getNonce();\r",
+  "language": "TypeScript"
+}
+
+
+const dataDir = './data';
+const clientDir = 'E:\\wp\\THS\\Branches\\SBT\\Client\\Assets\\';
+const netbookDir = 'C:\\Users\\lihang.zhao\\Desktop\\GoogleDriver\\workdoc';
+
+let ignoreList = [
+  '**/node_modules',
+  '**/.git',
+  '.gitignore',
+  '.vscode',
+  'Library',
+  'Logs',
+  'Temp',
+  'obj',
+  '**/LICENSE.txt',
+  '**/readme.txt',
+  '**/*vcxproj*.txt',
+  '**/*.pdf',
+];
+
+let includeList: string[] = [
+  // '**/*.js',
+  '**/*.ts',
+  '**/*.txt',
+  '**/*.cs',
+  '**/*.json',
+];
+
+
 
 /**
  * Set up search query handling and search commands
@@ -36,18 +78,6 @@ const LEADING_SPACES_RE = /^\s*/
 const PRE_CTX = 30
 const POST_CTX = 100
 
-
-let testSGSearch = {
-  "text": "getNonce()",
-  "range": {
-    "byteOffset": { "start": 5627, "end": 5637 },
-    "start": { "line": 184, "column": 16 },
-    "end": { "line": 184, "column": 26 }
-  },
-  "file": "src\\extension.ts",
-  "lines": "\t\tconst nonce = getNonce();\r",
-  "language": "TypeScript"
-}
 
 function getFileExtension(filePath: string) {
   const { ext } = path.parse(filePath);
@@ -179,40 +209,12 @@ interface Handlers {
   onError: (e: Error) => void
 }
 
-
-const dataDir = './data';
-const clientDir = 'E:\\wp\\THS\\Branches\\SBT\\Client\\Assets\\';
-const netbookDir = 'C:\\Users\\lihang.zhao\\Desktop\\GoogleDriver\\workdoc';
-
-let ignoreList = [
-  '**/node_modules',
-  '**/.git',
-  '.gitignore',
-  '.vscode',
-  'Library',
-  'Logs',
-  'Temp',
-  'obj',
-  '**/LICENSE.txt',
-  '**/readme.txt',
-  '**/*vcxproj*.txt',
-  '**/*.pdf',
-];
-
-let includeList: string[] = [
-  // '**/*.js',
-  '**/*.ts',
-  '**/*.txt',
-  '**/*.cs',
-  '**/*.json',
-];
-
 function getFilesExclude() {
   let ignoreList: string[] = [];
   const filesConfig = vscode.workspace.getConfiguration('files');
   const filesExclude = filesConfig.get<{ [key: string]: boolean }>('exclude');
   const searchConfig = vscode.workspace.getConfiguration('search');
-  const useIgnoreFiles = searchConfig.get<boolean>('useIgnoreFiles');
+  // const useIgnoreFiles = searchConfig.get<boolean>('useIgnoreFiles');
   const searchExclude = searchConfig.get<{ [key: string]: boolean }>('exclude');
 
   if (filesExclude) {
@@ -244,7 +246,10 @@ function getStringList(str: string | undefined) {
   return strs;
 }
 
-function getWindowSize(str: string | undefined) {
+function getWindowSize(str: string | undefined | number) {
+  if (typeof str === 'number') {
+    return str;
+  }
   if (!str) {
     return 1;
   }
@@ -285,11 +290,11 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
     ignoreList: ignoreList,
     includeList: includeList,
     fzfList: fzfList,
-    caseSensitive: query.caseSensitive == 'true',
+    caseSensitive: !!query.caseSensitive,
     search: query.pattern,
-    forward: query.forward == 'true',
+    forward: !!query.forward,
     windowSize: getWindowSize(query.windowSize),
-    fullSearch: query.fullSearch == 'true'
+    fullSearch: !!query.fullSearch
   }
 
   const proc = buildCommand(queryArgs)

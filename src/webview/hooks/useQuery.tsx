@@ -1,96 +1,41 @@
-import { useEffect, useState } from 'react'
-import { useLocalStorage, useDebounce, useBoolean } from 'react-use'
-import { MessageType, SearchQuery } from '../../types.js'
+import { MessageType } from '../../types.js'
 import { childPort } from '../postMessage'
-export { SearchQuery }
 // this is the single sole point of communication
 // between search query and search result
 import { postSearch } from './useSearch'
+import { includeFileAtom, searchOptions, patternAtom, showOptionsAtom, store } from '../store.js'
+import { Atom } from 'jotai'
 
-const searchQuery: Record<keyof SearchQuery, string> = {
-  pattern: '',
-  strictness: 'smart',
-  selector: '',
-  includeFile: '',
-  excludeFile: '',
-  rewrite: '',
-  lang: '',
-  caseSensitive: '',
-  fullSearch: '',
-  forward: 'true',
-  fzfFile: '',
-  windowSize: '1',
+export const getSearchQuery = () => {
+  let searchQuery = {} as any;
+  for (const key in searchOptions) {
+    const element: Atom<unknown> = searchOptions[key];
+    let value = store.get(element)
+    searchQuery[key] = value;
+  }
+  return searchQuery;
 }
 
-type PatternKeys = 'selector'
-
-const LS_KEYS: Record<Exclude<keyof SearchQuery, PatternKeys>, string> = {
-  pattern: 'searchx-search-panel-input-value',
-  includeFile: 'searchx-search-panel-include-value',
-  excludeFile: 'searchx-search-panel-exclude-value',
-  rewrite: 'searchx-search-panel-rewrite-value',
-  strictness: 'searchx-search-panel-strictness-value',
-  lang: 'searchx-search-panel-lang-value',
-  caseSensitive: 'searchx-search-panel-caseSensitive-value',
-  fullSearch: 'searchx-search-panel-fullSearch-value',
-  forward: 'searchx-search-panel-forward-value',
-  fzfFile: 'searchx-search-panel-fileFzf-value',
-  windowSize: 'searchx-search-panel-windowSize-value',
-}
-
-export function refreshResult() {
+export function refreshSearch() {
+  let searchQuery = getSearchQuery();
   postSearch(searchQuery)
 }
-childPort.onMessage(MessageType.RefreshAllSearch, refreshResult)
+
+(function initListeners() {
+  for (const key in searchOptions) {
+    const element: Atom<unknown> = searchOptions[key];
+    store.sub(element, () => {
+      refreshSearch()
+    })
+  }
+}())
+
+childPort.onMessage(MessageType.RefreshAllSearch, refreshSearch)
 childPort.onMessage(MessageType.ClearSearchResults, () => {
-  searchQuery.pattern = ''
-  refreshResult()
+  store.set(patternAtom, '')
 })
 
-export function useSearchField(key: keyof typeof LS_KEYS) {
-  const [field = '', setField] = useLocalStorage(LS_KEYS[key], '')
-  // this useEffect and useDebounce is silly
-  useEffect(() => {
-    searchQuery[key] = field
-  }, [field, key])
-  useDebounce(refreshResult, 150, [field])
-  return [field, setField] as const
-}
-
-export function usePatternConfig(key: PatternKeys) {
-  const [field, setField] = useState(searchQuery[key])
-  // this useEffect and useDebounce is silly
-  useEffect(() => {
-    searchQuery[key] = field
-  }, [field, key])
-  useDebounce(refreshResult, 150, [field])
-  return [field, setField] as const
-}
-
-export function useSearchOption() {
-  const [includeFile = '', setIncludeFile] = useSearchField('includeFile')
-  const [excludeFile = '', setExcludeFile] = useSearchField('excludeFile')
-  const [fzfFile = '', setFzfFile] = useSearchField('fzfFile')
-  const [showOptions, toggleOptions] = useBoolean(Boolean(includeFile || excludeFile || fzfFile))
-
-  useEffect(() => {
-    childPort.onMessage(MessageType.SetIncludeFile, val => {
-      setIncludeFile(val.includeFile)
-      toggleOptions(true)
-    })
-  }, [toggleOptions, setIncludeFile, setExcludeFile, setFzfFile])
-  return {
-    includeFile,
-    setIncludeFile,
-    showOptions,
-    toggleOptions,
-    excludeFile,
-    setExcludeFile,
-    fzfFile,
-    setFzfFile,
-  }
-}
-
-export function hasInitialRewrite() {
-  return Boolean(localStorage.getItem(LS_KEYS.rewrite))
-}
+childPort.onMessage(MessageType.SetIncludeFile, val => {
+  store.set(includeFileAtom, val.includeFile)
+  store.set(showOptionsAtom, true)
+})

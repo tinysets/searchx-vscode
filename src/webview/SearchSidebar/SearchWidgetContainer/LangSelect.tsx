@@ -1,11 +1,8 @@
 import * as stylex from '@stylexjs/stylex'
-import { Icon, icons } from '../SearchResultList/Icon'
-import { type ChangeEvent, useCallback, useState } from 'react'
-import { VscArrowSmallRight, VscCaseSensitive, VscListFlat, VscRegex, VscWholeWord } from 'react-icons/vsc'
-import { useSearchField } from '../../hooks/useQuery'
-import {
-  VSCodeButton,
-} from '@vscode/webview-ui-toolkit/react'
+import { VscArrowSmallRight, VscCaseSensitive, VscWholeWord } from 'react-icons/vsc'
+import { VSCodeButton, } from '@vscode/webview-ui-toolkit/react'
+import { useAtom } from 'jotai'
+import { caseSensitiveAtom, forwardAtom, fullSearchAtom } from '../../store'
 
 const styles = stylex.create({
 
@@ -49,26 +46,16 @@ const styles = stylex.create({
 
 export function SearchToggles() {
 
-  const [caseSensitiveStr, setCaseSensitive] = useSearchField('caseSensitive')
-  const [forwardStr, setForward] = useSearchField('forward')
-  const [fullSearchStr, setFullSearch] = useSearchField('fullSearch')
-  const caseSensitive = caseSensitiveStr === 'true'
-  const forward = forwardStr === 'true'
-  const fullSearch = fullSearchStr === 'true'
+  const [caseSensitive, setCaseSensitive] = useAtom(caseSensitiveAtom)
+  const [forward, setForward] = useAtom(forwardAtom)
+  const [fullSearch, setFullSearch] = useAtom(fullSearchAtom)
 
-  const [lang, setLang] = useSearchField('lang')
-  const onChange = useCallback(
-    (e: ChangeEvent<HTMLSelectElement>) => {
-      setLang(e.target.value)
-    },
-    [setLang],
-  )
   return (
     <div {...stylex.props(styles.buttonContainer)}>
       <VSCodeButton
         appearance="icon"
         title="Match Case"
-        onClick={() => setCaseSensitive((!caseSensitive).toString())}
+        onClick={() => setCaseSensitive(!caseSensitive)}
         {...stylex.props(styles.button, caseSensitive && styles.activeButton)}
       >
         <VscCaseSensitive />
@@ -76,7 +63,7 @@ export function SearchToggles() {
       <VSCodeButton
         appearance="icon"
         title="Full Search"
-        onClick={() => setFullSearch((!fullSearch).toString())}
+        onClick={() => setFullSearch(!fullSearch)}
         {...stylex.props(styles.button, fullSearch && styles.activeButton)}
       >
         <VscWholeWord />
@@ -84,7 +71,7 @@ export function SearchToggles() {
       <VSCodeButton
         appearance="icon"
         title="Forward Search"
-        onClick={() => setForward((!forward).toString())}
+        onClick={() => setForward(!forward)}
         {...stylex.props(styles.button, forward && styles.activeButton)}
       >
         <VscArrowSmallRight />

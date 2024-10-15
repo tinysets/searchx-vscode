@@ -117,25 +117,26 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/vscode": "^1.73.0",
-    "@types/vscode-webview": "^1.57.0",
-    "typescript": "^5.6.2",
     "@stylexjs/esbuild-plugin": "0.7.5",
     "@stylexjs/stylex": "0.7.5",
+    "@types/node": "^20",
     "@types/react": "18.3.5",
     "@types/react-dom": "18.3.0",
+    "@types/vscode": "^1.73.0",
+    "@types/vscode-webview": "^1.57.0",
     "@vscode/webview-ui-toolkit": "1.4.0",
+    "dedent": "^0.7.0",
     "esbuild": "0.23.1",
+    "jotai": "^2.10.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-icons": "5.3.0",
+    "react-simple-code-editor": "^0.14.1",
     "react-use": "17.5.1",
     "react-virtuoso": "4.10.1",
     "tslib": "2.7.0",
     "tsx": "4.19.0",
-    "unport": "0.6.0",
-    "dedent": "^0.7.0",
-    "react-simple-code-editor": "^0.14.1"
+    "typescript": "^5.6.2",
+    "unport": "0.6.0"
   }
 }

@@ -1,10 +1,11 @@
 import { VscEllipsis } from 'react-icons/vsc'
-import PatternConfig from './PatternConfig'
 import * as stylex from '@stylexjs/stylex'
-import { useSearchOption, refreshResult } from '../../hooks/useQuery'
+import { refreshSearch } from '../../hooks/useQuery'
 import IncludeFile from './IncludeFile'
 import ExcludeFile from './ExcludeFile'
 import FzfFile from './FzfFile'
+import { useAtom } from 'jotai'
+import { excludeFileAtom, fzfFileAtom, includeFileAtom, showOptionsAtom } from '../../store'
 
 const styles = stylex.create({
   button: {
@@ -29,13 +30,13 @@ const styles = stylex.create({
 })
 
 export default function SearchOptions() {
-  const {
-    showOptions, toggleOptions,
-    includeFile, setIncludeFile,
-    excludeFile, setExcludeFile,
-    fzfFile, setFzfFile,
-  } =
-    useSearchOption()
+
+  const [includeFile, setIncludeFile] = useAtom(includeFileAtom)
+  const [excludeFile, setExcludeFile] = useAtom(excludeFileAtom)
+  const [fzfFile, setFzfFile] = useAtom(fzfFileAtom)
+  const [showOptions, setShowOptions] = useAtom(showOptionsAtom)
+  const toggleOptions = () => { setShowOptions(!showOptions) }
+
   return (
     <div {...stylex.props(styles.options)}>
       <button
@@ -50,17 +51,17 @@ export default function SearchOptions() {
           <IncludeFile
             includeFile={includeFile}
             setIncludeFile={setIncludeFile}
-            refreshResult={refreshResult}
+            refreshResult={refreshSearch}
           />
           <FzfFile
             fzfFile={fzfFile}
             setFzfFile={setFzfFile}
-            refreshResult={refreshResult}
+            refreshResult={refreshSearch}
           />
           <ExcludeFile
             excludeFile={excludeFile}
             setExcludeFile={setExcludeFile}
-            refreshResult={refreshResult}
+            refreshResult={refreshSearch}
           />
           {/* TODO: add file exclude*/}
           {/* <PatternConfig /> */}

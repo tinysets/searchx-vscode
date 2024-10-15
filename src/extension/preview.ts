@@ -21,19 +21,15 @@ import {
 } from 'vscode'
 import {
   type ChildToParent,
-  type DisplayResult,
   type SearchQuery,
-  type SgSearch,
   type Diff,
   MessageType,
 } from '../types.js'
-import { parentPort, streamedPromise } from './common'
-import { buildCommand, splitByHighLightToken } from './search'
+import { parentPort } from './common'
 import path from 'node:path'
 
 const SCHEME = 'sgpreview'
 let lastPattern = ''
-let lastRewrite = ''
 
 /**
  * NB A file will only have one preview at a time
@@ -166,22 +162,16 @@ function closeAllDiffs() {
 function refreshDiff(query: SearchQuery) {
   try {
     // Clear cache if pattern/rewrite changed
-    if (query.pattern !== lastPattern || query.rewrite !== lastRewrite) {
+    if (query.pattern !== lastPattern) {
       previewContents.clear()
     }
     if (query.pattern !== lastPattern) {
       closeAllDiffs()
       return
     }
-    if (query.rewrite === lastRewrite) {
-      return
-    }
-    // TODO: refresh diff content!
-    closeAllDiffs()
   } finally {
     // use finally to ensure updated
     lastPattern = query.pattern
-    lastRewrite = query.rewrite
   }
 }
 parentPort.onMessage(MessageType.OpenFile, openFile)
@@ -232,44 +222,44 @@ parentPort.onMessage('search', refreshDiff)
 //   })
 // }
 
-async function doChange(
-  fileUri: Uri,
-  { diffs }: ChildToParent['commitChange'],
-) {
-  const bytes = await workspace.fs.readFile(fileUri)
-  const { receiveResult, conclude } = bufferMaker(bytes)
-  for (const { range, replacement } of diffs) {
-    receiveResult(replacement, range.byteOffset)
-  }
-  const final = conclude()
-  await workspace.fs.writeFile(fileUri, final)
-}
+// async function doChange(
+//   fileUri: Uri,
+//   { diffs }: ChildToParent['commitChange'],
+// ) {
+//   const bytes = await workspace.fs.readFile(fileUri)
+//   const { receiveResult, conclude } = bufferMaker(bytes)
+//   for (const { range, replacement } of diffs) {
+//     receiveResult(replacement, range.byteOffset)
+//   }
+//   const final = conclude()
+//   await workspace.fs.writeFile(fileUri, final)
+// }
 
-async function refreshSearchResult(
-  id: number,
-  fileUri: Uri,
-  query: SearchQuery,
-) {
-  // const command = buildCommand(query)
-  // const bytes = await workspace.fs.readFile(fileUri)
-  // const { receiveResult, conclude } = bufferMaker(bytes)
-  // const updatedResults: DisplayResult[] = []
-  // await streamedPromise(command!, (results: SgSearch[]) => {
-  //   for (const r of results) {
-  //     receiveResult(r.replacement!, r.range.byteOffset)
-  //     updatedResults.push(splitByHighLightToken(r))
-  //   }
-  // })
-  // const final = conclude()
-  // const replaced = new TextDecoder('utf-8').decode(final)
-  // previewContents.set(fileUri.path, replaced)
-  // previewProvider.notifyDiffChange(fileUri)
-  // parentPort.postMessage('refreshSearchResult', {
-  //   id,
-  //   updatedResults,
-  //   fileName: query.includeFile,
-  // })
-}
+// async function refreshSearchResult(
+//   id: number,
+//   fileUri: Uri,
+//   query: SearchQuery,
+// ) {
+//   // const command = buildCommand(query)
+//   // const bytes = await workspace.fs.readFile(fileUri)
+//   // const { receiveResult, conclude } = bufferMaker(bytes)
+//   // const updatedResults: DisplayResult[] = []
+//   // await streamedPromise(command!, (results: SgSearch[]) => {
+//   //   for (const r of results) {
+//   //     receiveResult(r.replacement!, r.range.byteOffset)
+//   //     updatedResults.push(splitByHighLightToken(r))
+//   //   }
+//   // })
+//   // const final = conclude()
+//   // const replaced = new TextDecoder('utf-8').decode(final)
+//   // previewContents.set(fileUri.path, replaced)
+//   // previewProvider.notifyDiffChange(fileUri)
+//   // parentPort.postMessage('refreshSearchResult', {
+//   //   id,
+//   //   updatedResults,
+//   //   fileName: query.includeFile,
+//   // })
+// }
 
 /**
  *  set up replace preview and open file

@@ -1,12 +1,10 @@
-import { SearchInput } from './SearchInput'
 import {
   VSCodeDropdown,
   VSCodeOption,
-  VSCodeLink,
 } from '@vscode/webview-ui-toolkit/react'
-import { usePatternConfig, useSearchField } from '../../hooks/useQuery'
-import { useCallback } from 'react'
 import stylex from '@stylexjs/stylex'
+import { useAtom } from 'jotai'
+import { windowSizeAtom } from '../../store'
 
 const titleStyle = {
   textOverflow: 'ellipsis',
@@ -40,26 +38,16 @@ const styles = stylex.create({
   },
 })
 
-const NOOP = () => {}
-
-function Link({ href }: { href: string }) {
-  return (
-    <VSCodeLink style={{ fontSize: '0.9em', marginLeft: '0.25em' }} href={href}>
-      ⓘ
-    </VSCodeLink>
-  )
-}
-
 export default function WindowSizeConfig() {
-  const [windowSize, setWindowSize] = useSearchField('windowSize')
-  const onWindowSizeChange = useCallback(
-    // biome-ignore lint/suspicious/noExplicitAny: onChange event has wrong type signature.
-    (e: any) => {
-      const select = e.target as HTMLSelectElement
-      setWindowSize(select.value)
-    },
-    [windowSize],
-  )
+
+  const [windowSize, setWindowSize] = useAtom(windowSizeAtom)
+
+  const onWindowSizeChange = (e: any) => {
+    const select = e.target as HTMLSelectElement
+    select.value && setWindowSize(parseInt(select.value))
+    console.log('windowSize', select.value)
+  }
+
   return (
     <div {...stylex.props(styles.options)}>
       <h4 style={titleStyle}>
@@ -67,7 +55,7 @@ export default function WindowSizeConfig() {
         {/* <Link href="https://ast-grep.github.io/advanced/match-algorithm.html" /> */}
       </h4>
       <VSCodeDropdown
-        value={windowSize}
+        value={windowSize.toString()}
         onChange={onWindowSizeChange}
         style={{ width: '100%', zIndex: '2' }}
       >

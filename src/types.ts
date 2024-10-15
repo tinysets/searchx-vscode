@@ -29,20 +29,16 @@ export interface DisplayResult {
 
 interface SearchQueryBasic {
   pattern: string
-  rewrite: string
-  strictness: string
-  selector: string
-  lang: string
 }
 
 export interface SearchQuery extends SearchQueryBasic {
   includeFile: string
-  excludeFile?: string
-  caseSensitive: string
-  fullSearch: string
-  forward: string
+  excludeFile: string
+  caseSensitive: boolean
+  fullSearch: boolean
+  forward: boolean
   fzfFile: string
-  windowSize: string
+  windowSize: number
 }
 
 export type SgSearch = {

@@ -1,19 +1,11 @@
-import { VSCodeButton } from '@vscode/webview-ui-toolkit/react'
 import {
-  useSearchField,
-  refreshResult,
-  hasInitialRewrite,
+  refreshSearch,
 } from '../../hooks/useQuery'
-import { childPort } from '../../postMessage'
-import { useSearchResult, acceptAllChanges } from '../../hooks/useSearch'
-import { SearchInput } from './SearchInput'
 import { SearchToggles } from './LangSelect'
-import { useBoolean, useEffectOnce } from 'react-use'
-import { VscChevronRight, VscChevronDown, VscReplaceAll } from 'react-icons/vsc'
 import * as stylex from '@stylexjs/stylex'
-import { MessageType } from '../../../types.js'
 import Editor from 'react-simple-code-editor';
-import { useState } from 'react'
+import { useAtom } from 'jotai'
+import { patternAtom } from '../../store'
 
 const styles = stylex.create({
   container: {
@@ -54,52 +46,9 @@ const styles = stylex.create({
   },
 })
 
-function ReplaceBar() {
-  const [rewrite, setRewrite] = useSearchField('rewrite')
-  const { searching, groupedByFileSearchResult } = useSearchResult()
-  let disabled = !rewrite || searching || groupedByFileSearchResult.length === 0
-  // disabled = false
-  // sadly unport does not support unsub
-  useEffectOnce(() => {
-    childPort.onMessage(MessageType.ClearSearchResults, () => {
-      setRewrite('')
-    })
-  })
-  return (
-    <div {...stylex.props(styles.replaceToolbar)}>
-      <SearchInput
-        placeholder="Replace"
-        value={rewrite}
-        onChange={setRewrite}
-        onKeyEnterUp={refreshResult}
-      />
-      <VSCodeButton
-        title="Replace All"
-        appearance="icon"
-        disabled={disabled}
-        onClick={acceptAllChanges}
-        {...stylex.props(styles.replaceAll, disabled && styles.disabledButton)}
-      >
-        <VscReplaceAll />
-      </VSCodeButton>
-    </div>
-  )
-}
 
 function SearchWidgetContainer() {
-  const [pattern, setPattern] = useSearchField('pattern')
-  const [isExpanded, toggleIsExpanded] = useBoolean(hasInitialRewrite())
-
-  const [code, setCode] = useState(
-    `function add(a, b) {\n  return a + b;\n}`
-  );
-
-  // sadly unport does not support unsub
-  useEffectOnce(() => {
-    childPort.onMessage(MessageType.ClearSearchResults, () => {
-      setPattern('')
-    })
-  })
+  const [pattern, setPattern] = useAtom(patternAtom)
 
   let highlight = (code: string) => {
     let newStr = ''
@@ -132,7 +81,7 @@ function SearchWidgetContainer() {
           onValueChange={setPattern}
           highlight={highlight}
           padding={padding}
-          onKeyUp={refreshResult}
+          onKeyUp={refreshSearch}
           className='searchx-textarea-container'
           style={{
             // fontFamily: '"Fira code", "Fira Mono", monospace',

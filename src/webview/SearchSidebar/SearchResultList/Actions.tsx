@@ -1,8 +1,6 @@
 import { type MouseEvent, useCallback } from 'react'
 import type { DisplayResult } from '../../../types.js'
 import {
-  acceptChangeAndRefresh,
-  acceptFileChanges,
   dismissOneMatch,
   dismissOneFile,
 } from '../../hooks/useSearch'
@@ -45,28 +43,12 @@ interface ActionsProps {
 }
 
 export function MatchActions({ match }: ActionsProps) {
-  const onClick = useCallback(() => {
-    acceptChangeAndRefresh({
-      filePath: match.file,
-      diffs: [
-        {
-          replacement: match.replacement!,
-          range: match.range,
-        },
-      ],
-    })
-  }, [match])
   const onDismiss = useCallback(() => {
     dismissOneMatch(match)
   }, [match])
   return (
     <ul {...stylex.props(styles.list)} role="toolbar">
       {/* VSCode supports shortcut Replace (⇧⌘1)*/}
-      {match.replacement ? (
-        <li {...stylex.props(styles.action)} onClick={onClick}>
-          <VscReplace role="button" title="Replace" tabIndex={0} />
-        </li>
-      ) : null}
       {/* VSCode supports shortcut Dismiss (⌘Backspace)*/}
       <li {...stylex.props(styles.action)} onClick={onDismiss}>
         <VscClose role="button" title="Dismiss" tabIndex={0} />
@@ -81,13 +63,6 @@ interface FileActionsProps {
 }
 
 export function FileActions({ filePath, hasReplace }: FileActionsProps) {
-  const onClick = useCallback(
-    (e: MouseEvent<HTMLLIElement>) => {
-      e.stopPropagation()
-      acceptFileChanges(filePath)
-    },
-    [filePath],
-  )
   const onDismiss = useCallback(
     (e: MouseEvent<HTMLLIElement>) => {
       e.stopPropagation()
@@ -98,11 +73,6 @@ export function FileActions({ filePath, hasReplace }: FileActionsProps) {
   return (
     <ul {...stylex.props(styles.list)} role="toolbar">
       {/* VSCode supports shortcut Replace (⇧⌘1)*/}
-      {hasReplace && (
-        <li {...stylex.props(styles.action)} onClick={onClick}>
-          <VscReplaceAll role="button" title="Replace All" tabIndex={0} />
-        </li>
-      )}
       {/* VSCode supports shortcut Dismiss (⌘Backspace)*/}
       <li {...stylex.props(styles.action)} onClick={onDismiss}>
         <VscClose role="button" title="Dismiss" tabIndex={0} />
