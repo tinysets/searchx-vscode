@@ -104,3 +104,28 @@ svg {
   width: 2%;
   height: 2px;
 }
+
+.searchx-textarea-container {
+  background-color: var(--vscode-input-background) !important;
+  color: var(--vscode-input-foreground) !important;
+}
+
+.searchx-textarea-pre {
+  border: 1px solid var(--vscode-input-border, transparent) !important;
+  border-radius: calc(var(--corner-radius-round) * 1px) !important;
+  outline: none !important;
+}
+
+.searchx-textarea {
+  border: 1px solid var(--vscode-input-border, transparent) !important;
+  border-radius: calc(var(--corner-radius-round) * 1px) !important;
+  outline: none !important;
+}
+
+.searchx-textarea:focus {
+  border-color: var(--vscode-focusBorder) !important;
+}
+
+.searchx-textarea-container .keyword {
+  color: #ce9178;
+}

@@ -101,6 +101,18 @@ function SearchWidgetContainer() {
     })
   })
 
+  let highlight = (code: string) => {
+    let newStr = ''
+    for (const char of code) {
+      if (char == '`' || char == `/`) {
+        newStr += `<span class="keyword">${char}</span>`
+      } else {
+        newStr += char
+      }
+    }
+    return newStr
+  }
+
   let padding = { right: 70, left: 5, top: 5, bottom: 5 } as any
   return (
     <div {...stylex.props(styles.container)}>
@@ -118,13 +130,16 @@ function SearchWidgetContainer() {
         <Editor
           value={code}
           onValueChange={code => setCode(code)}
-          highlight={code => code}
+          highlight={highlight}
           padding={padding}
+          className='searchx-textarea-container'
           style={{
             // fontFamily: '"Fira code", "Fira Mono", monospace',
             // fontSize: 12,
             // width: "calc(100% - 66px)",
           }}
+          textareaClassName='searchx-textarea'
+          preClassName='searchx-textarea-pre'
         />
         {/* {isExpanded ? <ReplaceBar /> : null} */}
       </div>
