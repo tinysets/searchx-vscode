@@ -15,18 +15,15 @@ import {
   commands,
   window,
   workspace,
-  TextEditorRevealType,
   TabInputTextDiff,
   EventEmitter,
 } from 'vscode'
 import {
   type ChildToParent,
   type SearchQuery,
-  type Diff,
   MessageType,
 } from '../types.js'
 import { parentPort } from './common'
-import path from 'node:path'
 
 const SCHEME = 'sgpreview'
 let lastPattern = ''
@@ -96,57 +93,6 @@ function openFile({ filePath, locationsToSelect }: ChildToParent['openFile']) {
   })
 }
 
-async function previewDiff(param: ChildToParent['previewDiff']) {
-  const { filePath, diffs } = param
-  const fileUri = workspaceUriFromFilePath(filePath)
-  if (!fileUri) {
-    return
-  }
-  // if preview not in the preview provider, generate it
-  if (!previewContents.has(fileUri.path)) {
-    await generatePreview(fileUri, diffs)
-  }
-  doPreview(fileUri, param)
-}
-
-async function doPreview(
-  fileUri: Uri,
-  { filePath, locationsToSelect }: ChildToParent['previewDiff'],
-) {
-  const previewUri = fileUri.with({
-    scheme: SCHEME,
-    query: Date.now().toString(),
-  })
-  const filename = path.basename(filePath)
-  // https://github.com/microsoft/vscode/blob/d63202a5382aa104f5515ea09053a2a21a2587c6/src/vs/workbench/api/common/extHostApiCommands.ts#L422
-  await commands.executeCommand(
-    'vscode.diff',
-    fileUri,
-    previewUri,
-    `${filename} ↔ ${filename} (Replace Preview)`,
-    {
-      preserveFocus: true,
-    },
-  )
-  const range = locationToRange(locationsToSelect)
-  window.activeTextEditor?.revealRange(range, TextEditorRevealType.InCenter)
-}
-
-async function dismissDiff(param: ChildToParent['dismissDiff']) {
-  const { filePath, diffs } = param
-  const fileUri = workspaceUriFromFilePath(filePath)
-  if (!fileUri) {
-    return
-  }
-  // if preview not in the preview provider, skip generate
-  if (!previewContents.has(fileUri.path)) {
-    return
-  }
-  await generatePreview(fileUri, diffs)
-  // update the preview snapshot
-  const previewUri = fileUri.with({ scheme: SCHEME })
-  previewProvider.notifyDiffChange(previewUri)
-}
 
 function closeAllDiffs() {
   console.debug('Search pattern changed. Closing all diffs.')
@@ -175,9 +121,7 @@ function refreshDiff(query: SearchQuery) {
   }
 }
 parentPort.onMessage(MessageType.OpenFile, openFile)
-parentPort.onMessage('previewDiff', previewDiff)
-parentPort.onMessage('dismissDiff', dismissDiff)
-parentPort.onMessage('search', refreshDiff)
+parentPort.onMessage(MessageType.Search, refreshDiff)
 // parentPort.onMessage('commitChange', onCommitChange)
 // parentPort.onMessage('replaceAll', onReplaceAll)
 
@@ -269,61 +213,4 @@ export function activatePreview({ subscriptions }: ExtensionContext) {
     workspace.registerTextDocumentContentProvider(SCHEME, previewProvider),
     workspace.onDidCloseTextDocument(cleanupDocument),
   )
-}
-
-function bufferMaker(bytes: Uint8Array) {
-  const encoder = new TextEncoder()
-  let newBuffer = new Uint8Array(bytes.byteLength)
-  let srcOffset = 0
-  let destOffset = 0
-  function resizeBuffer() {
-    const temp = new Uint8Array(newBuffer.byteLength * 2)
-    temp.set(newBuffer)
-    newBuffer = temp
-  }
-  function receiveResult(
-    replace: string,
-    byteOffset: { start: number; end: number },
-  ) {
-    // skip overlapping replacement
-    if (byteOffset.start < srcOffset) {
-      return
-    }
-    const slice = bytes.slice(srcOffset, byteOffset.start)
-    const replacement = encoder.encode(replace)
-    const expectedLength =
-      destOffset + slice.byteLength + replacement.byteLength
-    while (expectedLength > newBuffer.byteLength) {
-      resizeBuffer()
-    }
-    newBuffer.set(slice, destOffset)
-    destOffset += slice.byteLength
-    newBuffer.set(replacement, destOffset)
-    destOffset += replacement.byteLength
-    srcOffset = byteOffset.end
-  }
-  function conclude() {
-    const slice = bytes.slice(srcOffset, bytes.byteLength)
-    while (destOffset + slice.byteLength > newBuffer.byteLength) {
-      resizeBuffer()
-    }
-    newBuffer.set(slice, destOffset)
-    return newBuffer.slice(0, destOffset + slice.byteLength)
-  }
-  return {
-    receiveResult,
-    conclude,
-  }
-}
-
-async function generatePreview(uri: Uri, diffs: Diff[]) {
-  // TODO, maybe we also need a rewrite change event?
-  const bytes = await workspace.fs.readFile(uri)
-  const { receiveResult, conclude } = bufferMaker(bytes)
-  for (const { range, replacement } of diffs) {
-    receiveResult(replacement, range.byteOffset)
-  }
-  const final = conclude()
-  const replaced = new TextDecoder('utf-8').decode(final)
-  previewContents.set(uri.path, replaced)
 }

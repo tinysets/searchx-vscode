@@ -23,18 +23,3 @@ export const openFile = (data: OpenPayload) => {
   childPort.postMessage(MessageType.OpenFile, data)
 }
 
-export function previewDiff(data: ChildToParent['previewDiff']) {
-  childPort.postMessage(MessageType.PreviewDiff, data)
-}
-
-export function dismissDiff(data: ChildToParent['dismissDiff']) {
-  childPort.postMessage(MessageType.DismissDiff, data)
-}
-
-export function commitChange(diff: ChildToParent['commitChange']) {
-  childPort.postMessage(MessageType.CommitChange, diff)
-}
-
-export function replaceAll(payload: ChildToParent['replaceAll']) {
-  childPort.postMessage(MessageType.ReplaceAll, payload)
-}

@@ -2,7 +2,6 @@ import {
   type DisplayResult,
   type OpenPayload,
   openFile,
-  dismissDiff,
   childPort,
 } from '../postMessage'
 import { useSyncExternalStore } from 'react'
@@ -166,14 +165,6 @@ export function dismissOneMatch(match: DisplayResult) {
       continue
     }
     group[1] = group[1].filter(m => m !== match)
-    dismissDiff({
-      filePath: match.file,
-      diffs: group[1].map(d => ({
-        replacement: d.replacement!,
-        range: d.range,
-      })),
-      locationsToSelect: match.range,
-    })
     break
   }
   // remove files if user deleted all matches
