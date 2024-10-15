@@ -113,25 +113,26 @@ function SearchWidgetContainer() {
     return newStr
   }
 
-  let padding = { right: 70, left: 5, top: 5, bottom: 5 } as any
+  let padding = { right: 70, left: 5, top: 3, bottom: 3 } as any
   return (
     <div {...stylex.props(styles.container)}>
       {/* <div {...stylex.props(styles.replaceToggle)} onClick={toggleIsExpanded}>
         {isExpanded ? <VscChevronDown /> : <VscChevronRight />}
       </div> */}
       <div {...stylex.props(styles.inputs)}>
-        <SearchInput
+        {/* <SearchInput
           placeholder="Search"
           value={pattern}
           onChange={setPattern}
           onKeyEnterUp={refreshResult}
-        />
-        <SearchToggles />
+        /> */}
         <Editor
-          value={code}
-          onValueChange={code => setCode(code)}
+          placeholder='Search'
+          value={pattern}
+          onValueChange={setPattern}
           highlight={highlight}
           padding={padding}
+          onKeyUp={refreshResult}
           className='searchx-textarea-container'
           style={{
             // fontFamily: '"Fira code", "Fira Mono", monospace',
@@ -141,6 +142,7 @@ function SearchWidgetContainer() {
           textareaClassName='searchx-textarea'
           preClassName='searchx-textarea-pre'
         />
+        <SearchToggles />
         {/* {isExpanded ? <ReplaceBar /> : null} */}
       </div>
     </div>
