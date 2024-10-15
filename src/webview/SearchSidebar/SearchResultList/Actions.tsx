@@ -6,7 +6,7 @@ import {
 } from '../../hooks/useSearch'
 
 import * as stylex from '@stylexjs/stylex'
-import { VscReplace, VscReplaceAll, VscClose } from 'react-icons/vsc'
+import { VscClose } from 'react-icons/vsc'
 
 const styles = stylex.create({
   list: {
