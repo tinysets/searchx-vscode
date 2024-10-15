@@ -8,45 +8,45 @@ import { QueryArgs, QueryResult, QueryResultFullSearch } from '../interfaces.js'
 import { Base64 } from './base64.js'
 
 
-let testSGSearch = {
-  "text": "getNonce()",
-  "range": {
-    "byteOffset": { "start": 5627, "end": 5637 },
-    "start": { "line": 184, "column": 16 },
-    "end": { "line": 184, "column": 26 }
-  },
-  "file": "src\\extension.ts",
-  "lines": "\t\tconst nonce = getNonce();\r",
-  "language": "TypeScript"
-}
+// let testSGSearch = {
+//   "text": "getNonce()",
+//   "range": {
+//     "byteOffset": { "start": 5627, "end": 5637 },
+//     "start": { "line": 184, "column": 16 },
+//     "end": { "line": 184, "column": 26 }
+//   },
+//   "file": "src\\extension.ts",
+//   "lines": "\t\tconst nonce = getNonce();\r",
+//   "language": "TypeScript"
+// }
 
 
-const dataDir = './data';
-const clientDir = 'E:\\wp\\THS\\Branches\\SBT\\Client\\Assets\\';
-const netbookDir = 'C:\\Users\\lihang.zhao\\Desktop\\GoogleDriver\\workdoc';
+// const dataDir = './data';
+// const clientDir = 'E:\\wp\\THS\\Branches\\SBT\\Client\\Assets\\';
+// const netbookDir = 'C:\\Users\\lihang.zhao\\Desktop\\GoogleDriver\\workdoc';
 
-let ignoreList = [
-  '**/node_modules',
-  '**/.git',
-  '.gitignore',
-  '.vscode',
-  'Library',
-  'Logs',
-  'Temp',
-  'obj',
-  '**/LICENSE.txt',
-  '**/readme.txt',
-  '**/*vcxproj*.txt',
-  '**/*.pdf',
-];
+// let ignoreList = [
+//   '**/node_modules',
+//   '**/.git',
+//   '.gitignore',
+//   '.vscode',
+//   'Library',
+//   'Logs',
+//   'Temp',
+//   'obj',
+//   '**/LICENSE.txt',
+//   '**/readme.txt',
+//   '**/*vcxproj*.txt',
+//   '**/*.pdf',
+// ];
 
-let includeList: string[] = [
-  // '**/*.js',
-  '**/*.ts',
-  '**/*.txt',
-  '**/*.cs',
-  '**/*.json',
-];
+// let includeList: string[] = [
+//   // '**/*.js',
+//   '**/*.ts',
+//   '**/*.txt',
+//   '**/*.cs',
+//   '**/*.json',
+// ];
 
 
 
