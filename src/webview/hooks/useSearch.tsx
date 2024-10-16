@@ -32,7 +32,7 @@ function refreshResultIfStale() {
     }
   }
 }
-export function onResultChange(f: () => void) {
+export function addResultChangeListener(f: () => void) {
   resultChangeCallbacks.add(f)
   return () => {
     resultChangeCallbacks.delete(f)

@@ -3,7 +3,7 @@
 
 import { useCallback, useEffect, useRef } from 'react'
 import { useBoolean } from 'react-use'
-import { onResultChange, findIndex } from '../../hooks/useSearch'
+import { addResultChangeListener, findIndex } from '../../hooks/useSearch'
 import { MessageType, type DisplayResult } from '../../../types.js'
 import type { VirtuosoHandle } from 'react-virtuoso'
 import { childPort } from '../../messageHub'
@@ -18,7 +18,7 @@ const expandStateMap = new Map<string, boolean>()
 let defaultOpen = true
 const toggleSet = new Set<(b?: boolean) => void>()
 
-onResultChange(() => {
+addResultChangeListener(() => {
   expandStateMap.clear()
   lastActiveFile = ''
   activeItem = null
