@@ -4,7 +4,7 @@ import { parentPort } from './messageHub'
 import { MessageType } from '../types'
 import path from 'node:path'
 import { searchCallback } from './search'
-import { openFile, refreshDiff } from './preview'
+import { openFile } from './preview'
 
 export function registerCommand(context: vscode.ExtensionContext) {
 
@@ -62,5 +62,4 @@ function toggleAllSearch() {
 }
 
 parentPort.onMessage(MessageType.OpenFile, openFile)
-parentPort.onMessage(MessageType.Search, refreshDiff)
 parentPort.onMessage(MessageType.Search, searchCallback)
