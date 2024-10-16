@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import { VSCodeLink } from '@vscode/webview-ui-toolkit/react'
 import type { DisplayResult } from '../../../types.js'
 
 const style = {
@@ -7,10 +6,6 @@ const style = {
   padding: '0 22px 8px',
   lineHeight: '1.4em',
 }
-
-const codeStyle = {
-  fontSize: 'var(--vscode-font-size)',
-} as const
 
 function Empty() {
   return (
