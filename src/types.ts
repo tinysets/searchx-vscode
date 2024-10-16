@@ -23,15 +23,11 @@ export interface DisplayResult {
   displayLine: string
   lineSpan: number
   range: RangeInfo
-  replacement?: string
   language: string
 }
 
-interface SearchQueryBasic {
+export interface SearchQuery {
   pattern: string
-}
-
-export interface SearchQuery extends SearchQueryBasic {
   includeFile: string
   excludeFile: string
   caseSensitive: boolean
@@ -47,7 +43,6 @@ export type SgSearch = {
   file: string
   lines: string
   language: string
-  replacement?: string
 }
 
 export interface ParentToChild {
@@ -73,14 +68,8 @@ export interface ParentToChild {
   toggleAllSearch: unknown
 }
 
-export interface Diff {
-  replacement: string
-  range: RangeInfo
-}
-
 export interface ChildToParent {
   search: WithId<SearchQuery>
-  reload: unknown
   openFile: {
     filePath: string
     locationsToSelect: {
@@ -88,36 +77,6 @@ export interface ChildToParent {
       end: Position
     }
   }
-  previewDiff: {
-    filePath: string
-    locationsToSelect: {
-      start: Position
-      end: Position
-    }
-    diffs: Diff[]
-  }
-  dismissDiff: {
-    filePath: string
-    locationsToSelect: {
-      start: Position
-      end: Position
-    }
-    diffs: Diff[]
-  }
-  commitChange: WithId<
-    {
-      filePath: string
-      diffs: Diff[]
-    } & SearchQueryBasic
-  >
-  replaceAll: WithId<
-    {
-      changes: {
-        filePath: string
-        diffs: Diff[]
-      }[]
-    } & SearchQueryBasic
-  >
 }
 
 export type Definition = {
@@ -131,16 +90,10 @@ export type ParentPort = Unport<Definition, 'parent'>
 
 export enum MessageType {
   Search = 'search',
-  Reload = 'reload',
   OpenFile = 'openFile',
-  PreviewDiff = 'previewDiff',
-  DismissDiff = 'dismissDiff',
-  CommitChange = 'commitChange',
-  ReplaceAll = 'replaceAll',
   SearchEnd = 'searchEnd',
   Error = 'error',
   SetIncludeFile = 'setIncludeFile',
-  RefreshSearchResult = 'refreshSearchResult',
   RefreshAllSearch = 'refreshAllSearch',
   ClearSearchResults = 'clearSearchResults',
   ToggleAllSearch = 'toggleAllSearch',

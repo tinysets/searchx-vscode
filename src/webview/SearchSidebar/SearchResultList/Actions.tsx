@@ -59,10 +59,9 @@ export function MatchActions({ match }: ActionsProps) {
 
 interface FileActionsProps {
   filePath: string
-  hasReplace: boolean
 }
 
-export function FileActions({ filePath, hasReplace }: FileActionsProps) {
+export function FileActions({ filePath }: FileActionsProps) {
   const onDismiss = useCallback(
     (e: MouseEvent<HTMLLIElement>) => {
       e.stopPropagation()

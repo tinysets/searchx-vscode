@@ -131,17 +131,8 @@ export function splitByHighLightToken(searchQuery: SearchQuery, result: QueryRes
     file: search.file,
     range: search.range,
     language: search.language,
-    ...handleReplacement(search.replacement),
   }
 }
-
-function handleReplacement(replacement?: string) {
-  if (replacement) {
-    return { replacement }
-  }
-  return {}
-}
-
 
 type StreamingHandler = (r: QueryResult[]) => void
 let child: ChildProcessWithoutNullStreams | undefined

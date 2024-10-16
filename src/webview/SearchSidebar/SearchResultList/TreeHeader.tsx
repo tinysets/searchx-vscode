@@ -63,7 +63,6 @@ export default function TreeHeader({
   isScrolled,
 }: TreeHeaderProps) {
   const { file: filePath, language } = matches[0]
-  const hasReplace = Boolean(matches[0].replacement)
   const [active, setActive] = useActiveItem(matches)
   const styleProps = stylex.props(
     styles.fileName,
@@ -86,7 +85,7 @@ export default function TreeHeader({
       </div>
       <FileLink filePath={filePath} language={language} />
       {hovered ? (
-        <FileActions filePath={filePath} hasReplace={hasReplace} />
+        <FileActions filePath={filePath} />
       ) : (
         <VSCodeBadge {...stylex.props(styles.badge)}>
           {matches.length}

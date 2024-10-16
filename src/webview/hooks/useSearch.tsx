@@ -85,22 +85,6 @@ childPort.onMessage(MessageType.Error, event => {
   notify()
 })
 
-childPort.onMessage(MessageType.RefreshSearchResult, event => {
-  if (event.id !== id) {
-    return
-  }
-  const { fileName, updatedResults } = event
-  const temp = new Map(grouped)
-  if (updatedResults.length === 0) {
-    temp.delete(fileName)
-  } else {
-    temp.set(fileName, updatedResults)
-  }
-  grouped = [...temp.entries()]
-  grouped.sort(byFilePath)
-  notify()
-})
-
 function groupBy(matches: DisplayResult[]) {
   const groups = new Map<string, DisplayResult[]>()
   for (const match of matches) {

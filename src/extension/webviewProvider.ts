@@ -1,7 +1,6 @@
 import type { ChannelMessage } from 'unport'
 import * as vscode from 'vscode'
 import { window } from 'vscode'
-import { MessageType } from '../types.js'
 import { parentPort } from './messageHub.js'
 
 /**
@@ -39,13 +38,6 @@ function setupParentPort(webviewView: vscode.WebviewView) {
         pipe(message)
       })
     },
-  })
-  parentPort.onMessage(MessageType.Reload, _payload => {
-    const nonce = getNonce()
-    webviewView.webview.html = webviewView.webview.html.replace(
-      /(nonce="\w+?")|(nonce-\w+?)/g,
-      `nonce="${nonce}"`,
-    )
   })
 }
 
