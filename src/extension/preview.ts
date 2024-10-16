@@ -23,7 +23,7 @@ import {
   type SearchQuery,
 } from '../types.js'
 
-const SCHEME = 'sgpreview'
+const SCHEME = 'searchx-preview'
 let lastPattern = ''
 
 /**
