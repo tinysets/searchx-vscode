@@ -21,9 +21,7 @@ import {
 import {
   type ChildToParent,
   type SearchQuery,
-  MessageType,
 } from '../types.js'
-import { parentPort } from './common'
 
 const SCHEME = 'sgpreview'
 let lastPattern = ''
@@ -81,7 +79,7 @@ function locationToRange(
   )
 }
 
-function openFile({ filePath, locationsToSelect }: ChildToParent['openFile']) {
+export function openFile({ filePath, locationsToSelect }: ChildToParent['openFile']) {
   const fileUri = workspaceUriFromFilePath(filePath)
   if (!fileUri) {
     return
@@ -105,7 +103,7 @@ function closeAllDiffs() {
   }
 }
 
-function refreshDiff(query: SearchQuery) {
+export function refreshDiff(query: SearchQuery) {
   try {
     // Clear cache if pattern/rewrite changed
     if (query.pattern !== lastPattern) {
@@ -120,8 +118,7 @@ function refreshDiff(query: SearchQuery) {
     lastPattern = query.pattern
   }
 }
-parentPort.onMessage(MessageType.OpenFile, openFile)
-parentPort.onMessage(MessageType.Search, refreshDiff)
+
 // parentPort.onMessage('commitChange', onCommitChange)
 // parentPort.onMessage('replaceAll', onReplaceAll)
 

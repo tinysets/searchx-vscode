@@ -1,10 +1,7 @@
-import type { ParentPort } from '../types.js'
-import { Unport } from 'unport'
 import { workspace } from 'vscode'
 import { execFile } from 'node:child_process'
 import type { ChildProcessWithoutNullStreams } from 'node:child_process'
 
-export const parentPort: ParentPort = new Unport()
 
 let defaultBinary: string;
 
@@ -41,7 +38,7 @@ export function resolveBinary() {
 	return config
 }
 
-export async function testBinaryExist(command: string) {
+async function testBinaryExist(command: string) {
 	const uris = workspace.workspaceFolders?.map(i => i.uri?.fsPath) ?? []
 	return new Promise(r => {
 		execFile(

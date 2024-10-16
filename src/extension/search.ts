@@ -1,12 +1,12 @@
 import path from 'node:path'
 import * as vscode from 'vscode';
-import { type ExtensionContext, commands, workspace, window } from 'vscode'
+import { workspace } from 'vscode'
 import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
-import { parentPort, resolveBinary, streamedPromise } from './common.js'
-import { type SgSearch, type DisplayResult, type SearchQuery, MessageType } from '../types.js'
+import { resolveBinary, streamedPromise } from './callcli.js'
+import { type SgSearch, type DisplayResult, type SearchQuery, MessageType, WithId } from '../types.js'
 import { QueryArgs, QueryResult, QueryResultFullSearch } from '../interfaces.js'
 import { Base64 } from './base64.js'
-
+import { parentPort } from './messageHub.js'
 
 // let testSGSearch = {
 //   "text": "getNonce()",
@@ -49,30 +49,6 @@ import { Base64 } from './base64.js'
 // ];
 
 
-
-/**
- * Set up search query handling and search commands
- */
-export function activateSearch(context: ExtensionContext) {
-  context.subscriptions.push(
-    commands.registerCommand('searchx.searchInFolder', findInFolder),
-  )
-}
-
-// biome-ignore lint/suspicious/noExplicitAny: todo
-function findInFolder(data: any) {
-  const workspacePath = workspace.workspaceFolders?.[0]?.uri?.fsPath
-  // compute relative path to the workspace folder
-  const relative = workspacePath && path.relative(workspacePath, data.fsPath)
-  if (!relative) {
-    window.showErrorMessage('searchx Error: folder is not in the workspace')
-    return
-  }
-  commands.executeCommand('searchx.search.input.focus')
-  parentPort.postMessage(MessageType.SetIncludeFile, {
-    includeFile: relative,
-  })
-}
 
 const LEADING_SPACES_RE = /^\s*/
 const PRE_CTX = 30
@@ -307,8 +283,7 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
   return uniqueCommand(proc, handlers.onData)
 }
 
-
-parentPort.onMessage(MessageType.Search, async payload => {
+export async function searchCallback(payload: WithId<SearchQuery>) {
   const onData = (ret: QueryResult[]) => {
     parentPort.postMessage(MessageType.SearchResultStreaming, {
       ...payload,
@@ -327,4 +302,6 @@ parentPort.onMessage(MessageType.Search, async payload => {
   })
 
   parentPort.postMessage(MessageType.SearchEnd, payload)
-})
+}
+
+

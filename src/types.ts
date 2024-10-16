@@ -1,6 +1,6 @@
 import type { Unport } from 'unport'
 
-type WithId<T> = T & { id: number }
+export type WithId<T> = T & { id: number }
 
 export type Position = {
   line: number

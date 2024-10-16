@@ -1,8 +1,8 @@
 import type { ChannelMessage } from 'unport'
-import { parentPort } from './common'
 import * as vscode from 'vscode'
-import { window, commands } from 'vscode'
+import { window } from 'vscode'
 import { MessageType } from '../types.js'
+import { parentPort } from './messageHub.js'
 
 /**
  * Set up webviews for UI display, e.g. sidebar.
@@ -15,12 +15,18 @@ export function activateWebview(context: vscode.ExtensionContext) {
       SearchSidebarProvider.viewType,
       provider,
       { webviewOptions: { retainContextWhenHidden: true } },
-    ),
-    commands.registerCommand('searchx.refreshSearch', refreshSearch),
-    commands.registerCommand('searchx.clearSearchResults', clearSearchResults),
-    commands.registerCommand('searchx.expandAll', toggleAllSearch),
-    commands.registerCommand('searchx.collapseAll', toggleAllSearch),
+    )
   )
+}
+
+function getNonce() {
+  let text = ''
+  const possible =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  for (let i = 0; i < 32; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length))
+  }
+  return text
 }
 
 function setupParentPort(webviewView: vscode.WebviewView) {
@@ -106,42 +112,3 @@ class SearchSidebarProvider implements vscode.WebviewViewProvider {
   }
 }
 
-function getNonce() {
-  let text = ''
-  const possible =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  for (let i = 0; i < 32; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length))
-  }
-  return text
-}
-
-function refreshSearch() {
-  parentPort.postMessage(MessageType.RefreshAllSearch, {})
-}
-
-function clearSearchResults() {
-  parentPort.postMessage(MessageType.ClearSearchResults, {})
-}
-
-let defaultCollapse = false
-
-// reset default collapse when starting a new search
-parentPort.onMessage(MessageType.Search, async () => {
-  defaultCollapse = false
-  vscode.commands.executeCommand(
-    'setContext',
-    'searchx.searchDefaultCollapse',
-    false,
-  )
-})
-
-function toggleAllSearch() {
-  parentPort.postMessage(MessageType.ToggleAllSearch, {})
-  defaultCollapse = !defaultCollapse
-  vscode.commands.executeCommand(
-    'setContext',
-    'searchx.searchDefaultCollapse',
-    defaultCollapse,
-  )
-}

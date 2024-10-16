@@ -1,4 +1,4 @@
-import { atom, getDefaultStore } from "jotai";
+import { atom, getDefaultStore, PrimitiveAtom } from "jotai";
 
 const store = getDefaultStore()
 
@@ -17,7 +17,7 @@ function setSearching(value: boolean) {
 	store.set(searchingAtom, value)
 }
 
-let searchOptions = {
+let searchOptions: { [key: string]: PrimitiveAtom<any> } = {
 	pattern: patternAtom,
 	includeFile: includeFileAtom,
 	excludeFile: excludeFileAtom,
@@ -26,7 +26,7 @@ let searchOptions = {
 	fullSearch: fullSearchAtom,
 	forward: forwardAtom,
 	windowSize: windowSizeAtom,
-} as any
+}
 
 
 export {
