@@ -6,6 +6,17 @@ import { postSearch } from './useSearch'
 import { includeFileAtom, searchOptions, patternAtom, showOptionsAtom, store } from '../store.js'
 import { Atom } from 'jotai'
 
+
+function initListeners() {
+  for (const key in searchOptions) {
+    const element: Atom<unknown> = searchOptions[key];
+    store.sub(element, () => {
+      refreshSearch()
+    })
+  }
+}
+initListeners();
+
 export const getSearchQuery = () => {
   let searchQuery = {} as any;
   for (const key in searchOptions) {
@@ -20,15 +31,6 @@ export function refreshSearch() {
   let searchQuery = getSearchQuery();
   postSearch(searchQuery)
 }
-
-(function initListeners() {
-  for (const key in searchOptions) {
-    const element: Atom<unknown> = searchOptions[key];
-    store.sub(element, () => {
-      refreshSearch()
-    })
-  }
-}())
 
 childPort.onMessage(MessageType.RefreshAllSearch, refreshSearch)
 childPort.onMessage(MessageType.ClearSearchResults, () => {
