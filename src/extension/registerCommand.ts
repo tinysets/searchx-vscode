@@ -40,17 +40,6 @@ function clearSearchResults() {
 }
 
 let defaultCollapse = false
-
-// reset default collapse when starting a new search
-parentPort.onMessage(MessageType.Search, async () => {
-	defaultCollapse = false
-	vscode.commands.executeCommand(
-		'setContext',
-		'searchx.searchDefaultCollapse',
-		false,
-	)
-})
-
 function toggleAllSearch() {
 	parentPort.postMessage(MessageType.ToggleAllSearch, {})
 	defaultCollapse = !defaultCollapse
@@ -60,6 +49,15 @@ function toggleAllSearch() {
 		defaultCollapse,
 	)
 }
+// reset default collapse when starting a new search
+parentPort.onMessage(MessageType.Search, async () => {
+	defaultCollapse = false
+	vscode.commands.executeCommand(
+		'setContext',
+		'searchx.searchDefaultCollapse',
+		false,
+	)
+})
 
 parentPort.onMessage(MessageType.OpenFile, openFile)
 parentPort.onMessage(MessageType.Search, searchCallback)

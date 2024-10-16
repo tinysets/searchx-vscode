@@ -6,7 +6,7 @@ import { useBoolean } from 'react-use'
 import { onResultChange, findIndex } from '../../hooks/useSearch'
 import { MessageType, type DisplayResult } from '../../../types.js'
 import type { VirtuosoHandle } from 'react-virtuoso'
-import { childPort } from '../../postMessage'
+import { childPort } from '../../messageHub'
 
 let ref: VirtuosoHandle
 

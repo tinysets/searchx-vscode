@@ -1,5 +1,5 @@
 import { MessageType } from '../../types.js'
-import { childPort } from '../postMessage'
+import { childPort } from '../messageHub.js'
 // this is the single sole point of communication
 // between search query and search result
 import { postSearch } from './useSearch'

@@ -3,7 +3,7 @@ import {
   type OpenPayload,
   openFile,
   childPort,
-} from '../postMessage'
+} from '../messageHub'
 import { useSyncExternalStore } from 'react'
 import { MessageType, SearchQuery } from '../../types.js'
 import { setSearching } from '../store'
