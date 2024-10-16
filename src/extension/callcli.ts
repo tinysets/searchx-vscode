@@ -67,7 +67,7 @@ export function streamedPromise<T>(
 	proc.stdout.setEncoding('utf8')
 	proc.stdout.on('data', (data: string) => {
 		// collect results in this batch
-		console.log('result=> ', data)
+		console.log('result=> \n', data)
 		const result: T[] = []
 		const lines = (trailingLine + data).split(/\r?\n/) // 每一行都是一个json结果,否则就丢弃
 		trailingLine = ''

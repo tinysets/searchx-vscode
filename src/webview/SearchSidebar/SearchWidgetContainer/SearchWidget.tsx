@@ -1,6 +1,3 @@
-import {
-  refreshSearch,
-} from '../../hooks/useQuery'
 import { SearchToggles } from './LangSelect'
 import * as stylex from '@stylexjs/stylex'
 import Editor from 'react-simple-code-editor';
@@ -81,7 +78,6 @@ function SearchWidgetContainer() {
           onValueChange={setPattern}
           highlight={highlight}
           padding={padding}
-          onKeyUp={refreshSearch}
           className='searchx-textarea-container'
           style={{
             // fontFamily: '"Fira code", "Fira Mono", monospace',
