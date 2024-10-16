@@ -24,7 +24,6 @@ export const SearchSidebar = () => {
       <LoadingBar loading={searching} />
       <SearchWidgetContainer />
       <SearchProviderMessage
-        error={null}
         results={groupedByFileSearchResult}
       />
       <SearchResultList matches={groupedByFileSearchResultForRender} />
