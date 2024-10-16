@@ -1,5 +1,9 @@
+import { setupChildPort } from './messageHub';
 import { SearchSidebar } from './SearchSidebar'
 import ReactDOM from 'react-dom/client'
+
+
+setupChildPort();
 
 const App = () => {
   return <SearchSidebar />
