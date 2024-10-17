@@ -1,6 +1,5 @@
 import SearchResultList from './SearchResultList'
 import SearchWidgetContainer from './SearchWidgetContainer'
-import { UseDarkContextProvider } from '../hooks/useDark'
 import { useSearchResult } from '../hooks/useSearch'
 import LoadingBar from './LoadingBar'
 import SearchProviderMessage from './SearchProviderMessage'
@@ -20,13 +19,13 @@ export const SearchSidebar = () => {
   )
 
   return (
-    <UseDarkContextProvider>
+    <>
       <LoadingBar loading={searching} />
       <SearchWidgetContainer />
       <SearchProviderMessage
         results={groupedByFileSearchResult}
       />
       <SearchResultList matches={groupedByFileSearchResultForRender} />
-    </UseDarkContextProvider>
+    </>
   )
 }
