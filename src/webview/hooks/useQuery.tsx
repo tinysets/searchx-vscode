@@ -7,7 +7,7 @@ import { includeFileAtom, searchOptions, patternAtom, showOptionsAtom, store } f
 import { Atom } from 'jotai'
 
 
-function initListeners() {
+export function initQueryChangedListeners() {
   for (const key in searchOptions) {
     const element: Atom<unknown> = searchOptions[key];
     store.sub(element, () => {
@@ -15,9 +15,13 @@ function initListeners() {
     })
   }
 }
-initListeners();
 
-export const getSearchQuery = () => {
+export function refreshSearch() {
+  let searchQuery = getSearchQuery();
+  postSearch(searchQuery)
+}
+
+const getSearchQuery = () => {
   let searchQuery = {} as any;
   for (const key in searchOptions) {
     const element: Atom<unknown> = searchOptions[key];
@@ -27,10 +31,6 @@ export const getSearchQuery = () => {
   return searchQuery;
 }
 
-export function refreshSearch() {
-  let searchQuery = getSearchQuery();
-  postSearch(searchQuery)
-}
 
 childPort.onMessage(MessageType.RefreshAllSearch, refreshSearch)
 childPort.onMessage(MessageType.ClearSearchResults, () => {
