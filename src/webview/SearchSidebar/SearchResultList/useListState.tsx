@@ -69,8 +69,11 @@ function toggleResult(filePath: string, isExpandedNow: boolean) {
 let lastActiveFile = ''
 
 export function useStickyShadow(filePath: string) {
-  const [isScrolled, setScrolled] = useBoolean(false)
+
   const ref = useRef<HTMLDivElement>(null)
+  const [isScrolled, setScrolled] = useBoolean(false)
+  const [_, setIsInView] = useBoolean(false)
+
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       const entry = entries[0]
@@ -88,6 +91,24 @@ export function useStickyShadow(filePath: string) {
       observer.disconnect()
     }
   }, [isScrolled, setScrolled, filePath])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      const entry = entries[0]
+      if (entry.isIntersecting) {
+        setIsInView(true)
+        console.log('html-viewCallback inView:' + filePath)
+      } else {
+        console.log('html-viewCallback outView:' + filePath)
+        setIsInView(false)
+      }
+    })
+    observer.observe(ref.current!)
+    return () => {
+      observer.disconnect()
+    }
+  }, [filePath])
+
   return {
     isScrolled,
     ref,
