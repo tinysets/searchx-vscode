@@ -1,4 +1,6 @@
 import { atom, getDefaultStore, PrimitiveAtom } from "jotai";
+import { reactive } from "vue";
+import { useReactive } from "react-vue-use-reactive";
 
 const store = getDefaultStore()
 
