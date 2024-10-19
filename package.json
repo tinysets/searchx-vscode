@@ -140,7 +140,7 @@
     "unport": "0.6.0"
   },
   "dependencies": {
-    "react-vue-use-reactive": "^1.0.1",
+    "react-vue-use-reactive": "latest",
     "vue": "^3.5.12"
   }
 }
