@@ -1,6 +1,6 @@
 import { FileLink } from './FileLink'
 import { FileActions } from './Actions'
-import type { DisplayResult } from '../../../types.js'
+import type { DisplayFileResult } from '../../../types.js'
 import { useActiveItem } from './useListState'
 import { VscChevronDown, VscChevronRight } from 'react-icons/vsc'
 import { VSCodeBadge } from '@vscode/webview-ui-toolkit/react'
@@ -52,18 +52,18 @@ const styles = stylex.create({
 interface TreeHeaderProps {
   isExpanded: boolean
   toggleIsExpanded: () => void
-  matches: DisplayResult[]
+  data: DisplayFileResult
   inView: boolean
 }
 
 export default function TreeHeader({
   isExpanded,
   toggleIsExpanded,
-  matches,
+  data,
   inView,
 }: TreeHeaderProps) {
-  const { file: filePath, language } = matches[0]
-  let [active, setActive] = useActiveItem(matches)
+  const { file: filePath, language } = data
+  let [active, setActive] = useActiveItem(data.results)
   const styleProps = stylex.props(
     styles.fileName,
     !inView && styles.scrolled,
@@ -88,7 +88,7 @@ export default function TreeHeader({
         <FileActions filePath={filePath} />
       ) : (
         <VSCodeBadge {...stylex.props(styles.badge)}>
-          {matches.length}
+          {data.results.length}
         </VSCodeBadge>
       )}
     </div>

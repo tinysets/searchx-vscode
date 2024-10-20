@@ -1,5 +1,5 @@
 import TreeHeader from './TreeHeader'
-import type { DisplayResult } from '../../../types.js'
+import type { DisplayFileResult } from '../../../types.js'
 import { MatchList } from './MatchList'
 import { memo } from 'react'
 import { useToggleResult, useInView, useActiveFile } from './useListState'
@@ -31,14 +31,14 @@ const styles = stylex.create({
 
 interface TreeItemProps {
   className: string
-  matches: DisplayResult[]
+  data: DisplayFileResult
 }
 
-const TreeItem = ({ className, matches }: TreeItemProps) => {
-  const filePath = matches[0].file
+const TreeItem = ({ className, data }: TreeItemProps) => {
+  const filePath = data.file
   let [isExpanded, toggleIsExpanded] = useToggleResult(filePath)
   let { inView, ref } = useInView(filePath)
-  let isTreeActive = useActiveFile(matches)
+  let isTreeActive = useActiveFile(data.results)
   const props = stylex.props(
     styles.treeItem,
     isTreeActive && styles.activeIndent,
@@ -50,11 +50,11 @@ const TreeItem = ({ className, matches }: TreeItemProps) => {
       <TreeHeader
         isExpanded={isExpanded}
         toggleIsExpanded={toggleIsExpanded}
-        matches={matches}
+        data={data}
         inView={inView}
       />
       <ul style={{ display: isExpanded ? '' : 'none' }}>
-        <MatchList matches={matches} />
+        <MatchList data={data} />
       </ul>
     </div>
   )

@@ -1,9 +1,11 @@
 import { memo } from 'react'
-import type { DisplayResult } from '../../../types.js'
+import type { DisplayFileResult } from '../../../types.js'
 import TreeItem from './TreeItem'
 import { refScroller } from './useListState'
 import * as stylex from '@stylexjs/stylex'
 import { Virtuoso } from 'react-virtuoso'
+import { useReactive } from 'react-vue-use-reactive'
+import { vueStore } from '../../store.js'
 
 const styles = stylex.create({
   resultList: {
@@ -18,26 +20,25 @@ const styles = stylex.create({
   },
 })
 
-interface SearchResultListProps {
-  matches: Array<[string, DisplayResult[]]>
-}
 
-function itemContent(_: number, data: [string, DisplayResult[]]) {
-  return <TreeItem className={'sg-match-tree-item'} matches={data[1]} />
+function itemContent(_: number, data: DisplayFileResult) {
+  return <TreeItem className={'sg-match-tree-item'} data={data} />
 }
-function computeItemKey(_: number, data: [string, DisplayResult[]]) {
-  return data[0]
+function computeItemKey(_: number, data: DisplayFileResult) {
+  return data.file
 }
-const SearchResultList = ({ matches }: SearchResultListProps) => {
-  return (
-    <Virtuoso
-      ref={refScroller}
-      {...stylex.props(styles.resultList)}
-      data={matches}
-      itemContent={itemContent}
-      computeItemKey={computeItemKey}
-    />
-  )
+const SearchResultList = () => {
+  return useReactive(() => {
+    return (
+      <Virtuoso
+        ref={refScroller}
+        {...stylex.props(styles.resultList)}
+        data={vueStore.grouped}
+        itemContent={itemContent}
+        computeItemKey={computeItemKey}
+      />
+    )
+  })
 }
 
 export default memo(SearchResultList)

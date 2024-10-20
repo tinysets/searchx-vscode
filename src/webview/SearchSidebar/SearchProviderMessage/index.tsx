@@ -1,5 +1,4 @@
 import { memo } from 'react'
-import type { DisplayResult } from '../../../types.js'
 import { useReactive } from 'react-vue-use-reactive'
 import { vueStore } from '../../store.js'
 

@@ -1,6 +1,6 @@
 import { CodeBlock } from './CodeBlock'
 import { MatchActions } from './Actions'
-import type { DisplayResult } from '../../../types.js'
+import type { DisplayFileResult, DisplayResult } from '../../../types.js'
 import { useHover } from 'react-use'
 import { useActiveItem } from './useListState'
 
@@ -45,12 +45,12 @@ function OneMatch({ match }: { match: DisplayResult }) {
 }
 
 interface CodeBlockListProps {
-  matches: DisplayResult[]
+  data: DisplayFileResult
 }
-export const MatchList = memo(({ matches }: CodeBlockListProps) => {
+export const MatchList = memo(({ data }: CodeBlockListProps) => {
   return (
     <>
-      {matches?.map(match => {
+      {data?.results.map(match => {
         const { file, range } = match
         const { byteOffset } = range
         const key = file + byteOffset.start + byteOffset.end

@@ -7,19 +7,12 @@ import { useDeferredValue } from 'react'
 
 export const SearchSidebar = () => {
 
-  const { groupedByFileSearchResult } = useSearchResult()
-
-  // rendering tree is too expensive, useDeferredValue
-  const groupedByFileSearchResultForRender = useDeferredValue(
-    groupedByFileSearchResult,
-  )
-
   return (
     <>
       <LoadingBar />
       <SearchWidgetContainer />
       <SearchProviderMessage />
-      <SearchResultList matches={groupedByFileSearchResultForRender} />
+      <SearchResultList />
     </>
   )
 }
