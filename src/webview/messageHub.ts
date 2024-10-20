@@ -1,6 +1,6 @@
 import { DisplayFileResult, DisplayResult, MessageType, SearchQuery, type ChildPort, type ChildToParent } from '../types.js'
 import { Unport } from 'unport'
-import { searchOptions, setSearching, vueStore } from './store.js'
+import { patternAtom, searchOptions, setSearching, store, vueStore } from './store.js'
 import { watch } from 'vue'
 import { scrollToIndex } from './SearchSidebar/SearchResultList/hooks.js'
 export type OpenPayload = ChildToParent['openFile']
@@ -172,7 +172,7 @@ export function refreshSearch() {
 
 childPort.onMessage(MessageType.RefreshAllSearch, refreshSearch)
 childPort.onMessage(MessageType.ClearSearchResults, () => {
-  vueStore.pattern = ''
+  store.set(patternAtom, '')
 })
 
 childPort.onMessage(MessageType.SetIncludeFile, val => {
