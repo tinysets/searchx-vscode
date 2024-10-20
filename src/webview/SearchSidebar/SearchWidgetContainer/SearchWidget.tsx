@@ -1,8 +1,7 @@
 import { SearchToggles } from './LangSelect'
 import * as stylex from '@stylexjs/stylex'
 import Editor from 'react-simple-code-editor';
-import { patternAtom, vueStore } from '../../store'
-import { useReactive } from 'react-vue-use-reactive';
+import { patternAtom } from '../../store'
 import { useAtom } from 'jotai';
 
 const styles = stylex.create({
@@ -64,16 +63,7 @@ function SearchWidgetContainer() {
 
   return (
     <div {...stylex.props(styles.container)}>
-      {/* <div {...stylex.props(styles.replaceToggle)} onClick={toggleIsExpanded}>
-       {isExpanded ? <VscChevronDown /> : <VscChevronRight />}
-     </div> */}
       <div {...stylex.props(styles.inputs)}>
-        {/* <SearchInput
-         placeholder="Search"
-         value={pattern}
-         onChange={setPattern}
-         onKeyEnterUp={refreshResult}
-       /> */}
         <Editor
           placeholder='Search'
           value={pattern}
@@ -91,7 +81,6 @@ function SearchWidgetContainer() {
           preClassName='searchx-textarea-pre'
         />
         <SearchToggles />
-        {/* {isExpanded ? <ReplaceBar /> : null} */}
       </div>
     </div>
   )
