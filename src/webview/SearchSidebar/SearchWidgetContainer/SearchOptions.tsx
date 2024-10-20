@@ -1,11 +1,11 @@
 import { VscEllipsis } from 'react-icons/vsc'
 import * as stylex from '@stylexjs/stylex'
-import { refreshSearch } from '../../hooks/useQuery'
 import IncludeFile from './IncludeFile'
 import ExcludeFile from './ExcludeFile'
 import FzfFile from './FzfFile'
 import { vueStore } from '../../store'
 import { useReactive } from 'react-vue-use-reactive'
+import { refreshSearch } from '../../messageHub'
 
 const styles = stylex.create({
   button: {

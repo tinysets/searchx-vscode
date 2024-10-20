@@ -1,6 +1,7 @@
 import { DisplayFileResult, DisplayResult, MessageType, SearchQuery, type ChildPort, type ChildToParent } from '../types.js'
 import { Unport } from 'unport'
-import { setSearching, vueStore } from './store.js'
+import { searchOptions, setSearching, vueStore } from './store.js'
+import { watch } from 'vue'
 export type OpenPayload = ChildToParent['openFile']
 
 export const childPort: ChildPort = new Unport()
@@ -19,7 +20,7 @@ export function setupChildPort() {
   })
 }
 
-export const openFile = (data: OpenPayload) => {
+const openFile = (data: OpenPayload) => {
   childPort.postMessage(MessageType.OpenFile, data)
 }
 
@@ -44,11 +45,16 @@ function refreshResultIfStale() {
 const MOD = 1e9 + 7
 let id = 0
 
-export function postSearch(searchQuery: SearchQuery) {
+function postSearch(searchQuery: SearchQuery) {
   id = (id + 1) % MOD
   hasStaleResult = true
   childPort.postMessage(MessageType.Search, { id, ...searchQuery })
   setSearching(true)
+}
+
+export function openAction(payload: OpenPayload) {
+  payload = JSON.parse(JSON.stringify(payload)) // deep clone, payload contains Proxy object!
+  openFile(payload)
 }
 
 
@@ -130,3 +136,38 @@ export function dismissOneMatch(match: DisplayResult) {
 export function dismissOneFile(filePath: string) {
   vueStore.grouped = vueStore.grouped.filter(g => g.file !== filePath)
 }
+
+// SearchQuery
+export function initQueryChangedListener() {
+  watch(() => {
+    for (const key of searchOptions) {
+      (vueStore as any)[key];
+    }
+  }, () => {
+    refreshSearch()
+  }, { deep: true, flush: 'post', immediate: true, once: false })
+}
+
+vueStore.pattern = 'App'
+
+const getSearchQuery = () => {
+  let searchQuery = {} as any;
+  for (const key of searchOptions) {
+    searchQuery[key] = (vueStore as any)[key];
+  }
+  return searchQuery;
+}
+export function refreshSearch() {
+  let searchQuery = getSearchQuery();
+  postSearch(searchQuery)
+}
+
+childPort.onMessage(MessageType.RefreshAllSearch, refreshSearch)
+childPort.onMessage(MessageType.ClearSearchResults, () => {
+  vueStore.pattern = ''
+})
+
+childPort.onMessage(MessageType.SetIncludeFile, val => {
+  vueStore.includeFile = val.includeFile
+  vueStore.showOptions = true
+})
