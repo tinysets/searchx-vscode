@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import type { DisplayFileResult } from '../../../types.js'
 import TreeItem from './TreeItem'
-import { refScroller } from './useListState'
+import { refVirtuoso } from './hooks.js'
 import * as stylex from '@stylexjs/stylex'
 import { Virtuoso } from 'react-virtuoso'
 import { useReactive } from 'react-vue-use-reactive'
@@ -31,7 +31,7 @@ const SearchResultList = () => {
   return useReactive(() => {
     return (
       <Virtuoso
-        ref={refScroller}
+        ref={refVirtuoso}
         {...stylex.props(styles.resultList)}
         data={vueStore.grouped}
         itemContent={itemContent}

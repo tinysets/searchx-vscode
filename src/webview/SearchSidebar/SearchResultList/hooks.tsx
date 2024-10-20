@@ -7,7 +7,7 @@ import type { VirtuosoHandle } from 'react-virtuoso'
 
 let ref: VirtuosoHandle
 
-export function refScroller(handle: VirtuosoHandle) {
+export function refVirtuoso(handle: VirtuosoHandle) {
   ref = handle
 }
 
