@@ -14,44 +14,18 @@ const vueStore = reactive({
 	searching: false,
 	showOptions: true,
 	expandedGlobal: true,
-	grouped: [] as DisplayFileResult[]
+	grouped: [] as DisplayFileResult[],
+	activeItem: null as any
 })
 
 
 function activeFile(data: DisplayFileResult) {
-	if (data.active === true)
-		return
-	for (const element of vueStore.grouped) {
-		element.active = false
-	}
-	data.active = true
-	clearFileItem();
+	vueStore.activeItem = data
 }
 
-function clearFile() {
-	for (const element of vueStore.grouped) {
-		element.active = false
-	}
-}
-
-function clearFileItem() {
-	for (const element of vueStore.grouped) {
-		for (const item of element.results) {
-			item.active = false
-		}
-	}
-}
 
 function activeItem(match: DisplayResult) {
-	if (match.active === true)
-		return
-	for (const element of vueStore.grouped) {
-		for (const item of element.results) {
-			item.active = false
-		}
-	}
-	match.active = true
-	clearFile()
+	vueStore.activeItem = match
 }
 
 

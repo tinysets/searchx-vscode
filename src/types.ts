@@ -24,7 +24,6 @@ export interface DisplayResult {
   lineSpan: number
   range: RangeInfo
   language: string
-  active?: boolean
 }
 
 export interface DisplayFileResult {
@@ -32,7 +31,6 @@ export interface DisplayFileResult {
   expanded: boolean
   language: string
   results: DisplayResult[]
-  active: boolean
 }
 
 export interface SearchQuery {

@@ -63,7 +63,7 @@ export default function TreeHeader({
   inView,
 }: TreeHeaderProps) {
   const { file: filePath, language } = matches[0]
-  const [active, setActive] = useActiveItem(matches)
+  let [active, setActive] = useActiveItem(matches)
   const styleProps = stylex.props(
     styles.fileName,
     !inView && styles.scrolled,
