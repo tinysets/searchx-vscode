@@ -4,12 +4,8 @@ import { useSearchResult } from '../hooks/useSearch'
 import LoadingBar from './LoadingBar'
 import SearchProviderMessage from './SearchProviderMessage'
 import { useDeferredValue } from 'react'
-import { searchingAtom } from '../store'
-import { useAtom } from 'jotai'
 
 export const SearchSidebar = () => {
-
-  const [searching] = useAtom(searchingAtom)
 
   const { groupedByFileSearchResult } = useSearchResult()
 
@@ -20,7 +16,7 @@ export const SearchSidebar = () => {
 
   return (
     <>
-      <LoadingBar loading={searching} />
+      <LoadingBar />
       <SearchWidgetContainer />
       <SearchProviderMessage
         results={groupedByFileSearchResult}

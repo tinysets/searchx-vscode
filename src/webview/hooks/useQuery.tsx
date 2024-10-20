@@ -3,17 +3,17 @@ import { childPort } from '../messageHub.js'
 // this is the single sole point of communication
 // between search query and search result
 import { postSearch } from './useSearch'
-import { includeFileAtom, searchOptions, patternAtom, showOptionsAtom, store } from '../store.js'
-import { Atom } from 'jotai'
-
+import { searchOptions, vueStore } from '../store.js'
+import { watch } from 'vue'
 
 export function initQueryChangedListeners() {
-  for (const key in searchOptions) {
-    const element: Atom<unknown> = searchOptions[key];
-    store.sub(element, () => {
-      refreshSearch()
-    })
-  }
+  watch(() => {
+    for (const key of searchOptions) {
+      (vueStore as any)[key];
+    }
+  }, () => {
+    refreshSearch()
+  }, { deep: true, flush: 'post', immediate: true, once: false })
 }
 
 export function refreshSearch() {
@@ -23,10 +23,8 @@ export function refreshSearch() {
 
 const getSearchQuery = () => {
   let searchQuery = {} as any;
-  for (const key in searchOptions) {
-    const element: Atom<unknown> = searchOptions[key];
-    let value = store.get(element)
-    searchQuery[key] = value;
+  for (const key of searchOptions) {
+    searchQuery[key] = (vueStore as any)[key];
   }
   return searchQuery;
 }
@@ -34,10 +32,10 @@ const getSearchQuery = () => {
 
 childPort.onMessage(MessageType.RefreshAllSearch, refreshSearch)
 childPort.onMessage(MessageType.ClearSearchResults, () => {
-  store.set(patternAtom, '')
+  vueStore.pattern = ''
 })
 
 childPort.onMessage(MessageType.SetIncludeFile, val => {
-  store.set(includeFileAtom, val.includeFile)
-  store.set(showOptionsAtom, true)
+  vueStore.includeFile = val.includeFile
+  vueStore.showOptions = true
 })

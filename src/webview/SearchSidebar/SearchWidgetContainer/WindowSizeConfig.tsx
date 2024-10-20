@@ -3,8 +3,8 @@ import {
   VSCodeOption,
 } from '@vscode/webview-ui-toolkit/react'
 import stylex from '@stylexjs/stylex'
-import { useAtom } from 'jotai'
-import { windowSizeAtom } from '../../store'
+import { vueStore } from '../../store'
+import { useReactive } from 'react-vue-use-reactive'
 
 const titleStyle = {
   textOverflow: 'ellipsis',
@@ -40,32 +40,34 @@ const styles = stylex.create({
 
 export default function WindowSizeConfig() {
 
-  const [windowSize, setWindowSize] = useAtom(windowSizeAtom)
+  return useReactive(() => {
+    const windowSize = vueStore.windowSize
 
-  const onWindowSizeChange = (e: any) => {
-    const select = e.target as HTMLSelectElement
-    select.value && setWindowSize(parseInt(select.value))
-    console.log('windowSize', select.value)
-  }
+    const onWindowSizeChange = (e: any) => {
+      const select = e.target as HTMLSelectElement
+      if (select.value)
+        (vueStore.windowSize = (parseInt(select.value)))
+    }
 
-  return (
-    <div {...stylex.props(styles.options)}>
-      <h4 style={titleStyle}>
-        {/* search line window size */}
-        {/* <Link href="https://ast-grep.github.io/advanced/match-algorithm.html" /> */}
-      </h4>
-      <VSCodeDropdown
-        value={windowSize.toString()}
-        onChange={onWindowSizeChange}
-        style={{ width: '100%', zIndex: '2' }}
-      >
-        <VSCodeOption value="1">Every 1 Line</VSCodeOption>
-        <VSCodeOption value="3">Every 3 Lines</VSCodeOption>
-        <VSCodeOption value="5">Every 5 Lines</VSCodeOption>
-        <VSCodeOption value="10">Every 10 Lines</VSCodeOption>
-        <VSCodeOption value="20">Every 20 Lines</VSCodeOption>
-        <VSCodeOption value="50">Every 20 Lines</VSCodeOption>
-      </VSCodeDropdown>
-    </div>
-  )
+    return (
+      <div {...stylex.props(styles.options)}>
+        <h4 style={titleStyle}>
+          {/* search line window size */}
+          {/* <Link href="https://ast-grep.github.io/advanced/match-algorithm.html" /> */}
+        </h4>
+        <VSCodeDropdown
+          value={windowSize.toString()}
+          onChange={onWindowSizeChange}
+          style={{ width: '100%', zIndex: '2' }}
+        >
+          <VSCodeOption value="1">Every 1 Line</VSCodeOption>
+          <VSCodeOption value="3">Every 3 Lines</VSCodeOption>
+          <VSCodeOption value="5">Every 5 Lines</VSCodeOption>
+          <VSCodeOption value="10">Every 10 Lines</VSCodeOption>
+          <VSCodeOption value="20">Every 20 Lines</VSCodeOption>
+          <VSCodeOption value="50">Every 20 Lines</VSCodeOption>
+        </VSCodeDropdown>
+      </div>
+    )
+  })
 }

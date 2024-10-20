@@ -1,4 +1,6 @@
 import * as stylex from '@stylexjs/stylex'
+import { vueStore } from '../store'
+import { useReactive } from 'react-vue-use-reactive'
 const styles = stylex.create({
   progressBar: {
     width: '100%',
@@ -9,26 +11,26 @@ const styles = stylex.create({
   },
 })
 
-interface LoadingBarProps {
-  loading: boolean
-}
+export default function LoadingBar() {
 
-export default function LoadingBar({ loading }: LoadingBarProps) {
-  const style = {
-    display: loading ? '' : 'none',
-    position: 'absolute',
-    top: '0',
-  } as const
-  return (
-    <div
-      {...stylex.props(styles.progressBar)}
-      role="progressbar"
-      aria-valuemin={0}
-      aria-valuenow={5}
-      aria-valuemax={10}
-      aria-hidden={!loading}
-    >
-      <div className="progressBar" style={style} />
-    </div>
-  )
+  return useReactive(() => {
+    let loading = vueStore.searching
+    const style = {
+      display: loading ? '' : 'none',
+      position: 'absolute',
+      top: '0',
+    } as const
+    return (
+      <div
+        {...stylex.props(styles.progressBar)}
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuenow={5}
+        aria-valuemax={10}
+        aria-hidden={!loading}
+      >
+        <div className="progressBar" style={style} />
+      </div>
+    )
+  })
 }

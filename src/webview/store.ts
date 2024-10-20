@@ -1,48 +1,38 @@
-import { atom, getDefaultStore, PrimitiveAtom } from "jotai";
 import { reactive } from "vue";
-import { useReactive } from "react-vue-use-reactive";
 
-const store = getDefaultStore()
+const vueStore = reactive({
+	expandGlobal: true,
+	pattern: "",
+	includeFile: "",
+	excludeFile: "",
+	fzfFile: "",
+	caseSensitive: false,
+	fullSearch: false,
+	forward: true,
+	windowSize: 1,
+	searching: false,
+	showOptions: true,
+})
 
-let patternAtom = atom("")
-let includeFileAtom = atom("")
-let excludeFileAtom = atom("")
-let fzfFileAtom = atom("")
-let caseSensitiveAtom = atom(false)
-let fullSearchAtom = atom(false)
-let forwardAtom = atom(true)
-let windowSizeAtom = atom(1)
-let searchingAtom = atom(false)
-let showOptionsAtom = atom(true)
 
 function setSearching(value: boolean) {
-	store.set(searchingAtom, value)
+	vueStore.searching = value
 }
 
-let searchOptions: { [key: string]: PrimitiveAtom<any> } = {
-	pattern: patternAtom,
-	includeFile: includeFileAtom,
-	excludeFile: excludeFileAtom,
-	fzfFile: fzfFileAtom,
-	caseSensitive: caseSensitiveAtom,
-	fullSearch: fullSearchAtom,
-	forward: forwardAtom,
-	windowSize: windowSizeAtom,
-}
+let searchOptions = [
+	'pattern',
+	'includeFile',
+	'excludeFile',
+	'fzfFile',
+	'caseSensitive',
+	'fullSearch',
+	'forward',
+	'windowSize',
+]
 
 
 export {
-	store,
+	vueStore,
 	searchOptions,
-	patternAtom,
-	includeFileAtom,
-	excludeFileAtom,
-	fzfFileAtom,
-	caseSensitiveAtom,
-	fullSearchAtom,
-	forwardAtom,
-	windowSizeAtom,
-	searchingAtom,
-	showOptionsAtom,
 	setSearching,
 }
