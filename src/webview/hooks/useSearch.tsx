@@ -1,11 +1,10 @@
 import {
-  type DisplayResult,
   type OpenPayload,
   openFile,
   childPort,
 } from '../messageHub'
 import { useSyncExternalStore } from 'react'
-import { MessageType, SearchQuery } from '../../types.js'
+import { DisplayResult, MessageType, SearchQuery } from '../../types.js'
 import { setSearching } from '../store'
 
 // id should not overflow, the MOD is large enough
