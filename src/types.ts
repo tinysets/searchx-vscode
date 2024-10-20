@@ -24,6 +24,15 @@ export interface DisplayResult {
   lineSpan: number
   range: RangeInfo
   language: string
+  active?: boolean
+}
+
+export interface DisplayFileResult {
+  file: string
+  expanded: boolean
+  language: string
+  results: DisplayResult[]
+  active: boolean
 }
 
 export interface SearchQuery {
