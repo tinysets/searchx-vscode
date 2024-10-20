@@ -36,6 +36,7 @@ let hasStaleResult = false
 function refreshResultIfStale() {
   if (hasStaleResult) {
     // empty previous result
+    scrollToIndex(0)
     hasStaleResult = false
     vueStore.grouped = []
     vueStore.activeItem = null
