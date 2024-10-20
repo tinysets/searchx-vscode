@@ -31,6 +31,7 @@ export interface DisplayFileResult {
   expanded: boolean
   language: string
   results: DisplayResult[]
+  inView?: boolean
 }
 
 export interface SearchQuery {

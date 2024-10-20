@@ -2,6 +2,7 @@ import { DisplayFileResult, DisplayResult, MessageType, SearchQuery, type ChildP
 import { Unport } from 'unport'
 import { searchOptions, setSearching, vueStore } from './store.js'
 import { watch } from 'vue'
+import { scrollToIndex } from './SearchSidebar/SearchResultList/hooks.js'
 export type OpenPayload = ChildToParent['openFile']
 
 export const childPort: ChildPort = new Unport()
@@ -127,14 +128,22 @@ export function dismissOneMatch(match: DisplayResult) {
       continue
     }
     group.results = group.results.filter(m => m !== match)
+    if (group.results.length === 0) {
+      dismissOneFile(group.file) // remove files if user deleted all matches
+    }
     break
   }
-  // remove files if user deleted all matches
-  vueStore.grouped = vueStore.grouped.filter(g => g.results.length > 0)
 }
 
 export function dismissOneFile(filePath: string) {
-  vueStore.grouped = vueStore.grouped.filter(g => g.file !== filePath)
+  let index = vueStore.grouped.findIndex(g => g.file === filePath)
+  if (index != -1) {
+    let item = vueStore.grouped[index]
+    if (!item.inView) {
+      scrollToIndex(index)
+    }
+    vueStore.grouped = vueStore.grouped.filter(g => g.file !== filePath)
+  }
 }
 
 // SearchQuery
@@ -147,8 +156,6 @@ export function initQueryChangedListener() {
     refreshSearch()
   }, { deep: true, flush: 'post', immediate: true, once: false })
 }
-
-vueStore.pattern = 'App'
 
 const getSearchQuery = () => {
   let searchQuery = {} as any;

@@ -41,6 +41,7 @@ const TreeItem = ({ className, data }: TreeItemProps) => {
     const filePath = data.file
     let isExpanded = data.expanded;
     let { inView, ref } = useInView(filePath)
+    data.inView = inView
     let isTreeActive = data == vueStore.activeItem
     const props = stylex.props(
       styles.treeItem,

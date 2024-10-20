@@ -11,6 +11,10 @@ export function refVirtuoso(handle: VirtuosoHandle) {
   ref = handle
 }
 
+export function scrollToIndex(index: number) {
+  ref?.scrollToIndex({ index })
+}
+
 export function useInView(filePath: string) {
 
   const ref = useRef<HTMLDivElement>(null)
@@ -20,10 +24,10 @@ export function useInView(filePath: string) {
     const observer = new IntersectionObserver(entries => {
       const entry = entries[0]
       if (entry.isIntersecting) {
+        // console.log('in View : ' + filePath)
         setInView(true)
-        console.log('html-viewCallback inView:' + filePath)
       } else {
-        console.log('html-viewCallback outView:' + filePath)
+        // console.log('out View : ' + filePath)
         setInView(false)
       }
     })
