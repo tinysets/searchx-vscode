@@ -53,20 +53,20 @@ interface TreeHeaderProps {
   isExpanded: boolean
   toggleIsExpanded: () => void
   matches: DisplayResult[]
-  isScrolled: boolean
+  inView: boolean
 }
 
 export default function TreeHeader({
   isExpanded,
   toggleIsExpanded,
   matches,
-  isScrolled,
+  inView,
 }: TreeHeaderProps) {
   const { file: filePath, language } = matches[0]
   const [active, setActive] = useActiveItem(matches)
   const styleProps = stylex.props(
     styles.fileName,
-    isScrolled && styles.scrolled,
+    !inView && styles.scrolled,
     active && styles.active,
   )
   const onClick = useCallback(() => {

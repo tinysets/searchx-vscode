@@ -68,49 +68,49 @@ function toggleResult(filePath: string, isExpandedNow: boolean) {
 
 let lastActiveFile = ''
 
-export function useStickyShadow(filePath: string) {
+export function useInView(filePath: string) {
 
   const ref = useRef<HTMLDivElement>(null)
-  const [isScrolled, setScrolled] = useBoolean(false)
-  const [_, setIsInView] = useBoolean(false)
+  const [inView, setInView] = useBoolean(false)
+  
+  // const [isScrolled, setScrolled] = useBoolean(false)
+  // useEffect(() => {
+  //   const observer = new IntersectionObserver(entries => {
+  //     const entry = entries[0]
+  //     if (entry.isIntersecting) {
+  //       setScrolled(false)
+  //     } else {
+  //       setScrolled(true)
+  //       if (!isScrolled) {
+  //         lastActiveFile = filePath
+  //       }
+  //     }
+  //   })
+  //   observer.observe(ref.current!)
+  //   return () => {
+  //     observer.disconnect()
+  //   }
+  // }, [isScrolled, setScrolled, filePath])
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       const entry = entries[0]
       if (entry.isIntersecting) {
-        setScrolled(false)
-      } else {
-        setScrolled(true)
-        if (!isScrolled) {
-          lastActiveFile = filePath
-        }
-      }
-    })
-    observer.observe(ref.current!)
-    return () => {
-      observer.disconnect()
-    }
-  }, [isScrolled, setScrolled, filePath])
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      const entry = entries[0]
-      if (entry.isIntersecting) {
-        setIsInView(true)
+        setInView(true)
         console.log('html-viewCallback inView:' + filePath)
       } else {
         console.log('html-viewCallback outView:' + filePath)
-        setIsInView(false)
+        setInView(false)
       }
     })
     observer.observe(ref.current!)
     return () => {
       observer.disconnect()
     }
-  }, [filePath])
+  }, [inView, setInView, filePath])
 
   return {
-    isScrolled,
+    inView,
     ref,
   }
 }

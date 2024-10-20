@@ -2,7 +2,7 @@ import TreeHeader from './TreeHeader'
 import type { DisplayResult } from '../../../types.js'
 import { MatchList } from './MatchList'
 import { memo } from 'react'
-import { useToggleResult, useStickyShadow, useActiveFile } from './useListState'
+import { useToggleResult, useInView, useActiveFile } from './useListState'
 import * as stylex from '@stylexjs/stylex'
 
 const styles = stylex.create({
@@ -36,9 +36,9 @@ interface TreeItemProps {
 
 const TreeItem = ({ className, matches }: TreeItemProps) => {
   const filePath = matches[0].file
-  const [isExpanded, toggleIsExpanded] = useToggleResult(filePath)
-  const { isScrolled, ref } = useStickyShadow(filePath)
-  const isTreeActive = useActiveFile(matches)
+  let [isExpanded, toggleIsExpanded] = useToggleResult(filePath)
+  let { inView, ref } = useInView(filePath)
+  let isTreeActive = useActiveFile(matches)
   const props = stylex.props(
     styles.treeItem,
     isTreeActive && styles.activeIndent,
@@ -51,7 +51,7 @@ const TreeItem = ({ className, matches }: TreeItemProps) => {
         isExpanded={isExpanded}
         toggleIsExpanded={toggleIsExpanded}
         matches={matches}
-        isScrolled={isScrolled}
+        inView={inView}
       />
       <ul style={{ display: isExpanded ? '' : 'none' }}>
         <MatchList matches={matches} />
