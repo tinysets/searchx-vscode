@@ -1,7 +1,8 @@
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import type { DisplayResult } from '../../../types.js'
 import { openAction } from '../../hooks/useSearch'
 import * as stylex from '@stylexjs/stylex'
+import { useReactive } from 'react-vue-use-reactive'
 
 const styles = stylex.create({
   box: {
@@ -60,17 +61,20 @@ interface CodeBlockProps {
   match: DisplayResult
 }
 export const CodeBlock = memo(({ match }: CodeBlockProps) => {
-  const { startIdx, endIdx, displayLine, lineSpan, file, range } = match
-  const onClick = useCallback(() => {
-    openAction({ filePath: file, locationsToSelect: range })
-  }, [file, range])
+  return useReactive(() => {
+    const { startIdx, endIdx, displayLine, lineSpan, file, range } = match
+    const onClick = () => {
+      openAction({ filePath: file, locationsToSelect: range })
+    }
 
-  return (
-    <div {...stylex.props(styles.box)} onClick={onClick}>
-      <MultiLineIndicator lineSpan={lineSpan} />
-      {displayLine.slice(0, startIdx)}
-      <Highlight {...match} />
-      {displayLine.slice(endIdx)}
-    </div>
-  )
+    return (
+      <div {...stylex.props(styles.box)} onClick={onClick}>
+        <MultiLineIndicator lineSpan={lineSpan} />
+        {displayLine.slice(0, startIdx)}
+        <Highlight {...match} />
+        {displayLine.slice(endIdx)}
+      </div>
+    )
+  })
+
 })

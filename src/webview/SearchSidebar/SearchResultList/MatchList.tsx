@@ -2,10 +2,11 @@ import { CodeBlock } from './CodeBlock'
 import { MatchActions } from './Actions'
 import type { DisplayFileResult, DisplayResult } from '../../../types.js'
 import { useHover } from 'react-use'
-import { useActiveItem } from './useListState'
 
 import { memo } from 'react'
 import * as stylex from '@stylexjs/stylex'
+import { useReactive } from 'react-vue-use-reactive'
+import { vueStore } from '../../store'
 
 const styles = stylex.create({
   codeItem: {
@@ -30,32 +31,38 @@ const styles = stylex.create({
 })
 
 function OneMatch({ match }: { match: DisplayResult }) {
-  const [active, setActive] = useActiveItem(match)
-  const styleProps = stylex.props(styles.codeItem, active && styles.active)
-  const [hoverable] = useHover(hovered => {
-    return (
-      // biome-ignore lint/a11y/noNoninteractiveTabindex: need it for styling
-      <li {...styleProps} onClick={setActive} tabIndex={0}>
-        <CodeBlock match={match} />
-        {(hovered || active) && <MatchActions match={match} />}
-      </li>
-    )
+  return useReactive(() => {
+    let active = match == vueStore.activeItem
+    let setActive = () => { vueStore.activeItem = match }
+
+    const styleProps = stylex.props(styles.codeItem, active && styles.active)
+    const [hoverable] = useHover(hovered => {
+      return (
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: need it for styling
+        <li {...styleProps} onClick={setActive} tabIndex={0}>
+          <CodeBlock match={match} />
+          {(hovered || active) && <MatchActions match={match} />}
+        </li>
+      )
+    })
+    return hoverable
   })
-  return hoverable
 }
 
 interface CodeBlockListProps {
   data: DisplayFileResult
 }
 export const MatchList = memo(({ data }: CodeBlockListProps) => {
-  return (
-    <>
-      {data?.results.map(match => {
-        const { file, range } = match
-        const { byteOffset } = range
-        const key = file + byteOffset.start + byteOffset.end
-        return <OneMatch key={key} match={match} />
-      })}
-    </>
-  )
+  return useReactive(() => {
+    return (
+      <>
+        {data?.results.map(match => {
+          const { file, range } = match
+          const { byteOffset } = range
+          const key = file + byteOffset.start + byteOffset.end
+          return <OneMatch key={key} match={match} />
+        })}
+      </>
+    )
+  })
 })

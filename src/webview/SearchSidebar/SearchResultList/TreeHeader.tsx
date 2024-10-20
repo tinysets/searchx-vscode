@@ -1,12 +1,12 @@
 import { FileLink } from './FileLink'
 import { FileActions } from './Actions'
 import type { DisplayFileResult } from '../../../types.js'
-import { useActiveItem } from './useListState'
 import { VscChevronDown, VscChevronRight } from 'react-icons/vsc'
 import { VSCodeBadge } from '@vscode/webview-ui-toolkit/react'
 import * as stylex from '@stylexjs/stylex'
 import { useHover } from 'react-use'
-import { useCallback } from 'react'
+import { vueStore } from '../../store'
+import { useReactive } from 'react-vue-use-reactive'
 
 const styles = stylex.create({
   fileName: {
@@ -62,37 +62,41 @@ export default function TreeHeader({
   data,
   inView,
 }: TreeHeaderProps) {
-  const { file: filePath, language } = data
-  let [active, setActive] = useActiveItem(data.results)
-  const styleProps = stylex.props(
-    styles.fileName,
-    !inView && styles.scrolled,
-    active && styles.active,
-  )
-  const onClick = useCallback(() => {
-    toggleIsExpanded()
-    setActive()
-  }, [toggleIsExpanded, setActive])
-  const element = (hovered: boolean) => (
-    // biome-ignore lint/a11y/noNoninteractiveTabindex: need it for styling
-    <div {...styleProps} onClick={onClick} tabIndex={0}>
-      <div
-        {...stylex.props(styles.toggleButton)}
-        aria-label="expand/collapse button"
-        role="button"
-      >
-        {isExpanded ? <VscChevronDown /> : <VscChevronRight />}
+
+  return useReactive(() => {
+    const { file: filePath, language } = data
+    let active = data == vueStore.activeItem
+    let setActive = () => { vueStore.activeItem = data }
+    const styleProps = stylex.props(
+      styles.fileName,
+      !inView && styles.scrolled,
+      active && styles.active,
+    )
+    const onClick = () => {
+      toggleIsExpanded()
+      setActive()
+    }
+    const element = (hovered: boolean) => (
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: need it for styling
+      <div {...styleProps} onClick={onClick} tabIndex={0}>
+        <div
+          {...stylex.props(styles.toggleButton)}
+          aria-label="expand/collapse button"
+          role="button"
+        >
+          {isExpanded ? <VscChevronDown /> : <VscChevronRight />}
+        </div>
+        <FileLink filePath={filePath} language={language} />
+        {hovered ? (
+          <FileActions filePath={filePath} />
+        ) : (
+          <VSCodeBadge {...stylex.props(styles.badge)}>
+            {data.results.length}
+          </VSCodeBadge>
+        )}
       </div>
-      <FileLink filePath={filePath} language={language} />
-      {hovered ? (
-        <FileActions filePath={filePath} />
-      ) : (
-        <VSCodeBadge {...stylex.props(styles.badge)}>
-          {data.results.length}
-        </VSCodeBadge>
-      )}
-    </div>
-  )
-  const [hoverable] = useHover(element)
-  return hoverable
+    )
+    const [hoverable] = useHover(element)
+    return hoverable
+  })
 }

@@ -15,6 +15,8 @@ export function initQueryChangedListeners() {
   }, { deep: true, flush: 'post', immediate: true, once: false })
 }
 
+vueStore.pattern = 'App'
+
 const getSearchQuery = () => {
   let searchQuery = {} as any;
   for (const key of searchOptions) {

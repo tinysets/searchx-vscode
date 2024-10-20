@@ -2,8 +2,10 @@ import TreeHeader from './TreeHeader'
 import type { DisplayFileResult } from '../../../types.js'
 import { MatchList } from './MatchList'
 import { memo } from 'react'
-import { useToggleResult, useInView, useActiveFile } from './useListState'
+import { useInView } from './useListState'
 import * as stylex from '@stylexjs/stylex'
+import { vueStore } from '../../store'
+import { useReactive } from 'react-vue-use-reactive'
 
 const styles = stylex.create({
   treeItem: {
@@ -35,28 +37,30 @@ interface TreeItemProps {
 }
 
 const TreeItem = ({ className, data }: TreeItemProps) => {
-  const filePath = data.file
-  let [isExpanded, toggleIsExpanded] = useToggleResult(filePath)
-  let { inView, ref } = useInView(filePath)
-  let isTreeActive = useActiveFile(data.results)
-  const props = stylex.props(
-    styles.treeItem,
-    isTreeActive && styles.activeIndent,
-  )
+  return useReactive(() => {
+    const filePath = data.file
+    let isExpanded = data.expanded;
+    let { inView, ref } = useInView(filePath)
+    let isTreeActive = data == vueStore.activeItem
+    const props = stylex.props(
+      styles.treeItem,
+      isTreeActive && styles.activeIndent,
+    )
 
-  return (
-    <div className={`${className} ${props.className}`} style={props.style}>
-      <div className="scroll-observer" ref={ref} />
-      <TreeHeader
-        isExpanded={isExpanded}
-        toggleIsExpanded={toggleIsExpanded}
-        data={data}
-        inView={inView}
-      />
-      <ul style={{ display: isExpanded ? '' : 'none' }}>
-        <MatchList data={data} />
-      </ul>
-    </div>
-  )
+    return (
+      <div className={`${className} ${props.className}`} style={props.style}>
+        <div className="scroll-observer" ref={ref} />
+        <TreeHeader
+          isExpanded={isExpanded}
+          toggleIsExpanded={() => { data.expanded = !data.expanded }}
+          data={data}
+          inView={inView}
+        />
+        <ul style={{ display: isExpanded ? '' : 'none' }}>
+          <MatchList data={data} />
+        </ul>
+      </div>
+    )
+  })
 }
 export default memo(TreeItem)

@@ -25,7 +25,7 @@ addResultChangeListener(() => {
   defaultOpen = true
 })
 
-export function useToggleResult(filePath: string) {
+function useToggleResult(filePath: string) {
   const expandBefore = expandStateMap.get(filePath) ?? defaultOpen
   const [isExpanded, toggle] = useBoolean(expandBefore)
   const toggleIsExpanded = useCallback(() => {
@@ -72,7 +72,7 @@ export function useInView(filePath: string) {
 
   const ref = useRef<HTMLDivElement>(null)
   const [inView, setInView] = useBoolean(false)
-  
+
   // const [isScrolled, setScrolled] = useBoolean(false)
   // useEffect(() => {
   //   const observer = new IntersectionObserver(entries => {
@@ -134,7 +134,7 @@ function setActive(item: ActiveItem) {
 }
 
 // is a match/file actively selected
-export function useActiveItem(item: ActiveItem) {
+function useActiveItem(item: ActiveItem) {
   const [active, forceUpdate] = useBoolean(activeItem === item)
   useEffect(() => {
     refreshers.set(item, forceUpdate)
@@ -153,7 +153,7 @@ function isActiveFile(matches: DisplayResult[]) {
 }
 
 // tell if a file is active (has a selected match or file itself selected)
-export function useActiveFile(matches: DisplayResult[]) {
+function useActiveFile(matches: DisplayResult[]) {
   const [active, forceUpdate] = useBoolean(isActiveFile(matches))
   useEffect(() => {
     activeFiles.set(matches, forceUpdate)

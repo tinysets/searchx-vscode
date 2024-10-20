@@ -36,6 +36,8 @@ function refreshResultIfStale() {
     // empty previous result
     hasStaleResult = false
     vueStore.grouped = []
+    vueStore.activeItem = null
+    vueStore.expandedGlobal = true
   }
 }
 

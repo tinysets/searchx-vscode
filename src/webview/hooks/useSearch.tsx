@@ -131,6 +131,7 @@ function getSnapshot() {
  * Either open a file or preview the diff
  */
 export function openAction(payload: OpenPayload) {
+  payload = JSON.parse(JSON.stringify(payload)) // deep clone, payload contains Proxy object!
   openFile(payload)
 }
 
