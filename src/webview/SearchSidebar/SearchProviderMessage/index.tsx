@@ -1,5 +1,7 @@
 import { memo } from 'react'
 import type { DisplayResult } from '../../../types.js'
+import { useReactive } from 'react-vue-use-reactive'
+import { vueStore } from '../../store.js'
 
 const style = {
   color: 'var(--vscode-search-resultsInfoForeground)',
@@ -14,25 +16,25 @@ function Empty() {
   )
 }
 
-interface SearchProviderMessageProps {
-  results: [string, DisplayResult[]][]
-}
+
 
 const SearchProviderMessage = memo(
-  ({ results }: SearchProviderMessageProps) => {
-    const resultCount = results.reduce((a, l) => a + l[1].length, 0)
-    const fileCount = results.length
-    return (
-      <>
-        {resultCount === 0 ? (
-          <Empty />
-        ) : (
-          <div
-            style={style}
-          >{`${resultCount} results in ${fileCount} files`}</div>
-        )}
-      </>
-    )
+  () => {
+    return useReactive(() => {
+      const resultCount = vueStore.grouped.reduce((a, l) => a + l.results.length, 0)
+      const fileCount = vueStore.grouped.length
+      return (
+        <>
+          {resultCount === 0 ? (
+            <Empty />
+          ) : (
+            <div
+              style={style}
+            >{`${resultCount} results in ${fileCount} files`}</div>
+          )}
+        </>
+      )
+    })
   },
 )
 

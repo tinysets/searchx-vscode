@@ -18,9 +18,7 @@ export const SearchSidebar = () => {
     <>
       <LoadingBar />
       <SearchWidgetContainer />
-      <SearchProviderMessage
-        results={groupedByFileSearchResult}
-      />
+      <SearchProviderMessage />
       <SearchResultList matches={groupedByFileSearchResultForRender} />
     </>
   )
