@@ -58,7 +58,7 @@ function groupBy(matches: DisplayResult[]) {
   const groups = new Map<string, DisplayFileResult>()
   for (const match of matches) {
     if (!groups.has(match.file)) {
-      groups.set(match.file, { file: match.file, language: match.language, expanded: vueStore.expandGlobal, results: [], active: false })
+      groups.set(match.file, { file: match.file, language: match.language, expanded: vueStore.expandGlobal, results: [] })
     }
     groups.get(match.file)!.results.push(match)
   }
