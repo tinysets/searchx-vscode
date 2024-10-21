@@ -1,10 +1,6 @@
-import { atom, getDefaultStore } from "jotai";
 import { reactive } from "vue";
 import { DisplayFileResult, DisplayResult } from "../types";
 
-
-let patternAtom = atom('')
-let store = getDefaultStore()
 
 const vueStore = reactive({
 	expandGlobal: true,
@@ -49,17 +45,10 @@ let searchOptions = [
 	'windowSize',
 ]
 
-store.sub(patternAtom, () => {
-	let pattern = store.get(patternAtom)
-	vueStore.pattern = pattern
-})
-
 export {
-	store,
 	vueStore,
 	searchOptions,
 	setSearching,
 	activeItem,
 	activeFile,
-	patternAtom,
 }
