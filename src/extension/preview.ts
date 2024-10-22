@@ -25,7 +25,7 @@ function workspaceUriFromFilePath(filePath: string) {
 }
 
 function locationToRange(
-  locations: ChildToParent['previewDiff']['locationsToSelect'],
+  locations: ChildToParent['openFile']['locationsToSelect'],
 ) {
   const { start, end } = locations
   return new Range(
