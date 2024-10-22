@@ -1,6 +1,6 @@
 import { DisplayFileResult, DisplayResult, MessageType, SearchQuery, type ChildPort, type ChildToParent } from '../types.js'
 import { Unport } from 'unport'
-import { searchOptions, setSearching, vueStore } from './store.js'
+import { searchOptions, searchOptionsToSave, setSearching, vueStore } from './store.js'
 import { watch } from 'vue'
 import { scrollToIndex } from './SearchSidebar/SearchResultList/hooks.js'
 export type OpenPayload = ChildToParent['openFile']
@@ -179,3 +179,28 @@ childPort.onMessage(MessageType.SetIncludeFile, val => {
   vueStore.includeFile = val.includeFile
   vueStore.showOptions = true
 })
+
+export function initSearchOptionsChangedListener() {
+  const getSearchOptions = () => {
+    let options = {} as any;
+    for (const key of searchOptionsToSave) {
+      options[key] = (vueStore as any)[key];
+    }
+    return options;
+  }
+
+  watch(() => {
+    for (const key of searchOptionsToSave) {
+      (vueStore as any)[key];
+    }
+  }, () => {
+    let searchOptions = getSearchOptions();
+    childPort.postMessage(MessageType.SaveSearchOptions, searchOptions)
+  }, { deep: true, flush: 'post', once: false })
+
+  childPort.onMessage(MessageType.ReadSavedSearchOptions, obj => {
+    for (const key in obj) {
+      (vueStore as any)[key] = obj[key]
+    }
+  })
+}

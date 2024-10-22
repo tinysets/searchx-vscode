@@ -45,9 +45,21 @@ let searchOptions = [
 	'windowSize',
 ]
 
+let searchOptionsToSave = [
+	'includeFile',
+	'excludeFile',
+	'fzfFile',
+	'caseSensitive',
+	'fullSearch',
+	'forward',
+	'windowSize',
+	'showOptions',
+]
+
 export {
 	vueStore,
 	searchOptions,
+	searchOptionsToSave,
 	setSearching,
 	activeItem,
 	activeFile,

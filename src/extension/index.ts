@@ -1,12 +1,23 @@
 import * as vscode from 'vscode';
 import { activateWebview } from './webviewProvider';
 import { detectDefaultBinaryAtStart } from './callcli';
-import { registerCommand } from './registerCommand';
+import { initSavedSearchOptions, registerCommand } from './registerCommand';
+import * as fs from 'fs'
 
 export async function activate(context: vscode.ExtensionContext) {
-	await detectDefaultBinaryAtStart()
-	activateWebview(context)
-	registerCommand(context)
 
+	console.log(`workspaceState : ${context.workspaceState}`)
+	console.log(`extensionPath : ${context.extensionPath}`)
 	console.log(`globalStorageUri : ${context.globalStorageUri.fsPath}`)
+	let storagePath = context.storageUri?.fsPath
+	if (storagePath) {
+		console.log(`storagePath : ${storagePath}`)
+		fs.mkdirSync(storagePath, { recursive: true })
+	}
+
+	await detectDefaultBinaryAtStart()
+	registerCommand(context)
+	initSavedSearchOptions(context)
+
+	activateWebview(context)
 }

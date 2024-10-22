@@ -1,9 +1,13 @@
-import { initQueryChangedListener, setupChildPort } from './messageHub';
+import { MessageType } from '../types';
+import { childPort, initQueryChangedListener, initSearchOptionsChangedListener, setupChildPort } from './messageHub';
 import { SearchSidebar } from './SearchSidebar'
 import ReactDOM from 'react-dom/client'
 
 setupChildPort();
 initQueryChangedListener();
+initSearchOptionsChangedListener();
+childPort.postMessage(MessageType.WebViewInited, {}); //
+
 
 const App = () => {
   return <SearchSidebar />

@@ -74,6 +74,7 @@ export interface ParentToChild {
   refreshAllSearch: unknown
   clearSearchResults: unknown
   toggleAllSearch: unknown
+  readSavedSearchOptions: any
 }
 
 export interface ChildToParent {
@@ -85,6 +86,8 @@ export interface ChildToParent {
       end: Position
     }
   }
+  saveSearchOptions: any
+  webViewInited: any
 }
 
 export type Definition = {
@@ -106,4 +109,11 @@ export enum MessageType {
   ClearSearchResults = 'clearSearchResults',
   ToggleAllSearch = 'toggleAllSearch',
   SearchResultStreaming = 'searchResultStreaming',
+  SaveSearchOptions = 'saveSearchOptions',
+  ReadSavedSearchOptions = 'readSavedSearchOptions',
+  WebViewInited = 'webViewInited',
+}
+
+export enum LocalSavedType {
+  SavedSearchOptions = "searchx-SavedSearchOptions",
 }

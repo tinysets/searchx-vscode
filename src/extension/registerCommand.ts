@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import { window, commands, workspace } from 'vscode'
 import { parentPort } from './messageHub'
-import { MessageType } from '../types'
+import { LocalSavedType, MessageType } from '../types'
 import path from 'node:path'
 import { searchCallback } from './search'
 import { openFile } from './preview'
@@ -45,3 +45,18 @@ function toggleAllSearch() {
 
 parentPort.onMessage(MessageType.OpenFile, openFile)
 parentPort.onMessage(MessageType.Search, searchCallback)
+
+export function initSavedSearchOptions(context: vscode.ExtensionContext) {
+	parentPort.onMessage(MessageType.WebViewInited, () => {
+		let obj = context.workspaceState.get(LocalSavedType.SavedSearchOptions)
+		if (obj) {
+			parentPort.postMessage(MessageType.ReadSavedSearchOptions, obj)
+		}
+
+		setTimeout(() => {
+			parentPort.onMessage(MessageType.SaveSearchOptions, (obj: any) => {
+				context.workspaceState.update(LocalSavedType.SavedSearchOptions, obj)
+			})
+		}, 10)
+	})
+}
