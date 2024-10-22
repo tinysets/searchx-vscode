@@ -25,7 +25,7 @@
     "compile": "node ./scripts/build.mjs",
     "watch": "node ./scripts/build.mjs --watch",
     "typecheck": "tsc --noEmit",
-    "gen": "vsce package --no-dependencies"
+    "publish": "vsce package --no-dependencies"
   },
   "contributes": {
     "commands": [
