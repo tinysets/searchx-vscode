@@ -3,7 +3,7 @@ import { window, commands, workspace } from 'vscode'
 import { parentPort } from './messageHub'
 import { LocalSavedType, MessageType } from '../types'
 import path from 'node:path'
-import { searchCallback } from './search'
+import { searchInCLI, searchInWorker } from './search'
 import { openFile } from './preview'
 
 export function registerCommand(context: vscode.ExtensionContext) {
@@ -44,7 +44,7 @@ function toggleAllSearch() {
 }
 
 parentPort.onMessage(MessageType.OpenFile, openFile)
-parentPort.onMessage(MessageType.Search, searchCallback)
+parentPort.onMessage(MessageType.Search, searchInWorker)
 
 export function initSavedSearchOptions(context: vscode.ExtensionContext) {
 	parentPort.onMessage(MessageType.WebViewInited, () => {

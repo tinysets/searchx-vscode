@@ -7,6 +7,8 @@ import { type SgSearch, type DisplayResult, type SearchQuery, MessageType, WithI
 import { QueryArgs, QueryResult, QueryResultFullSearch } from '../interfaces.js'
 import { Base64 } from './base64.js'
 import { parentPort } from './messageHub.js'
+import { workerPromise } from './worker.js';
+import { Worker } from 'node:worker_threads';
 
 // let testSGSearch = {
 //   "text": "getNonce()",
@@ -235,14 +237,14 @@ function getWindowSize(str: string | undefined | number) {
 }
 
 
-function getPatternRes(query: SearchQuery, handlers: Handlers) {
+function buildQueryArgs(query: SearchQuery): QueryArgs | null {
   if (!query.pattern) {
-    return;
+    return null;
   }
   const uris = workspace.workspaceFolders?.map(i => i.uri?.fsPath) ?? []
   let dir = uris[0]
   if (!dir) {
-    return;
+    return null;
   }
 
   let ignoreList = getFilesExclude()
@@ -263,6 +265,15 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
     windowSize: getWindowSize(query.windowSize),
     fullSearch: !!query.fullSearch
   }
+  return queryArgs;
+}
+
+
+function getPatternRes(query: SearchQuery, handlers: Handlers) {
+  const queryArgs = buildQueryArgs(query)
+  if (!queryArgs) {
+    return;
+  }
 
   const proc = buildCommand(queryArgs)
   if (proc) {
@@ -274,7 +285,7 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
   return uniqueCommand(proc, handlers.onData)
 }
 
-export async function searchCallback(payload: WithId<SearchQuery>) {
+export async function searchInCLI(payload: WithId<SearchQuery>) {
   const onData = (ret: QueryResult[]) => {
     parentPort.postMessage(MessageType.SearchResultStreaming, {
       ...payload,
@@ -295,4 +306,39 @@ export async function searchCallback(payload: WithId<SearchQuery>) {
   parentPort.postMessage(MessageType.SearchEnd, payload)
 }
 
+let lastWorker: Worker | null = null;
+export async function searchInWorker(payload: WithId<SearchQuery>) {
+  if (lastWorker) {
+    lastWorker.terminate();
+    lastWorker = null;
+  }
+
+  const queryArgs = buildQueryArgs(payload)
+  if (queryArgs) {
+    let base64 = Base64.jsonToBase64(queryArgs)
+    console.log(base64)
+
+    const onData = (ret: QueryResult[]) => {
+      parentPort.postMessage(MessageType.SearchResultStreaming, {
+        ...payload,
+        searchResult: ret.map((v) => { return splitByHighLightToken(payload, v) }).filter((v) => v != null),
+      })
+    }
+
+    let { worker, promise } = workerPromise(onData, { base64 });
+    lastWorker = worker;
+    try {
+      await promise;
+    }
+    catch (e) {
+      console.log(e);
+    }
+    finally {
+      if (worker === lastWorker)
+        lastWorker = null;
+    }
+  }
+
+  parentPort.postMessage(MessageType.SearchEnd, payload)
+}
 

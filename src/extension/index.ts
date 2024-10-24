@@ -3,6 +3,7 @@ import { activateWebview } from './webviewProvider';
 import { detectDefaultBinaryAtStart } from './callcli';
 import { initSavedSearchOptions, registerCommand } from './registerCommand';
 import * as fs from 'fs'
+import { initWorker } from './worker';
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -16,6 +17,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	await detectDefaultBinaryAtStart()
+	initWorker(context)
+
 	registerCommand(context)
 	initSavedSearchOptions(context)
 
