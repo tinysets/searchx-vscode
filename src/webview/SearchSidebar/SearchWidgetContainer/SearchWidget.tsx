@@ -3,6 +3,7 @@ import * as stylex from '@stylexjs/stylex'
 import Editor from 'react-simple-code-editor';
 import { vueStore } from '../../store'
 import { useReactive } from 'react-vue-use-reactive';
+import { QueryTokenizer, QueryTokenType } from '../../../common/QueryTokenizer';
 
 const styles = stylex.create({
   container: {
@@ -44,15 +45,19 @@ const styles = stylex.create({
 })
 
 
+const queryTokenizer = new QueryTokenizer()
+
 function SearchWidgetContainer() {
   return useReactive(() => {
     let highlight = (code: string) => {
       let newStr = ''
-      for (const char of code) {
-        if (char == '`' || char == `/`) {
-          newStr += `<span class="keyword">${char}</span>`
+      let reslut = queryTokenizer.tokenize(code)
+      for (const token of reslut) {
+        if (token.type == QueryTokenType.FzfQueryWord || token.type == QueryTokenType.ExactQueryWord) {
+          let text = token.token;
+          newStr += `${text.slice(0, -1)}<span class="keyword">${text[text.length - 1]}</span>`
         } else {
-          newStr += char
+          newStr += token.token
         }
       }
       return newStr
