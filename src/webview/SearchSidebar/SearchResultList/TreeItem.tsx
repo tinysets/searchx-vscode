@@ -1,5 +1,5 @@
 import TreeHeader from './TreeHeader'
-import type { DisplayFileResult } from '../../../types.js'
+import type { DisplayFileResult } from '../../../common/types.js'
 import { MatchList } from './MatchList'
 import { memo } from 'react'
 import { useInView } from './hooks'

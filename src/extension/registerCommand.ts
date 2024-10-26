@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import { window, commands, workspace } from 'vscode'
 import { parentPort } from './messageHub'
-import { LocalSavedType, MessageType } from '../types'
+import { LocalSavedType, MessageType } from '../common/types'
 import path from 'node:path'
 import { searchInCLI, searchInWorker } from './search'
 import { openFile } from './preview'

@@ -1,5 +1,5 @@
 import { type MouseEvent, useCallback } from 'react'
-import type { DisplayResult } from '../../../types.js'
+import type { DisplayResult } from '../../../common/types.js'
 
 import * as stylex from '@stylexjs/stylex'
 import { VscClose } from 'react-icons/vsc'

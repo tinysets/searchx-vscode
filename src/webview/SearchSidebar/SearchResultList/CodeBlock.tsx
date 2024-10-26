@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import type { DisplayResult } from '../../../types.js'
+import type { DisplayResult } from '../../../common/types.js'
 import * as stylex from '@stylexjs/stylex'
 import { useReactive } from 'react-vue-use-reactive'
 import { openAction } from '../../messageHub.js'

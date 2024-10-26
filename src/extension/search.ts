@@ -3,8 +3,8 @@ import * as vscode from 'vscode';
 import { workspace } from 'vscode'
 import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
 import { resolveBinary, streamedPromise } from './callcli.js'
-import { type SgSearch, type DisplayResult, type SearchQuery, MessageType, WithId } from '../types.js'
-import { QueryArgs, QueryResult, QueryResultFullSearch } from '../interfaces.js'
+import { type SgSearch, type DisplayResult, type SearchQuery, MessageType, WithId } from '../common/types.js'
+import { QueryArgs, QueryResult, QueryResultFullSearch } from '../common/interfaces.js'
 import { Base64 } from './base64.js'
 import { parentPort } from './messageHub.js'
 import { workerPromise } from './worker.js';

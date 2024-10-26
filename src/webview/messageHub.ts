@@ -1,4 +1,4 @@
-import { DisplayFileResult, DisplayResult, MessageType, SearchQuery, type ChildPort, type ChildToParent } from '../types.js'
+import { DisplayFileResult, DisplayResult, MessageType, SearchQuery, type ChildPort, type ChildToParent } from '../common/types.js'
 import { Unport } from 'unport'
 import { searchOptions, searchOptionsToSave, setSearching, vueStore } from './store.js'
 import { watch } from 'vue'

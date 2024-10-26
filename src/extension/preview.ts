@@ -13,7 +13,7 @@ import {
 } from 'vscode'
 import {
   type ChildToParent,
-} from '../types.js'
+} from '../common/types.js'
 
 function workspaceUriFromFilePath(filePath: string) {
   const uris = workspace.workspaceFolders

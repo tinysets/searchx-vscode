@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import { DisplayFileResult, DisplayResult } from "../types";
+import { DisplayFileResult, DisplayResult } from "../common/types";
 
 
 const vueStore = reactive({

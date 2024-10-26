@@ -1,4 +1,4 @@
-import { MessageType } from '../types';
+import { MessageType } from '../common/types';
 import { childPort, initQueryChangedListener, initSearchOptionsChangedListener, setupChildPort } from './messageHub';
 import { SearchSidebar } from './SearchSidebar'
 import ReactDOM from 'react-dom/client'

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import type { DisplayFileResult } from '../../../types.js'
+import type { DisplayFileResult } from '../../../common/types.js'
 import TreeItem from './TreeItem'
 import { refVirtuoso } from './hooks.js'
 import * as stylex from '@stylexjs/stylex'
