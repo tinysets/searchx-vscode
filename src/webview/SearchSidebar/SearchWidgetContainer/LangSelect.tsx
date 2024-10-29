@@ -62,14 +62,17 @@ export function SearchToggles() {
         >
           <VscCaseSensitive />
         </VSCodeButton>
-        <VSCodeButton
-          appearance="icon"
-          title="In Order Search"
-          onClick={() => vueStore.forward = !forward}
-          {...stylex.props(styles.button, forward && styles.activeButton)}
-        >
-          <IoIosArrowRoundForward />
-        </VSCodeButton>
+        {
+          fullSearch ? null :
+            < VSCodeButton
+              appearance="icon"
+              title="In Order Search"
+              onClick={() => vueStore.forward = !forward}
+              {...stylex.props(styles.button, forward && styles.activeButton)}
+            >
+              <IoIosArrowRoundForward />
+            </VSCodeButton>
+        }
         <VSCodeButton
           appearance="icon"
           title="Fuzzy Search"
@@ -78,7 +81,7 @@ export function SearchToggles() {
         >
           <VscSearchFuzzy />
         </VSCodeButton>
-      </div>
+      </div >
 
     )
   })
