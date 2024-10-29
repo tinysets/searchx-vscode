@@ -22,10 +22,10 @@ export default function FzfFile({
 }: IncludeFileProps) {
   return (
     <div>
-      <h4 style={titleStyle}>files to Fzf</h4>
+      <h4 style={titleStyle}>files to fzf</h4>
       <SearchInput
         isSingleLine={true}
-        placeholder="e.g. play.cs, play.ts. Fzf pattern"
+        placeholder="e.g. index.ts,player.cs  fzf pattern"
         value={fzfFile}
         onChange={setFzfFile}
         onKeyEnterUp={refreshResult}
