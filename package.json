@@ -24,6 +24,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "node ./scripts/build.mjs",
     "watch": "node ./scripts/build.mjs --watch",
+    "dev": "node ./scripts/build.mjs --watch",
     "typecheck": "tsc --noEmit",
     "publish": "vsce package --no-dependencies"
   },
@@ -102,7 +103,7 @@
         {
           "id": "searchx-sidebar-view",
           "title": "SearchX",
-          "icon": "media/favicon.svg"
+          "icon": "media/fuzzy.svg"
         }
       ]
     },

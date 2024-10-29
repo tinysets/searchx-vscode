@@ -1,8 +1,9 @@
 import * as stylex from '@stylexjs/stylex'
-import { VscArrowSmallRight, VscCaseSensitive, VscWholeWord } from 'react-icons/vsc'
+import { VscCaseSensitive, VscSearchFuzzy } from 'react-icons/vsc'
 import { VSCodeButton, } from '@vscode/webview-ui-toolkit/react'
 import { vueStore } from '../../store'
 import { useReactive } from 'react-vue-use-reactive'
+import { IoIosArrowRoundForward } from "react-icons/io";
 
 const styles = stylex.create({
 
@@ -63,19 +64,19 @@ export function SearchToggles() {
         </VSCodeButton>
         <VSCodeButton
           appearance="icon"
-          title="Full Search"
-          onClick={() => vueStore.fullSearch = !fullSearch}
-          {...stylex.props(styles.button, fullSearch && styles.activeButton)}
-        >
-          <VscWholeWord />
-        </VSCodeButton>
-        <VSCodeButton
-          appearance="icon"
-          title="Forward Search"
+          title="In Order Search"
           onClick={() => vueStore.forward = !forward}
           {...stylex.props(styles.button, forward && styles.activeButton)}
         >
-          <VscArrowSmallRight />
+          <IoIosArrowRoundForward />
+        </VSCodeButton>
+        <VSCodeButton
+          appearance="icon"
+          title="Fuzzy Search"
+          onClick={() => vueStore.fullSearch = !fullSearch}
+          {...stylex.props(styles.button, !fullSearch && styles.activeButton)}
+        >
+          <VscSearchFuzzy />
         </VSCodeButton>
       </div>
 
