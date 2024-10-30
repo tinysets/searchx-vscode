@@ -4,7 +4,7 @@ import TreeItem from './TreeItem'
 import { refVirtuoso } from './hooks.js'
 import * as stylex from '@stylexjs/stylex'
 import { Virtuoso } from 'react-virtuoso'
-import { useReactive } from 'react-vue-use-reactive'
+import { useReactive } from 'react-use-vue-reactive'
 import { vueStore } from '../../store.js'
 
 const styles = stylex.create({

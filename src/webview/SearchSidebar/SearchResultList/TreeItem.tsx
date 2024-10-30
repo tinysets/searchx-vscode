@@ -5,7 +5,7 @@ import { memo } from 'react'
 import { useInView } from './hooks'
 import * as stylex from '@stylexjs/stylex'
 import { vueStore } from '../../store'
-import { useReactive } from 'react-vue-use-reactive'
+import { useReactive } from 'react-use-vue-reactive'
 
 const styles = stylex.create({
   treeItem: {

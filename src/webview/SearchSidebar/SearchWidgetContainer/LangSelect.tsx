@@ -2,7 +2,7 @@ import * as stylex from '@stylexjs/stylex'
 import { VscCaseSensitive, VscSearchFuzzy } from 'react-icons/vsc'
 import { VSCodeButton, } from '@vscode/webview-ui-toolkit/react'
 import { vueStore } from '../../store'
-import { useReactive } from 'react-vue-use-reactive'
+import { useReactive } from 'react-use-vue-reactive'
 import { IoIosArrowRoundForward } from "react-icons/io";
 
 const styles = stylex.create({

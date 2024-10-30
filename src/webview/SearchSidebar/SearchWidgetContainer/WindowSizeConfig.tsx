@@ -4,7 +4,7 @@ import {
 } from '@vscode/webview-ui-toolkit/react'
 import stylex from '@stylexjs/stylex'
 import { vueStore } from '../../store'
-import { useReactive } from 'react-vue-use-reactive'
+import { useReactive } from 'react-use-vue-reactive'
 
 const titleStyle = {
   textOverflow: 'ellipsis',

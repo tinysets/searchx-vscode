@@ -6,7 +6,7 @@ import { VSCodeBadge } from '@vscode/webview-ui-toolkit/react'
 import * as stylex from '@stylexjs/stylex'
 import { useHover } from 'react-use'
 import { vueStore } from '../../store'
-import { useReactive } from 'react-vue-use-reactive'
+import { useReactive } from 'react-use-vue-reactive'
 
 const styles = stylex.create({
   fileName: {

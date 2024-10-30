@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useReactive } from 'react-vue-use-reactive'
+import { useReactive } from 'react-use-vue-reactive'
 import { vueStore } from '../../store.js'
 
 const style = {

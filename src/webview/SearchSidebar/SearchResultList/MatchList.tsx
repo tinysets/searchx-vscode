@@ -5,7 +5,7 @@ import { useHover } from 'react-use'
 
 import { memo } from 'react'
 import * as stylex from '@stylexjs/stylex'
-import { useReactive } from 'react-vue-use-reactive'
+import { useReactive } from 'react-use-vue-reactive'
 import { vueStore } from '../../store'
 
 const styles = stylex.create({

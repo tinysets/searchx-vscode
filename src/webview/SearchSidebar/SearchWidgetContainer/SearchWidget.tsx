@@ -2,7 +2,7 @@ import { SearchToggles } from './LangSelect'
 import * as stylex from '@stylexjs/stylex'
 import Editor from 'react-simple-code-editor';
 import { vueStore } from '../../store'
-import { useReactive } from 'react-vue-use-reactive';
+import { useReactive } from 'react-use-vue-reactive';
 import { QueryTokenizer, QueryTokenType } from '../../../common/QueryTokenizer';
 
 const styles = stylex.create({
