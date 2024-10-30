@@ -331,7 +331,7 @@ export async function searchInWorker(payload: WithId<SearchQuery>) {
       await promise;
     }
     catch (e) {
-      console.log(e);
+      // console.log(e);
     }
     finally {
       if (worker === lastWorker)
@@ -342,3 +342,9 @@ export async function searchInWorker(payload: WithId<SearchQuery>) {
   parentPort.postMessage(MessageType.SearchEnd, payload)
 }
 
+export function stopSearchWorker() {
+  if (lastWorker) {
+    lastWorker.terminate();
+    lastWorker = null;
+  }
+}

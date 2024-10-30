@@ -101,7 +101,17 @@ childPort.onMessage(MessageType.SearchResultStreaming, event => {
   refreshResultIfStale()
   vueStore.grouped = merge(groupBy(event.searchResult))
   vueStore.grouped.sort(byFilePath)
+
+  const resultCount = vueStore.grouped.reduce((a, l) => a + l.results.length, 0)
+  if (resultCount > 1000) { // 结果超过1000 也没什么意义了, 主要是界面变卡了 先不想着优化性能
+    stopSearch()
+  }
 })
+function stopSearch() {
+  vueStore.searching = false
+  id++
+  childPort.postMessage(MessageType.StopSearch, {})
+}
 
 childPort.onMessage(MessageType.SearchEnd, event => {
   const { id: eventId } = event

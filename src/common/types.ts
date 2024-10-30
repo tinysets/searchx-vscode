@@ -88,6 +88,7 @@ export interface ChildToParent {
   }
   saveSearchOptions: any
   webViewInited: any
+  stopSearch: any
 }
 
 export type Definition = {
@@ -112,6 +113,7 @@ export enum MessageType {
   SaveSearchOptions = 'saveSearchOptions',
   ReadSavedSearchOptions = 'readSavedSearchOptions',
   WebViewInited = 'webViewInited',
+  StopSearch = 'stopSearch',
 }
 
 export enum LocalSavedType {
