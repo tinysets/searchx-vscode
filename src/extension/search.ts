@@ -306,6 +306,14 @@ export async function searchInCLI(payload: WithId<SearchQuery>) {
   parentPort.postMessage(MessageType.SearchEnd, payload)
 }
 
+export function stopSearchCLI() {
+  // kill previous search
+  if (child) {
+    child.kill('SIGTERM')
+    child = undefined;
+  }
+}
+
 let lastWorker: Worker | null = null;
 export async function searchInWorker(payload: WithId<SearchQuery>) {
   if (lastWorker) {

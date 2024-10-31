@@ -3,7 +3,7 @@ import { window, commands, workspace } from 'vscode'
 import { parentPort } from './messageHub'
 import { LocalSavedType, MessageType } from '../common/types'
 import path from 'node:path'
-import { searchInCLI, searchInWorker, stopSearchWorker } from './search'
+import { searchInCLI, stopSearchCLI, searchInWorker, stopSearchWorker } from './search'
 import { openFile } from './preview'
 
 export function registerCommand(context: vscode.ExtensionContext) {
@@ -65,4 +65,5 @@ export function initSavedSearchOptions(context: vscode.ExtensionContext) {
 parentPort.onMessage(MessageType.StopSearch, stopSearch)
 function stopSearch() {
 	stopSearchWorker()
+	stopSearchCLI()
 }
