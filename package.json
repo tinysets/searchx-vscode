@@ -1,5 +1,6 @@
 {
   "name": "searchx-vscode",
+  "displayName": "SearchX",
   "description": "SearchX",
   "version": "0.0.1",
   "publisher": "Leo Zhao",
