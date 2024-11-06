@@ -1,9 +1,9 @@
 {
   "name": "searchx-vscode",
   "displayName": "SearchX",
-  "description": "SearchX",
+  "description": "Search by keywords.",
   "version": "0.0.1",
-  "publisher": "Leo Zhao",
+  "publisher": "Leo76",
   "preview": false,
   "license": "MIT",
   "repository": {
