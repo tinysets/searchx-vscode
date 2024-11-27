@@ -103,7 +103,7 @@ childPort.onMessage(MessageType.SearchResultStreaming, event => {
   vueStore.grouped.sort(byFilePath)
 
   const resultCount = vueStore.grouped.reduce((a, l) => a + l.results.length, 0)
-  if (resultCount > 1000) { // 结果超过1000 也没什么意义了, 主要是界面变卡了 先不想着优化性能
+  if (resultCount > 10000) { // 结果超过 10000 也没什么意义了, 主要是界面变卡了 先不想着优化性能
     stopSearch()
   }
 })
