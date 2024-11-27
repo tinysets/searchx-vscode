@@ -44,7 +44,8 @@ function toggleAllSearch() {
 }
 
 parentPort.onMessage(MessageType.OpenFile, openFile)
-parentPort.onMessage(MessageType.Search, searchInWorker)
+// parentPort.onMessage(MessageType.Search, searchInWorker)
+parentPort.onMessage(MessageType.Search, searchInCLI)
 
 export function initSavedSearchOptions(context: vscode.ExtensionContext) {
 	parentPort.onMessage(MessageType.WebViewInited, () => {

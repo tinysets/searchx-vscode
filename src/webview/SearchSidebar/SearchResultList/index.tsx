@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useDeferredValue } from 'react'
 import type { DisplayFileResult } from '../../../common/types.js'
 import TreeItem from './TreeItem'
 import { refVirtuoso } from './hooks.js'
@@ -29,11 +29,12 @@ function computeItemKey(_: number, data: DisplayFileResult) {
 }
 const SearchResultList = () => {
   return useReactive(() => {
+    const grouped = useDeferredValue(vueStore.grouped)
     return (
       <Virtuoso
         ref={refVirtuoso}
         {...stylex.props(styles.resultList)}
-        data={vueStore.grouped}
+        data={grouped}
         itemContent={itemContent}
         computeItemKey={computeItemKey}
       />
