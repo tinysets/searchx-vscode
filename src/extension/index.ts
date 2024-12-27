@@ -4,6 +4,8 @@ import { detectDefaultBinaryAtStart } from './callcli';
 import { initSavedSearchOptions, registerCommand } from './registerCommand';
 import * as fs from 'fs'
 import { initWorker } from './worker';
+import { registerEditorChanged } from './registerEditorChanged';
+import { initDecorations } from './preview';
 
 export async function activate(context: vscode.ExtensionContext) {
 
@@ -15,12 +17,13 @@ export async function activate(context: vscode.ExtensionContext) {
 		console.log(`storagePath : ${storagePath}`)
 		fs.mkdirSync(storagePath, { recursive: true })
 	}
-
+	initDecorations();
 	await detectDefaultBinaryAtStart()
 	initWorker(context)
 
 	registerCommand(context)
-	initSavedSearchOptions(context)
+	registerEditorChanged(context)
 
+	initSavedSearchOptions(context)
 	activateWebview(context)
 }
