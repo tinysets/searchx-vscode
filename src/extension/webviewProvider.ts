@@ -62,6 +62,20 @@ class SearchSidebarProvider implements vscode.WebviewViewProvider {
       localResourceRoots: [this._extensionUri],
     }
 
+    let isSearchXActive = true;
+    console.log('SearchX created');
+    // 监听视图状态变化
+    webviewView.onDidChangeVisibility(() => {
+      isSearchXActive = webviewView.visible;
+      console.log('SearchX visibility changed:', isSearchXActive);
+    });
+
+    // 监听视图销毁
+    webviewView.onDidDispose(() => {
+      isSearchXActive = false;
+      console.log('SearchX view disposed');
+    });
+
     webviewView.webview.html = this.getHtmlForWebview(webviewView.webview)
     setupParentPort(webviewView)
   }
