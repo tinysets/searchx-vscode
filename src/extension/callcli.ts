@@ -56,7 +56,7 @@ async function testBinaryExist(command: string) {
 	})
 }
 
-export function streamedPromise<T>(
+export function promisifyProc<T>(
 	proc: ChildProcessWithoutNullStreams,
 	handler: (r: T[]) => void,
 ): Promise<number> {

@@ -2,7 +2,7 @@ import path from 'node:path'
 import * as vscode from 'vscode';
 import { workspace } from 'vscode'
 import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
-import { resolveBinary, streamedPromise } from './callcli'
+import { resolveBinary, promisifyProc } from './callcli'
 import { type SgSearch, type DisplayResult, type SearchQuery, MessageType, WithId } from '../common/types'
 import { QueryArgs, QueryResult, QueryResultFullSearch } from '../common/interfaces'
 import { Base64 } from '../common/base64'
@@ -151,7 +151,7 @@ async function uniqueCommand(
   try {
     // set current proc to child
     child = proc
-    await streamedPromise(proc, handler)
+    await promisifyProc(proc, handler)
     // unset child only when the promise succeed
     // interrupted proc will be replaced by latter proc
     child = undefined
