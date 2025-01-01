@@ -1,14 +1,15 @@
-import * as vscode from 'vscode';
-import { activateWebview } from './webviewProvider';
-import { detectDefaultBinaryAtStart } from './callcli';
-import { initSavedSearchOptions, registerCommand } from './registerCommand';
 import * as fs from 'fs'
-import { initWorker } from './worker';
-import { registerEditorChanged } from './registerEditorChanged';
-import { initDecorations } from './preview';
+import * as vscode from 'vscode';
+import { initDecorations } from './decorations';
+import { detectCLIBinaryAtStart } from './callcli';
+import { registerWebview } from './webviewProvider';
+import {registerCommand } from './registerCommand';
+import { initContext } from './context';
+import { addCallback_WebViewInited, addCallbacks_Editor } from './callbacks';
 
 export async function activate(context: vscode.ExtensionContext) {
-
+	initContext(context)
+	
 	console.log(`workspaceState : ${context.workspaceState}`)
 	console.log(`extensionPath : ${context.extensionPath}`)
 	console.log(`globalStorageUri : ${context.globalStorageUri.fsPath}`)
@@ -17,13 +18,14 @@ export async function activate(context: vscode.ExtensionContext) {
 		console.log(`storagePath : ${storagePath}`)
 		fs.mkdirSync(storagePath, { recursive: true })
 	}
+
 	initDecorations();
-	await detectDefaultBinaryAtStart()
-	initWorker(context)
+
+	await detectCLIBinaryAtStart()
 
 	registerCommand(context)
-	registerEditorChanged(context)
+	addCallbacks_Editor(context)
+	addCallback_WebViewInited(context)
 
-	initSavedSearchOptions(context)
-	activateWebview(context)
+	registerWebview(context)// 放到最后
 }

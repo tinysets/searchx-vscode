@@ -1,9 +1,9 @@
+import path from 'node:path'
 import * as vscode from 'vscode'
 import { window, commands, workspace } from 'vscode'
+import { MessageType } from '../common/types'
 import { parentPort } from './messageHub'
-import { LocalSavedType, MessageType } from '../common/types'
-import path from 'node:path'
-import { searchInCLI, stopSearchCLI, searchInWorker, stopSearchWorker } from './search'
+import { searchInCLI, stopSearchCLI } from './search'
 import { openFile } from './preview'
 
 export function registerCommand(context: vscode.ExtensionContext) {
@@ -44,27 +44,9 @@ function toggleAllSearch() {
 }
 
 parentPort.onMessage(MessageType.OpenFile, openFile)
-// parentPort.onMessage(MessageType.Search, searchInWorker)
 parentPort.onMessage(MessageType.Search, searchInCLI)
-
-export function initSavedSearchOptions(context: vscode.ExtensionContext) {
-	parentPort.onMessage(MessageType.WebViewInited, () => {
-		let obj = context.workspaceState.get(LocalSavedType.SavedSearchOptions)
-		if (obj) {
-			parentPort.postMessage(MessageType.ReadSavedSearchOptions, obj)
-		}
-
-		setTimeout(() => {
-			parentPort.onMessage(MessageType.SaveSearchOptions, (obj: any) => {
-				context.workspaceState.update(LocalSavedType.SavedSearchOptions, obj)
-			})
-		}, 10)
-	})
-}
-
 
 parentPort.onMessage(MessageType.StopSearch, stopSearch)
 function stopSearch() {
-	stopSearchWorker()
 	stopSearchCLI()
 }

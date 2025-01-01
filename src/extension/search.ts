@@ -2,13 +2,11 @@ import path from 'node:path'
 import * as vscode from 'vscode';
 import { workspace } from 'vscode'
 import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
-import { resolveBinary, streamedPromise } from './callcli.js'
-import { type SgSearch, type DisplayResult, type SearchQuery, MessageType, WithId } from '../common/types.js'
-import { QueryArgs, QueryResult, QueryResultFullSearch } from '../common/interfaces.js'
-import { Base64 } from './base64.js'
-import { parentPort } from './messageHub.js'
-import { workerPromise } from './worker.js';
-import { Worker } from 'node:worker_threads';
+import { resolveBinary, streamedPromise } from './callcli'
+import { type SgSearch, type DisplayResult, type SearchQuery, MessageType, WithId } from '../common/types'
+import { QueryArgs, QueryResult, QueryResultFullSearch } from '../common/interfaces'
+import { Base64 } from '../common/base64'
+import { parentPort } from './messageHub'
 
 // let testSGSearch = {
 //   "text": "getNonce()",
@@ -311,48 +309,5 @@ export function stopSearchCLI() {
   if (child) {
     child.kill('SIGTERM')
     child = undefined;
-  }
-}
-
-let lastWorker: Worker | null = null;
-export async function searchInWorker(payload: WithId<SearchQuery>) {
-  if (lastWorker) {
-    lastWorker.terminate();
-    lastWorker = null;
-  }
-
-  const queryArgs = buildQueryArgs(payload)
-  if (queryArgs) {
-    let base64 = Base64.jsonToBase64(queryArgs)
-    console.log(base64)
-
-    const onData = (ret: QueryResult[]) => {
-      parentPort.postMessage(MessageType.SearchResultStreaming, {
-        ...payload,
-        searchResult: ret.map((v) => { return splitByHighLightToken(payload, v) }).filter((v) => v != null),
-      })
-    }
-
-    let { worker, promise } = workerPromise(onData, { base64 });
-    lastWorker = worker;
-    try {
-      await promise;
-    }
-    catch (e) {
-      // console.log(e);
-    }
-    finally {
-      if (worker === lastWorker)
-        lastWorker = null;
-    }
-  }
-
-  parentPort.postMessage(MessageType.SearchEnd, payload)
-}
-
-export function stopSearchWorker() {
-  if (lastWorker) {
-    lastWorker.terminate();
-    lastWorker = null;
   }
 }

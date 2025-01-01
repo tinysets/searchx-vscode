@@ -5,7 +5,7 @@ import type { ChildProcessWithoutNullStreams } from 'node:child_process'
 
 let defaultBinary: string;
 
-export async function detectDefaultBinaryAtStart() {
+export async function detectCLIBinaryAtStart() {
 	if (defaultBinary) {
 		return
 	}

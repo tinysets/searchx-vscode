@@ -1,48 +1,25 @@
-import type { ChannelMessage } from 'unport'
 import * as vscode from 'vscode'
 import { window } from 'vscode'
-import { parentPort } from './messageHub.js'
+import { onWebviewCreated } from './callbacks'
 
 /**
  * Set up webviews for UI display, e.g. sidebar.
  */
-export function activateWebview(context: vscode.ExtensionContext) {
+export function registerWebview(context: vscode.ExtensionContext) {
   const provider = new SearchSidebarProvider(context.extensionUri)
 
   context.subscriptions.push(
     window.registerWebviewViewProvider(
-      SearchSidebarProvider.viewType,
+      SearchSidebarProvider.ViewId,
       provider,
       { webviewOptions: { retainContextWhenHidden: true } },
     )
   )
 }
 
-function getNonce() {
-  let text = ''
-  const possible =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  for (let i = 0; i < 32; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length))
-  }
-  return text
-}
-
-function setupParentPort(webviewView: vscode.WebviewView) {
-  parentPort.implementChannel({
-    async send(message) {
-      webviewView.webview.postMessage(message)
-    },
-    accept(pipe) {
-      webviewView.webview.onDidReceiveMessage((message: ChannelMessage) => {
-        pipe(message)
-      })
-    },
-  })
-}
 
 class SearchSidebarProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = 'searchx.search.input'
+  public static readonly ViewId = 'searchx.search.input'
 
   // @ts-expect-error
   private _view?: vscode.WebviewView
@@ -62,22 +39,18 @@ class SearchSidebarProvider implements vscode.WebviewViewProvider {
       localResourceRoots: [this._extensionUri],
     }
 
-    let isSearchXActive = true;
-    console.log('SearchX created');
-    // 监听视图状态变化
-    webviewView.onDidChangeVisibility(() => {
-      isSearchXActive = webviewView.visible;
-      console.log('SearchX visibility changed:', isSearchXActive);
-    });
-
-    // 监听视图销毁
-    webviewView.onDidDispose(() => {
-      isSearchXActive = false;
-      console.log('SearchX view disposed');
-    });
-
     webviewView.webview.html = this.getHtmlForWebview(webviewView.webview)
-    setupParentPort(webviewView)
+    onWebviewCreated(webviewView);
+  }
+
+  private getNonce() {
+    let text = ''
+    const possible =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    for (let i = 0; i < 32; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length))
+    }
+    return text
   }
 
   private getHtmlForWebview(webview: vscode.Webview) {
@@ -99,7 +72,7 @@ class SearchSidebarProvider implements vscode.WebviewViewProvider {
     )
 
     // Use a nonce to only allow a specific script to be run.
-    const nonce = getNonce()
+    const nonce = this.getNonce()
 
     return `<!DOCTYPE html>
     <html lang="en">
