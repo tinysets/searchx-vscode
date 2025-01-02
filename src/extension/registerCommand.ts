@@ -3,7 +3,7 @@ import * as vscode from 'vscode'
 import { window, commands, workspace } from 'vscode'
 import { MessageType } from '../common/types'
 import { parentPort } from './messageHub'
-import { searchInCLI, stopSearchCLI } from './search'
+import { searchCLI, stopSearchCLI } from './searchCLI'
 import { openFile } from './preview'
 
 export function registerCommand(context: vscode.ExtensionContext) {
@@ -44,7 +44,7 @@ function toggleAllSearch() {
 }
 
 parentPort.onMessage(MessageType.OpenFile, openFile)
-parentPort.onMessage(MessageType.Search, searchInCLI)
+parentPort.onMessage(MessageType.Search, searchCLI)
 
 parentPort.onMessage(MessageType.StopSearch, stopSearch)
 function stopSearch() {

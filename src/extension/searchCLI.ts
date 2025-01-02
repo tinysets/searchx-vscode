@@ -63,7 +63,7 @@ function getFileExtension(filePath: string) {
   return ext;
 }
 
-export function splitByHighLightToken(searchQuery: SearchQuery, result: QueryResult | QueryResultFullSearch): DisplayResult {
+function splitByHighlightToken(searchQuery: SearchQuery, result: QueryResult | QueryResultFullSearch): DisplayResult {
 
   let search: SgSearch = {} as SgSearch;
   if (result.fullSearch) {
@@ -160,8 +160,7 @@ async function uniqueCommand(
   }
 }
 
-// TODO: add unit test for commandBuilder
-export function buildCommand(query: QueryArgs) {
+function buildCommand(query: QueryArgs) {
   const command = resolveBinary()
   let base64 = Base64.jsonToBase64(query)
   console.log(base64)
@@ -283,11 +282,11 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
   return uniqueCommand(proc, handlers.onData)
 }
 
-export async function searchInCLI(payload: WithId<SearchQuery>) {
+export async function searchCLI(payload: WithId<SearchQuery>) {
   const onData = (ret: QueryResult[]) => {
     parentPort.postMessage(MessageType.SearchResultStreaming, {
       ...payload,
-      searchResult: ret.map((v) => { return splitByHighLightToken(payload, v) }).filter((v) => v != null),
+      searchResult: ret.map((v) => { return splitByHighlightToken(payload, v) }).filter((v) => v != null),
     })
   }
 
