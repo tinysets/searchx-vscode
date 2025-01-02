@@ -208,7 +208,7 @@ export function initSearchOptionsChangedListener() {
     childPort.postMessage(MessageType.C2S_SaveSearchOptions, searchOptions)
   }, { deep: true, flush: 'post', once: false })
 
-  childPort.onMessage(MessageType.S2C_ReadSavedSearchOptions, obj => {
+  childPort.onMessage(MessageType.S2C_LoadSavedSearchOptions, obj => {
     for (const key in obj) {
       (vueStore as any)[key] = obj[key]
     }

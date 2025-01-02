@@ -44,7 +44,7 @@ export function addCallback_WebViewInited(context: vscode.ExtensionContext) {
 	parentPort.onMessage(MessageType.C2S_WebViewInited, () => {
 		let obj = context.workspaceState.get(LocalSavedType.SavedSearchOptions)
 		if (obj) {
-			parentPort.postMessage(MessageType.S2C_ReadSavedSearchOptions, obj)
+			parentPort.postMessage(MessageType.S2C_LoadSavedSearchOptions, obj)
 		}
 
 		setTimeout(() => {

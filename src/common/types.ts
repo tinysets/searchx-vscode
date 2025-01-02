@@ -74,7 +74,7 @@ export interface ParentToChild {
   refreshAllSearch: unknown
   clearSearchResults: unknown
   toggleAllSearch: unknown
-  readSavedSearchOptions: any
+  loadSavedSearchOptions: any
 }
 
 export interface ChildToParent {
@@ -111,7 +111,7 @@ export enum MessageType {
   S2C_ToggleAllSearch = 'toggleAllSearch',
   S2C_SearchResultStreaming = 'searchResultStreaming',
   C2S_SaveSearchOptions = 'saveSearchOptions',
-  S2C_ReadSavedSearchOptions = 'readSavedSearchOptions',
+  S2C_LoadSavedSearchOptions = 'loadSavedSearchOptions',
   C2S_WebViewInited = 'webViewInited',
   C2S_StopSearch = 'stopSearch',
 }
