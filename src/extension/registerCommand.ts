@@ -26,27 +26,27 @@ function findInFolder(data: any) {
 		return
 	}
 	commands.executeCommand('searchx.search.input.focus')
-	parentPort.postMessage(MessageType.SetIncludeFile, {
+	parentPort.postMessage(MessageType.S2C_SetIncludeFile, {
 		includeFile: relative,
 	})
 }
 
 function refreshSearch() {
-	parentPort.postMessage(MessageType.RefreshAllSearch, {})
+	parentPort.postMessage(MessageType.S2C_RefreshAllSearch, {})
 }
 
 function clearSearchResults() {
-	parentPort.postMessage(MessageType.ClearSearchResults, {})
+	parentPort.postMessage(MessageType.S2C_ClearSearchResults, {})
 }
 
 function toggleAllSearch() {
-	parentPort.postMessage(MessageType.ToggleAllSearch, {})
+	parentPort.postMessage(MessageType.S2C_ToggleAllSearch, {})
 }
 
-parentPort.onMessage(MessageType.OpenFile, openFile)
-parentPort.onMessage(MessageType.Search, searchCLI)
+parentPort.onMessage(MessageType.C2S_OpenFile, openFile)
+parentPort.onMessage(MessageType.C2S_Search, searchCLI)
 
-parentPort.onMessage(MessageType.StopSearch, stopSearch)
+parentPort.onMessage(MessageType.C2S_StopSearch, stopSearch)
 function stopSearch() {
 	stopSearchCLI()
 }

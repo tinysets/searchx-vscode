@@ -101,19 +101,19 @@ export type ParentPort = Unport<Definition, 'parent'>
 
 
 export enum MessageType {
-  Search = 'search',
-  OpenFile = 'openFile',
-  SearchEnd = 'searchEnd',
-  Error = 'error',
-  SetIncludeFile = 'setIncludeFile',
-  RefreshAllSearch = 'refreshAllSearch',
-  ClearSearchResults = 'clearSearchResults',
-  ToggleAllSearch = 'toggleAllSearch',
-  SearchResultStreaming = 'searchResultStreaming',
-  SaveSearchOptions = 'saveSearchOptions',
-  ReadSavedSearchOptions = 'readSavedSearchOptions',
-  WebViewInited = 'webViewInited',
-  StopSearch = 'stopSearch',
+  C2S_Search = 'search',
+  C2S_OpenFile = 'openFile',
+  S2C_SearchEnd = 'searchEnd',
+  S2C_Error = 'error',
+  S2C_SetIncludeFile = 'setIncludeFile',
+  S2C_RefreshAllSearch = 'refreshAllSearch',
+  S2C_ClearSearchResults = 'clearSearchResults',
+  S2C_ToggleAllSearch = 'toggleAllSearch',
+  S2C_SearchResultStreaming = 'searchResultStreaming',
+  C2S_SaveSearchOptions = 'saveSearchOptions',
+  S2C_ReadSavedSearchOptions = 'readSavedSearchOptions',
+  C2S_WebViewInited = 'webViewInited',
+  C2S_StopSearch = 'stopSearch',
 }
 
 export enum LocalSavedType {

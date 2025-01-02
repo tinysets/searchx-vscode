@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom/client'
 setupChildPort();
 initQueryChangedListener();
 initSearchOptionsChangedListener();
-childPort.postMessage(MessageType.WebViewInited, {}); //
+childPort.postMessage(MessageType.C2S_WebViewInited, {}); //
 
 
 const App = () => {

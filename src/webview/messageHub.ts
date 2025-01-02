@@ -22,10 +22,10 @@ export function setupChildPort() {
 }
 
 const openFile = (data: OpenPayload) => {
-  childPort.postMessage(MessageType.OpenFile, data)
+  childPort.postMessage(MessageType.C2S_OpenFile, data)
 }
 
-childPort.onMessage(MessageType.ToggleAllSearch, () => {
+childPort.onMessage(MessageType.S2C_ToggleAllSearch, () => {
   vueStore.expandedGlobal = !vueStore.expandedGlobal
   for (const element of vueStore.grouped) {
     element.expanded = vueStore.expandedGlobal
@@ -50,7 +50,7 @@ let id = 0
 function postSearch(searchQuery: SearchQuery) {
   id = (id + 1) % MOD
   hasStaleResult = true
-  childPort.postMessage(MessageType.Search, { id, ...searchQuery })
+  childPort.postMessage(MessageType.C2S_Search, { id, ...searchQuery })
   setSearching(true)
 }
 
@@ -93,7 +93,7 @@ function merge(newEntries: Map<string, DisplayFileResult>) {
   return [...temp.values()]
 }
 
-childPort.onMessage(MessageType.SearchResultStreaming, event => {
+childPort.onMessage(MessageType.S2C_SearchResultStreaming, event => {
   const { id: eventId } = event
   if (eventId !== id) {
     return
@@ -110,10 +110,10 @@ childPort.onMessage(MessageType.SearchResultStreaming, event => {
 function stopSearch() {
   vueStore.searching = false
   id++
-  childPort.postMessage(MessageType.StopSearch, {})
+  childPort.postMessage(MessageType.C2S_StopSearch, {})
 }
 
-childPort.onMessage(MessageType.SearchEnd, event => {
+childPort.onMessage(MessageType.S2C_SearchEnd, event => {
   const { id: eventId } = event
   if (eventId !== id) {
     return
@@ -122,7 +122,7 @@ childPort.onMessage(MessageType.SearchEnd, event => {
   setSearching(false)
 })
 
-childPort.onMessage(MessageType.Error, event => {
+childPort.onMessage(MessageType.S2C_Error, event => {
   if (event.id !== id) {
     return
   }
@@ -180,12 +180,12 @@ export function refreshSearch() {
   postSearch(searchQuery)
 }
 
-childPort.onMessage(MessageType.RefreshAllSearch, refreshSearch)
-childPort.onMessage(MessageType.ClearSearchResults, () => {
+childPort.onMessage(MessageType.S2C_RefreshAllSearch, refreshSearch)
+childPort.onMessage(MessageType.S2C_ClearSearchResults, () => {
   vueStore.pattern = ''
 })
 
-childPort.onMessage(MessageType.SetIncludeFile, val => {
+childPort.onMessage(MessageType.S2C_SetIncludeFile, val => {
   vueStore.includeFile = val.includeFile
   vueStore.showOptions = true
 })
@@ -205,10 +205,10 @@ export function initSearchOptionsChangedListener() {
     }
   }, () => {
     let searchOptions = getSearchOptions();
-    childPort.postMessage(MessageType.SaveSearchOptions, searchOptions)
+    childPort.postMessage(MessageType.C2S_SaveSearchOptions, searchOptions)
   }, { deep: true, flush: 'post', once: false })
 
-  childPort.onMessage(MessageType.ReadSavedSearchOptions, obj => {
+  childPort.onMessage(MessageType.S2C_ReadSavedSearchOptions, obj => {
     for (const key in obj) {
       (vueStore as any)[key] = obj[key]
     }

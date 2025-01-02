@@ -284,7 +284,7 @@ function getPatternRes(query: SearchQuery, handlers: Handlers) {
 
 export async function searchCLI(payload: WithId<SearchQuery>) {
   const onData = (ret: QueryResult[]) => {
-    parentPort.postMessage(MessageType.SearchResultStreaming, {
+    parentPort.postMessage(MessageType.S2C_SearchResultStreaming, {
       ...payload,
       searchResult: ret.map((v) => { return splitByHighlightToken(payload, v) }).filter((v) => v != null),
     })
@@ -293,14 +293,14 @@ export async function searchCLI(payload: WithId<SearchQuery>) {
   await getPatternRes(payload, {
     onData,
     onError(error) {
-      parentPort.postMessage(MessageType.Error, {
+      parentPort.postMessage(MessageType.S2C_Error, {
         error,
         ...payload,
       })
     },
   })
 
-  parentPort.postMessage(MessageType.SearchEnd, payload)
+  parentPort.postMessage(MessageType.S2C_SearchEnd, payload)
 }
 
 export function stopSearchCLI() {

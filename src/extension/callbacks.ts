@@ -41,14 +41,14 @@ function onWebviewVisibleChanged(visible: boolean) {
 }
 
 export function addCallback_WebViewInited(context: vscode.ExtensionContext) {
-	parentPort.onMessage(MessageType.WebViewInited, () => {
+	parentPort.onMessage(MessageType.C2S_WebViewInited, () => {
 		let obj = context.workspaceState.get(LocalSavedType.SavedSearchOptions)
 		if (obj) {
-			parentPort.postMessage(MessageType.ReadSavedSearchOptions, obj)
+			parentPort.postMessage(MessageType.S2C_ReadSavedSearchOptions, obj)
 		}
 
 		setTimeout(() => {
-			parentPort.onMessage(MessageType.SaveSearchOptions, (obj: any) => {
+			parentPort.onMessage(MessageType.C2S_SaveSearchOptions, (obj: any) => {
 				context.workspaceState.update(LocalSavedType.SavedSearchOptions, obj)
 			})
 		}, 10)
