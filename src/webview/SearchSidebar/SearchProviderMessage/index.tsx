@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useReactive } from 'react-use-vue-reactive'
-import { vueStore } from '../../store.js'
+import { vueStore } from '../../store'
 
 const style = {
   color: 'var(--vscode-search-resultsInfoForeground)',

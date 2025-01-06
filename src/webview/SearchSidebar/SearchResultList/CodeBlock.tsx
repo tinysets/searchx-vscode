@@ -1,8 +1,8 @@
 import { memo } from 'react'
-import type { DisplayResult } from '../../../common/types.js'
+import type { DisplayResult } from '../../../common/types'
 import * as stylex from '@stylexjs/stylex'
 import { useReactive } from 'react-use-vue-reactive'
-import { openAction } from '../../messageHub.js'
+import { openAction } from '../../messageHub'
 
 const styles = stylex.create({
   box: {
@@ -62,9 +62,9 @@ interface CodeBlockProps {
 }
 export const CodeBlock = memo(({ match }: CodeBlockProps) => {
   return useReactive(() => {
-    const { startIdx, endIdx, displayLine, lineSpan, file, range } = match
+    const { startIdx, endIdx, displayLine, lineSpan } = match
     const onClick = () => {
-      openAction({ filePath: file, locationsToSelect: range })
+      openAction(match)
     }
 
     return (

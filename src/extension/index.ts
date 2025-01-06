@@ -5,7 +5,7 @@ import { detectCLIBinaryAtStart } from './callcli';
 import { registerWebview } from './webviewProvider';
 import {registerCommand } from './registerCommand';
 import { initContext } from './context';
-import { addCallback_WebViewInited, addCallbacks_Editor } from './callbacks';
+import { addCallback_WebViewInited, addCallbacks_VSCodeEditor } from './callbacks';
 
 export async function activate(context: vscode.ExtensionContext) {
 	initContext(context)
@@ -24,7 +24,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	await detectCLIBinaryAtStart()
 
 	registerCommand(context)
-	addCallbacks_Editor(context)
+	addCallbacks_VSCodeEditor(context)
 	addCallback_WebViewInited(context)
 
 	registerWebview(context)// 放到最后

@@ -1,11 +1,11 @@
 import { memo, useDeferredValue } from 'react'
-import type { DisplayFileResult } from '../../../common/types.js'
+import type { DisplayFileResult } from '../../../common/types'
 import TreeItem from './TreeItem'
-import { refVirtuoso } from './hooks.js'
+import { refVirtuoso } from './hooks'
 import * as stylex from '@stylexjs/stylex'
 import { Virtuoso } from 'react-virtuoso'
 import { useReactive } from 'react-use-vue-reactive'
-import { vueStore } from '../../store.js'
+import { vueStore } from '../../store'
 
 const styles = stylex.create({
   resultList: {

@@ -12,9 +12,10 @@ import vscode, {
   workspace,
 } from 'vscode'
 import {
-  type ChildToParent,
+  OpenFileResult,
+  RangeInfo,
 } from '../common/types'
-import { activeMatchDecoration } from './decorations'
+import { activeMatchDecoration, findDecoration } from './decorations'
 
 function workspaceUriFromFilePath(filePath: string) {
   const uris = workspace.workspaceFolders
@@ -25,9 +26,7 @@ function workspaceUriFromFilePath(filePath: string) {
   return joinPath(uris?.[0].uri, filePath)
 }
 
-function locationToRange(
-  locations: ChildToParent['openFile']['locationsToSelect'],
-) {
+function locationToRange(locations: RangeInfo) {
   const { start, end } = locations
   return new Range(
     new Position(start.line, start.column),
@@ -35,26 +34,38 @@ function locationToRange(
   )
 }
 
-export async function openFile({ filePath, locationsToSelect }: ChildToParent['openFile']) {
-  const fileUri = workspaceUriFromFilePath(filePath)
+export async function openFile({ fileResult, matchIndex }: OpenFileResult) {
+  const fileUri = workspaceUriFromFilePath(fileResult.file)
   if (!fileUri) {
     return
   }
-  const range = locationToRange(locationsToSelect)
+  const locationSelect = fileResult.results[matchIndex].range
+  const rangeSelect = locationToRange(locationSelect)
   await commands.executeCommand('vscode.open', fileUri, {
-    selection: range,
+    selection: rangeSelect,
     preserveFocus: true,
   })
 
-  const decorations = [{
-    range: range
-  }];
   const editor = vscode.window.activeTextEditor;
-  if (editor) {
-    editor.setDecorations(activeMatchDecoration, decorations);
+  if (!editor) {
+    return;
   }
-  // if (editor) {
-  //   editor.setDecorations(activeMatchDecoration, []); // clear
-  // }
 
+  editor.setDecorations(findDecoration, []); // clear
+  editor.setDecorations(activeMatchDecoration, []); // clear
+
+  const findDecorationRanges: { range: vscode.Range }[] = [];
+  const activeMatchDecorationRanges: { range: vscode.Range }[] = [];
+
+  for (let i = 0; i < fileResult.results.length; i++) {
+    const range = locationToRange(fileResult.results[i].range);
+    if (i === matchIndex) {
+      activeMatchDecorationRanges.push({ range });
+    } else {
+      findDecorationRanges.push({ range });
+    }
+  }
+
+  editor.setDecorations(findDecoration, findDecorationRanges);
+  editor.setDecorations(activeMatchDecoration, activeMatchDecorationRanges);
 }

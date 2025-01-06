@@ -1,6 +1,6 @@
 import { CodeBlock } from './CodeBlock'
 import { MatchActions } from './Actions'
-import type { DisplayFileResult, DisplayResult } from '../../../common/types.js'
+import type { DisplayFileResult, DisplayResult } from '../../../common/types'
 import { useHover } from 'react-use'
 
 import { memo } from 'react'

@@ -1,9 +1,9 @@
 import { type MouseEvent, useCallback } from 'react'
-import type { DisplayResult } from '../../../common/types.js'
+import type { DisplayResult } from '../../../common/types'
 
 import * as stylex from '@stylexjs/stylex'
 import { VscClose } from 'react-icons/vsc'
-import { dismissOneFile, dismissOneMatch } from '../../messageHub.js'
+import { dismissOneFile, dismissOneMatch } from '../../messageHub'
 
 const styles = stylex.create({
   list: {

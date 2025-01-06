@@ -1,8 +1,8 @@
-import { DisplayFileResult, DisplayResult, MessageType, SearchQuery, type ChildPort, type ChildToParent } from '../common/types.js'
+import { DisplayFileResult, DisplayResult, MessageType, OpenFileResult, SearchQuery, type ChildPort, type ChildToParent } from '../common/types'
 import { Unport } from 'unport'
-import { searchOptions, searchOptionsToSave, setSearching, vueStore } from './store.js'
+import { searchOptions, searchOptionsToSave, setSearching, vueStore } from './store'
 import { watch } from 'vue'
-import { scrollToIndex } from './SearchSidebar/SearchResultList/hooks.js'
+import { scrollToIndex } from './SearchSidebar/SearchResultList/hooks'
 export type OpenPayload = ChildToParent['openFile']
 
 export const childPort: ChildPort = new Unport()
@@ -21,7 +21,7 @@ export function setupChildPort() {
   })
 }
 
-const openFile = (data: OpenPayload) => {
+const openFile = (data: OpenFileResult) => {
   childPort.postMessage(MessageType.C2S_OpenFile, data)
 }
 
@@ -54,9 +54,15 @@ function postSearch(searchQuery: SearchQuery) {
   setSearching(true)
 }
 
-export function openAction(payload: OpenPayload) {
-  payload = JSON.parse(JSON.stringify(payload)) // deep clone, payload contains Proxy object!
-  openFile(payload)
+export function openAction(match: DisplayResult) {
+  let groups = vueStore.grouped;
+  let fileResult = groups.find(g => g.file === match.file)!;
+  if (!fileResult)
+    return;
+  let matchIndex = fileResult.results.indexOf(match)
+
+  fileResult = JSON.parse(JSON.stringify(fileResult)) // deep clone, payload contains Proxy object!
+  openFile({ fileResult, matchIndex })
 }
 
 

@@ -55,7 +55,7 @@ export function addCallback_WebViewInited(context: vscode.ExtensionContext) {
 	})
 }
 
-export function addCallbacks_Editor(context: vscode.ExtensionContext) {
+export function addCallbacks_VSCodeEditor(context: vscode.ExtensionContext) {
 	// 监听活动编辑器变化
 	context.subscriptions.push(
 		vscode.window.onDidChangeActiveTextEditor(editor => {

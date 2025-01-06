@@ -34,6 +34,11 @@ export interface DisplayFileResult {
   inView?: boolean
 }
 
+export interface OpenFileResult {
+  fileResult: DisplayFileResult
+  matchIndex: number
+}
+
 export interface SearchQuery {
   pattern: string
   includeFile: string
@@ -79,13 +84,7 @@ export interface ParentToChild {
 
 export interface ChildToParent {
   search: WithId<SearchQuery>
-  openFile: {
-    filePath: string
-    locationsToSelect: {
-      start: Position
-      end: Position
-    }
-  }
+  openFile: any
   saveSearchOptions: any
   webViewInited: any
   stopSearch: any

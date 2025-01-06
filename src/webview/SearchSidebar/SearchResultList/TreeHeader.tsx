@@ -1,6 +1,6 @@
 import { FileLink } from './FileLink'
 import { FileActions } from './Actions'
-import type { DisplayFileResult } from '../../../common/types.js'
+import type { DisplayFileResult } from '../../../common/types'
 import { VscChevronDown, VscChevronRight } from 'react-icons/vsc'
 import { VSCodeBadge } from '@vscode/webview-ui-toolkit/react'
 import * as stylex from '@stylexjs/stylex'
