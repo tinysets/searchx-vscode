@@ -172,7 +172,7 @@ export function splitByHighlightToken(searchQuery: SearchQuery, result: QueryRes
       return null as any;
 
     let startShot = queryResult.shots[0]
-    let endShot = queryResult.shots[queryResult.shots.length - 1]
+    let endShot = queryResult.shots.at(-1)!
 
     search.text = searchQuery.pattern;
     search.file = queryResult.filePath;

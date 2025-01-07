@@ -55,7 +55,7 @@ function SearchWidgetContainer() {
       for (const token of reslut) {
         if (token.type == QueryTokenType.FzfQueryWord || token.type == QueryTokenType.ExactQueryWord) {
           let text = token.token;
-          newStr += `${text.slice(0, -1)}<span class="keyword">${text[text.length - 1]}</span>`
+          newStr += `${text.slice(0, -1)}<span class="keyword">${text.at(-1)}</span>`
         } else {
           newStr += token.token
         }
