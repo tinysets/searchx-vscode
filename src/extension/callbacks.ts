@@ -40,7 +40,7 @@ function onWebviewVisibleChanged(visible: boolean) {
 	console.log('SearchX visibility changed:', visible);
 }
 
-export function addCallback_WebViewInited(context: vscode.ExtensionContext) {
+export function addCallbacks_WebViewInited(context: vscode.ExtensionContext) {
 	parentPort.onMessage(MessageType.C2S_WebViewInited, () => {
 		let obj = context.workspaceState.get(LocalSavedType.SavedSearchOptions)
 		if (obj) {

@@ -16,7 +16,6 @@ export function registerCommand(context: vscode.ExtensionContext) {
 		commands.registerCommand('searchx.collapseAll', toggleAllSearch),
 	)
 }
-
 function findInFolder(data: any) {
 	const workspacePath = workspace.workspaceFolders?.[0]?.uri?.fsPath
 	// compute relative path to the workspace folder
@@ -30,23 +29,17 @@ function findInFolder(data: any) {
 		includeFile: relative,
 	})
 }
-
 function refreshSearch() {
 	parentPort.postMessage(MessageType.S2C_RefreshAllSearch, {})
 }
-
 function clearSearchResults() {
 	parentPort.postMessage(MessageType.S2C_ClearSearchResults, {})
 }
-
 function toggleAllSearch() {
 	parentPort.postMessage(MessageType.S2C_ToggleAllSearch, {})
 }
 
-parentPort.onMessage(MessageType.C2S_OpenFile, openFile)
-parentPort.onMessage(MessageType.C2S_Search, searchCLI)
 
-parentPort.onMessage(MessageType.C2S_StopSearch, stopSearch)
-function stopSearch() {
-	stopSearchCLI()
-}
+parentPort.onMessage(MessageType.C2S_Search, searchCLI)
+parentPort.onMessage(MessageType.C2S_StopSearch, stopSearchCLI)
+parentPort.onMessage(MessageType.C2S_OpenFile, openFile)
