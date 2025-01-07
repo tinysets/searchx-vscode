@@ -54,11 +54,11 @@ export default function SearchOptions() {
               setIncludeFile={(value) => vueStore.includeFile = value}
               refreshResult={refreshSearch}
             />
-            <FzfFile
+            {/* <FzfFile
               fzfFile={fzfFile}
               setFzfFile={(value) => vueStore.fzfFile = value}
               refreshResult={refreshSearch}
-            />
+            /> */}
             <ExcludeFile
               excludeFile={excludeFile}
               setExcludeFile={(value) => vueStore.excludeFile = value}
