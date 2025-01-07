@@ -2,7 +2,7 @@ import { VscEllipsis } from 'react-icons/vsc'
 import * as stylex from '@stylexjs/stylex'
 import IncludeFile from './IncludeFile'
 import ExcludeFile from './ExcludeFile'
-import FzfFile from './FzfFile'
+// import FzfFile from './FzfFile'
 import { vueStore } from '../../store'
 import { useReactive } from 'react-use-vue-reactive'
 import { refreshSearch } from '../../messageHub'
@@ -35,7 +35,7 @@ export default function SearchOptions() {
 
     const includeFile = vueStore.includeFile
     const excludeFile = vueStore.excludeFile
-    const fzfFile = vueStore.fzfFile
+    // const fzfFile = vueStore.fzfFile
     const showOptions = vueStore.showOptions
 
     return (
