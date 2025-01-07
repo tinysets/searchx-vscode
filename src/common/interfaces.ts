@@ -10,7 +10,8 @@ export interface IDocLine {
     text: string
     line: number
     pos: number
-    tokens: IToken[]
+    tokens?: IToken[]
+    tokensWhite?: IToken[]
 }
 
 export interface IToken {
@@ -27,6 +28,7 @@ export enum KeywordType {
 export interface Keyword {
     type: KeywordType
     keyword: string
+    longWordFzf?: boolean
 }
 
 export interface KeywordShot {
@@ -83,6 +85,7 @@ export interface IIsFullSearch {
 }
 
 export interface QueryResult extends IIsFullSearch {
+    fileAbsPath: string
     filePath: string
     lineStart: number
     lineEnd: number
@@ -93,6 +96,7 @@ export interface QueryResult extends IIsFullSearch {
 }
 
 export interface QueryResultFullSearch extends IIsFullSearch {
+    fileAbsPath: string
     filePath: string
     lineStart: number
     lineEnd: number
@@ -102,4 +106,3 @@ export interface QueryResultFullSearch extends IIsFullSearch {
     posStartAtLine: number
     posEndAtLine: number
 }
-
