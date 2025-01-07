@@ -56,7 +56,7 @@ function postSearch(searchQuery: SearchQuery) {
 
 export function openAction(match: DisplayResult) {
   let groups = vueStore.grouped;
-  let fileResult = groups.find(g => g.file === match.file)!;
+  let fileResult = groups.find(g => g.filePath === match.filePath)!;
   if (!fileResult)
     return;
   let matchIndex = fileResult.results.indexOf(match)
@@ -67,16 +67,22 @@ export function openAction(match: DisplayResult) {
 
 
 function byFilePath(a: DisplayFileResult, b: DisplayFileResult) {
-  return a.file.localeCompare(b.file)
+  return a.filePath.localeCompare(b.filePath)
 }
 
 function groupBy(matches: DisplayResult[]) {
   const groups = new Map<string, DisplayFileResult>()
   for (const match of matches) {
-    if (!groups.has(match.file)) {
-      groups.set(match.file, { file: match.file, language: match.language, expanded: vueStore.expandGlobal, results: [] })
+    if (!groups.has(match.filePath)) {
+      groups.set(match.filePath, {
+        fileAbsPath: match.fileAbsPath,
+        filePath: match.filePath,
+        language: match.language,
+        expanded: vueStore.expandGlobal,
+        results: []
+      })
     }
-    groups.get(match.file)!.results.push(match)
+    groups.get(match.filePath)!.results.push(match)
   }
   return groups
 }
@@ -85,7 +91,7 @@ function merge(newEntries: Map<string, DisplayFileResult>) {
   // first, clone the old map for react
   const temp = new Map<string, DisplayFileResult>()
   for (const element of vueStore.grouped) {
-    temp.set(element.file, element)
+    temp.set(element.filePath, element)
   }
 
   for (const [file, resluts] of newEntries) {
@@ -141,25 +147,25 @@ childPort.onMessage(MessageType.S2C_Error, event => {
 export function dismissOneMatch(match: DisplayResult) {
 
   for (const group of vueStore.grouped) {
-    if (group.file !== match.file) {
+    if (group.filePath !== match.filePath) {
       continue
     }
     group.results = group.results.filter(m => m !== match)
     if (group.results.length === 0) {
-      dismissOneFile(group.file) // remove files if user deleted all matches
+      dismissOneFile(group.filePath) // remove files if user deleted all matches
     }
     break
   }
 }
 
 export function dismissOneFile(filePath: string) {
-  let index = vueStore.grouped.findIndex(g => g.file === filePath)
+  let index = vueStore.grouped.findIndex(g => g.filePath === filePath)
   if (index != -1) {
     let item = vueStore.grouped[index]
     if (!item.inView) {
       scrollToIndex(index)
     }
-    vueStore.grouped = vueStore.grouped.filter(g => g.file !== filePath)
+    vueStore.grouped = vueStore.grouped.filter(g => g.filePath !== filePath)
   }
 }
 

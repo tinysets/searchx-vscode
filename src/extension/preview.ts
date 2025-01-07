@@ -16,8 +16,12 @@ import {
   RangeInfo,
 } from '../common/types'
 import { activeMatchDecoration, findDecoration } from './decorations'
+import path from 'node:path'
 
 function workspaceUriFromFilePath(filePath: string) {
+  if (path.isAbsolute(filePath)) {
+    return Uri.file(filePath)
+  }
   const uris = workspace.workspaceFolders
   const { joinPath } = Uri
   if (!uris?.length) {
@@ -35,7 +39,7 @@ function locationToRange(locations: RangeInfo) {
 }
 
 export async function openFile({ fileResult, matchIndex }: OpenFileResult) {
-  const fileUri = workspaceUriFromFilePath(fileResult.file)
+  const fileUri = workspaceUriFromFilePath(fileResult.fileAbsPath)
   if (!fileUri) {
     return
   }

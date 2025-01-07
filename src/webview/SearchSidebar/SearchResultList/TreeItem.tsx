@@ -38,7 +38,7 @@ interface TreeItemProps {
 
 const TreeItem = ({ className, data }: TreeItemProps) => {
   return useReactive(() => {
-    const filePath = data.file
+    const filePath = data.filePath
     let isExpanded = data.expanded;
     let { inView, ref } = useInView(filePath)
     data.inView = inView

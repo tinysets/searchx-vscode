@@ -17,7 +17,8 @@ export interface RangeInfo {
 }
 
 export interface DisplayResult {
-  file: string
+  fileAbsPath: string
+  filePath: string
   startIdx: number
   endIdx: number
   displayLine: string
@@ -27,7 +28,8 @@ export interface DisplayResult {
 }
 
 export interface DisplayFileResult {
-  file: string
+  fileAbsPath: string
+  filePath: string
   expanded: boolean
   language: string
   results: DisplayResult[]
@@ -53,7 +55,8 @@ export interface SearchQuery {
 export type SgSearch = {
   text: string
   range: RangeInfo
-  file: string
+  fileAbsPath: string
+  filePath: string
   lines: string
   language: string
 }

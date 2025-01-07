@@ -158,7 +158,8 @@ export function splitByHighlightToken(searchQuery: SearchQuery, result: QueryRes
   if (result.fullSearch) {
     let queryResult = result as QueryResultFullSearch
     search.text = searchQuery.pattern;
-    search.file = queryResult.filePath;
+    search.fileAbsPath = queryResult.fileAbsPath;
+    search.filePath = queryResult.filePath;
     search.language = getFileExtension(queryResult.filePath)
     search.lines = queryResult.startLineText;
     search.range = {
@@ -175,7 +176,8 @@ export function splitByHighlightToken(searchQuery: SearchQuery, result: QueryRes
     let endShot = queryResult.shots.at(-1)!
 
     search.text = searchQuery.pattern;
-    search.file = queryResult.filePath;
+    search.fileAbsPath = queryResult.fileAbsPath;
+    search.filePath = queryResult.filePath;
     search.language = getFileExtension(queryResult.filePath)
     search.lines = queryResult.lines[startShot.line];
     search.range = {
@@ -217,7 +219,8 @@ export function splitByHighlightToken(searchQuery: SearchQuery, result: QueryRes
     endIdx,
     displayLine,
     lineSpan: end.line - start.line,
-    file: search.file,
+    fileAbsPath: search.fileAbsPath,
+    filePath: search.filePath,
     range: search.range,
     language: search.language,
   }

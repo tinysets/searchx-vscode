@@ -64,7 +64,7 @@ export default function TreeHeader({
 }: TreeHeaderProps) {
 
   return useReactive(() => {
-    const { file: filePath, language } = data
+    const { filePath: filePath, language } = data
     let active = data == vueStore.activeItem
     let setActive = () => { vueStore.activeItem = data }
     const styleProps = stylex.props(

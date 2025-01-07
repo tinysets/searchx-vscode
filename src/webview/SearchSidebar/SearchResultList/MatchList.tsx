@@ -57,7 +57,7 @@ export const MatchList = memo(({ data }: CodeBlockListProps) => {
     return (
       <>
         {data?.results.map(match => {
-          const { file, range } = match
+          const { filePath: file, range } = match
           const { byteOffset } = range
           const key = file + byteOffset.start + byteOffset.end
           return <OneMatch key={key} match={match} />
