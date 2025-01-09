@@ -35,6 +35,10 @@
         "title": "SG: Find searchx Pattern in Folder"
       },
       {
+        "command": "searchx.searchInFile",
+        "title": "SG: Find searchx Pattern in File"
+      },
+      {
         "command": "searchx.clearSearchResults",
         "title": "Clear Search Results",
         "icon": {
@@ -73,6 +77,17 @@
           "command": "searchx.searchInFolder",
           "group": "4_search",
           "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "searchx.searchInFile",
+          "group": "4_search",
+          "when": "!explorerResourceIsFolder"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "searchx.searchInFile",
+          "group": "navigation"
         }
       ],
       "view/title": [
