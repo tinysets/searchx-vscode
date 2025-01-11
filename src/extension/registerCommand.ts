@@ -16,6 +16,10 @@ export function registerCommand(context: vscode.ExtensionContext) {
 		commands.registerCommand('searchx.expandAll', toggleAllSearch),
 		commands.registerCommand('searchx.collapseAll', toggleAllSearch),
 	)
+
+	parentPort.onMessage(MessageType.C2S_Search, searchCLI)
+	parentPort.onMessage(MessageType.C2S_StopSearch, stopSearchCLI)
+	parentPort.onMessage(MessageType.C2S_OpenFile, openFile)
 }
 function findInFolder(data: any) {
 	const workspacePath = workspace.workspaceFolders?.[0]?.uri?.fsPath
@@ -52,8 +56,3 @@ function clearSearchResults() {
 function toggleAllSearch() {
 	parentPort.postMessage(MessageType.S2C_ToggleAllSearch, {})
 }
-
-
-parentPort.onMessage(MessageType.C2S_Search, searchCLI)
-parentPort.onMessage(MessageType.C2S_StopSearch, stopSearchCLI)
-parentPort.onMessage(MessageType.C2S_OpenFile, openFile)
