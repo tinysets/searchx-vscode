@@ -50,10 +50,10 @@ function MultiLineIndicator({ lineSpan }: { lineSpan: number }) {
 
 function Highlight({
   displayLine,
-  startIdx,
-  endIdx,
+  startCol,
+  endCol,
 }: DisplayResult) {
-  const matched = displayLine.slice(startIdx, endIdx)
+  const matched = displayLine.slice(startCol, endCol)
   return <span style={style}>{matched}</span>
 }
 
@@ -62,7 +62,7 @@ interface CodeBlockProps {
 }
 export const CodeBlock = memo(({ match }: CodeBlockProps) => {
   return useReactive(() => {
-    const { startIdx, endIdx, displayLine, lineSpan } = match
+    const { startCol, endCol, displayLine, lineSpan } = match
     const onClick = () => {
       openAction(match)
     }
@@ -70,9 +70,9 @@ export const CodeBlock = memo(({ match }: CodeBlockProps) => {
     return (
       <div {...stylex.props(styles.box)} onClick={onClick}>
         <MultiLineIndicator lineSpan={lineSpan} />
-        {displayLine.slice(0, startIdx)}
+        {displayLine.slice(0, startCol)}
         <Highlight {...match} />
-        {displayLine.slice(endIdx)}
+        {displayLine.slice(endCol)}
       </div>
     )
   })

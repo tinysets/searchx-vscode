@@ -19,8 +19,8 @@ export interface RangeInfo {
 export interface DisplayResult {
   fileAbsPath: string
   filePath: string
-  startIdx: number
-  endIdx: number
+  startCol: number
+  endCol: number
   displayLine: string
   lineSpan: number
   range: RangeInfo
@@ -52,18 +52,9 @@ export interface SearchQuery {
   windowSize: number
 }
 
-export type SgSearch = {
-  text: string
-  range: RangeInfo
-  fileAbsPath: string
-  filePath: string
-  lines: string
-  language: string
-}
-
 export interface ParentToChild {
   searchResultStreaming: {
-    searchResult: DisplayResult[]
+    displayResult: DisplayResult[]
     id: number
   } & SearchQuery
   searchEnd: WithId<SearchQuery>

@@ -4,7 +4,7 @@ import { type SearchQuery, MessageType, WithId } from '../common/types'
 import { QueryArgs, QueryResult } from '../common/interfaces'
 import { Base64 } from '../common/base64'
 import { parentPort } from './messageHub'
-import { buildQueryArgs, splitByHighlightToken } from './searchUtil'
+import { buildQueryArgs, buildDisplayResult } from './searchUtil'
 
 type StreamingHandler = (r: QueryResult[]) => void
 let child: ChildProcessWithoutNullStreams | undefined
@@ -67,7 +67,7 @@ export async function searchCLI(payload: WithId<SearchQuery>) {
   const onData = (ret: QueryResult[]) => {
     parentPort.postMessage(MessageType.S2C_SearchResultStreaming, {
       ...payload,
-      searchResult: ret.map((v) => splitByHighlightToken(payload, v)).filter((v) => v != null),
+      displayResult: ret.map((v) => buildDisplayResult(payload, v)).filter((v) => v != null),
     })
   }
 

@@ -111,7 +111,7 @@ childPort.onMessage(MessageType.S2C_SearchResultStreaming, event => {
     return
   }
   refreshResultIfStale()
-  vueStore.grouped = merge(groupBy(event.searchResult))
+  vueStore.grouped = merge(groupBy(event.displayResult))
   vueStore.grouped.sort(byFilePath)
 
   const resultCount = vueStore.grouped.reduce((a, l) => a + l.results.length, 0)
