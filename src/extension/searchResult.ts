@@ -1,4 +1,5 @@
 import { DisplayFileResult, DisplayResult, SearchQuery, WithId } from '../common/types'
+import { onSearchResultChanged } from './callbacks';
 
 function byFilePath(a: DisplayFileResult, b: DisplayFileResult) {
 	return a.filePath.localeCompare(b.filePath)
@@ -32,16 +33,19 @@ class DisplayResults {
 			groups.get(match.fileAbsPath)!.results.push(match)
 		}
 		this.syncToArr()
+		onSearchResultChanged()
 	}
 	clear() {
 		this.groupsMap.clear()
 		this.syncToArr()
+		onSearchResultChanged()
 	}
 
 	dismissOneFile(fileAbsPath: string) {
 		const groups = this.groupsMap
 		groups.delete(fileAbsPath)
 		this.syncToArr()
+		onSearchResultChanged()
 	}
 
 	dismissOneMatch(fileAbsPath: string, matchIndex: number) {
@@ -57,12 +61,13 @@ class DisplayResults {
 			this.dismissOneFile(fileAbsPath)
 		} else {
 			this.syncToArr()
+			onSearchResultChanged()
 		}
 	}
 }
 
 
-let cacheResults: DisplayResults;
+export let cacheResults: DisplayResults;
 export function onSearchResult(query: WithId<SearchQuery>, displayResults: DisplayResult[]) {
 	if (!cacheResults || cacheResults.query.id !== query.id) {
 		cacheResults = new DisplayResults(query);

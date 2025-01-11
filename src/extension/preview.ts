@@ -17,6 +17,7 @@ import {
 } from '../common/types'
 import { activeMatchDecoration, findDecoration } from './decorations'
 import path from 'node:path'
+import { cacheResults } from './searchResult'
 
 function workspaceUriFromFilePath(filePath: string) {
   if (path.isAbsolute(filePath)) {
@@ -68,6 +69,36 @@ export async function openFile({ fileResult, matchIndex }: OpenFileResult) {
     } else {
       findDecorationRanges.push({ range });
     }
+  }
+
+  editor.setDecorations(findDecoration, findDecorationRanges);
+  editor.setDecorations(activeMatchDecoration, activeMatchDecorationRanges);
+}
+
+export async function highlightResultInTextEditor() {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    return;
+  }
+
+  editor.setDecorations(findDecoration, []); // clear
+  editor.setDecorations(activeMatchDecoration, []); // clear
+
+  if (!cacheResults)
+    return;
+  let fsPath = editor.document.uri.fsPath
+  if (!fsPath)
+    return;
+  const fileResult = cacheResults.groupsMap.get(fsPath);
+  if (!fileResult)
+    return;
+
+  const findDecorationRanges: { range: vscode.Range }[] = [];
+  const activeMatchDecorationRanges: { range: vscode.Range }[] = [];
+
+  for (let i = 0; i < fileResult.results.length; i++) {
+    const range = locationToRange(fileResult.results[i].range);
+    findDecorationRanges.push({ range });
   }
 
   editor.setDecorations(findDecoration, findDecorationRanges);

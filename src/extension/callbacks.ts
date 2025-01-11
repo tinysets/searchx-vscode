@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import type { ChannelMessage } from 'unport'
 import { parentPort } from './messageHub'
 import { LocalSavedType, MessageType } from '../common/types'
+import { highlightResultInTextEditor } from './preview'
 
 function setupParentPort(webviewView: vscode.WebviewView) {
 	parentPort.implementChannel({
@@ -62,6 +63,7 @@ export function addCallbacks_VSCodeEditor(context: vscode.ExtensionContext) {
 			if (editor) {
 				// 触发重新添加 findDecorations
 				console.log(`Switched to: ${editor.document.fileName}`);
+				highlightResultInTextEditor();
 			}
 		})
 	);
@@ -76,4 +78,8 @@ export function addCallbacks_VSCodeEditor(context: vscode.ExtensionContext) {
 			}
 		})
 	);
+}
+
+export function onSearchResultChanged() {
+	highlightResultInTextEditor();
 }
