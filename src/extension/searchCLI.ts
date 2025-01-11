@@ -5,6 +5,7 @@ import { QueryArgs, QueryResult } from '../common/interfaces'
 import { Base64 } from '../common/base64'
 import { parentPort } from './messageHub'
 import { buildQueryArgs, buildDisplayResult } from './searchUtil'
+import { onSearchResult } from './searchResult'
 
 type StreamingHandler = (r: QueryResult[]) => void
 let child: ChildProcessWithoutNullStreams | undefined
@@ -16,6 +17,7 @@ async function uniqueProc(
   // kill previous search
   if (child) {
     child.kill('SIGTERM')
+    child = undefined
   }
   if (!proc) {
     return Promise.resolve()
@@ -65,9 +67,11 @@ function execSearch(query: SearchQuery, handlers: Handlers) {
 
 export async function searchCLI(payload: WithId<SearchQuery>) {
   const onData = (ret: QueryResult[]) => {
+    let displayResults = ret.map((v) => buildDisplayResult(payload, v)).filter((v) => v != null);
+    onSearchResult(payload, displayResults)
     parentPort.postMessage(MessageType.S2C_SearchResultStreaming, {
       ...payload,
-      displayResult: ret.map((v) => buildDisplayResult(payload, v)).filter((v) => v != null),
+      displayResults: displayResults,
     })
   }
 

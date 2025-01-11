@@ -53,10 +53,7 @@ export interface SearchQuery {
 }
 
 export interface ParentToChild {
-  searchResultStreaming: {
-    displayResult: DisplayResult[]
-    id: number
-  } & SearchQuery
+  searchResultStreaming: { displayResults: DisplayResult[] } & WithId<SearchQuery>
   searchEnd: WithId<SearchQuery>
   error: {
     id: number
