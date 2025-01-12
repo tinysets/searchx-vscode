@@ -70,7 +70,7 @@ export class QueryTokenizer {
         const allTokens = [
             Whitespace,
             FzfQueryWord,
-            ExactQueryWord,
+            // ExactQueryWord,
             IncludeQueryWord
         ];
         const queryLexer = new Lexer(allTokens);
