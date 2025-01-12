@@ -6,11 +6,11 @@ function byFilePath(a: DisplayFileResult, b: DisplayFileResult) {
 }
 
 class DisplayResults {
-	query: WithId<SearchQuery> = null!;
+	id: number = -1;
 	groupsMap = new Map<string, DisplayFileResult>()
 	groupsArr: DisplayFileResult[] = []
-	constructor(query: WithId<SearchQuery>) {
-		this.query = query
+	constructor(id: number) {
+		this.id = id
 	}
 
 	private syncToArr() {
@@ -35,6 +35,7 @@ class DisplayResults {
 		this.syncToArr()
 		onSearchResultChanged()
 	}
+
 	clear() {
 		this.groupsMap.clear()
 		this.syncToArr()
@@ -48,13 +49,14 @@ class DisplayResults {
 		onSearchResultChanged()
 	}
 
-	dismissOneMatch(fileAbsPath: string, matchIndex: number) {
+	dismissOneMatch(fileAbsPath: string, uid: number) {
 		const groups = this.groupsMap
 		const group = groups.get(fileAbsPath)
 		if (!group) {
 			return
 		}
 		let results = group.results;
+		let matchIndex = group.results.findIndex(r => r.uid === uid);
 		if (matchIndex >= 0 && matchIndex < results.length)
 			results.splice(matchIndex, 1)
 		if (results.length === 0) {
@@ -69,8 +71,8 @@ class DisplayResults {
 
 export let cacheResults: DisplayResults;
 export function onSearchResult(query: WithId<SearchQuery>, displayResults: DisplayResult[]) {
-	if (!cacheResults || cacheResults.query.id !== query.id) {
-		cacheResults = new DisplayResults(query);
+	if (!cacheResults || cacheResults.id !== query.id) {
+		cacheResults = new DisplayResults(query.id);
 	}
 	cacheResults.add(displayResults)
 }

@@ -17,6 +17,7 @@ export interface RangeInfo {
 }
 
 export interface DisplayResult {
+  uid: number
   fileAbsPath: string
   filePath: string
   startCol: number
@@ -79,6 +80,8 @@ export interface ChildToParent {
   saveSearchOptions: any
   webViewInited: any
   stopSearch: any
+  dismissOneMatch: { fileAbsPath: string, uid: number }
+  dismissOneFile: { fileAbsPath: string }
 }
 
 export type Definition = {
@@ -104,6 +107,8 @@ export enum MessageType {
   S2C_LoadSavedSearchOptions = 'loadSavedSearchOptions',
   C2S_WebViewInited = 'webViewInited',
   C2S_StopSearch = 'stopSearch',
+  C2S_DismissOneMatch = 'dismissOneMatch',
+  C2S_DismissOneFile = 'dismissOneFile',
 }
 
 export enum LocalSavedType {

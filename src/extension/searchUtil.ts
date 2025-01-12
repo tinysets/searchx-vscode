@@ -144,6 +144,8 @@ const LEADING_SPACES_RE = /^\s*/
 const PRE_CTX = 30
 const POST_CTX = 100
 
+const MOD = 1e9 + 7
+let G_UID = 0
 
 function getFileExt(filePath: string) {
   const { ext } = path.parse(filePath);
@@ -152,7 +154,6 @@ function getFileExt(filePath: string) {
   }
   return ext;
 }
-
 
 type SearchResult = {
   text: string
@@ -225,7 +226,9 @@ export function buildDisplayResult(searchQuery: SearchQuery, result: QueryResult
     displayLine = displayLine.substring(0, endCol + POST_CTX) + '...'
   }
 
-  let displayResult = {
+  G_UID = (G_UID + 1) % MOD
+  let displayResult: DisplayResult = {
+    uid: G_UID++,
     startCol,
     endCol,
     displayLine,
@@ -234,6 +237,6 @@ export function buildDisplayResult(searchQuery: SearchQuery, result: QueryResult
     filePath: searchResult.filePath,
     range: searchResult.range,
     language: searchResult.language,
-  } as DisplayResult;
+  };
   return displayResult;
 }
