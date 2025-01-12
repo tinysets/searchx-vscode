@@ -56,7 +56,7 @@ function postSearch(searchQuery: SearchQuery) {
 
 export function openAction(match: DisplayResult) {
   let groups = vueStore.grouped;
-  let fileResult = groups.find(g => g.filePath === match.filePath)!;
+  let fileResult = groups.find(g => g.fileAbsPath === match.fileAbsPath)!;
   if (!fileResult)
     return;
   let matchIndex = fileResult.results.indexOf(match)
@@ -73,8 +73,8 @@ function byFilePath(a: DisplayFileResult, b: DisplayFileResult) {
 function groupBy(matches: DisplayResult[]) {
   const groups = new Map<string, DisplayFileResult>()
   for (const match of matches) {
-    if (!groups.has(match.filePath)) {
-      groups.set(match.filePath, {
+    if (!groups.has(match.fileAbsPath)) {
+      groups.set(match.fileAbsPath, {
         fileAbsPath: match.fileAbsPath,
         filePath: match.filePath,
         language: match.language,
@@ -82,7 +82,7 @@ function groupBy(matches: DisplayResult[]) {
         results: []
       })
     }
-    groups.get(match.filePath)!.results.push(match)
+    groups.get(match.fileAbsPath)!.results.push(match)
   }
   return groups
 }
@@ -91,7 +91,7 @@ function merge(newEntries: Map<string, DisplayFileResult>) {
   // first, clone the old map for react
   const temp = new Map<string, DisplayFileResult>()
   for (const element of vueStore.grouped) {
-    temp.set(element.filePath, element)
+    temp.set(element.fileAbsPath, element)
   }
 
   for (const [file, resluts] of newEntries) {
@@ -147,25 +147,27 @@ childPort.onMessage(MessageType.S2C_Error, event => {
 export function dismissOneMatch(match: DisplayResult) {
 
   for (const group of vueStore.grouped) {
-    if (group.filePath !== match.filePath) {
+    if (group.fileAbsPath !== match.fileAbsPath) {
       continue
     }
     group.results = group.results.filter(m => m !== match)
     if (group.results.length === 0) {
-      dismissOneFile(group.filePath) // remove files if user deleted all matches
+      dismissOneFile(group.fileAbsPath) // remove files if user deleted all matches
     }
+    childPort.postMessage(MessageType.C2S_DismissOneMatch, { fileAbsPath: match.fileAbsPath, uid: match.uid })
     break
   }
 }
 
-export function dismissOneFile(filePath: string) {
-  let index = vueStore.grouped.findIndex(g => g.filePath === filePath)
+export function dismissOneFile(fileAbsPath: string) {
+  let index = vueStore.grouped.findIndex(g => g.fileAbsPath === fileAbsPath)
   if (index != -1) {
     let item = vueStore.grouped[index]
     if (!item.inView) {
       scrollToIndex(index)
     }
-    vueStore.grouped = vueStore.grouped.filter(g => g.filePath !== filePath)
+    vueStore.grouped = vueStore.grouped.filter(g => g.fileAbsPath !== fileAbsPath)
+    childPort.postMessage(MessageType.C2S_DismissOneFile, { fileAbsPath })
   }
 }
 

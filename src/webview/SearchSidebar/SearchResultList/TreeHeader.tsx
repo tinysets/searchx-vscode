@@ -64,7 +64,7 @@ export default function TreeHeader({
 }: TreeHeaderProps) {
 
   return useReactive(() => {
-    const { filePath: filePath, language } = data
+    const { filePath, language, fileAbsPath } = data
     let active = data == vueStore.activeItem
     let setActive = () => { vueStore.activeItem = data }
     const styleProps = stylex.props(
@@ -88,7 +88,7 @@ export default function TreeHeader({
         </div>
         <FileLink filePath={filePath} language={language} />
         {hovered ? (
-          <FileActions filePath={filePath} />
+          <FileActions filePath={fileAbsPath} />
         ) : (
           <VSCodeBadge {...stylex.props(styles.badge)}>
             {data.results.length}

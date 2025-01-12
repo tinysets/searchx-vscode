@@ -25,7 +25,7 @@ function itemContent(_: number, data: DisplayFileResult) {
   return <TreeItem className={'sg-match-tree-item'} data={data} />
 }
 function computeItemKey(_: number, data: DisplayFileResult) {
-  return data.filePath
+  return data.fileAbsPath
 }
 const SearchResultList = () => {
   return useReactive(() => {

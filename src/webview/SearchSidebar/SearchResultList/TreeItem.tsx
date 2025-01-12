@@ -38,9 +38,9 @@ interface TreeItemProps {
 
 const TreeItem = ({ className, data }: TreeItemProps) => {
   return useReactive(() => {
-    const filePath = data.filePath
+    const fileAbsPath = data.fileAbsPath
     let isExpanded = data.expanded;
-    let { inView, ref } = useInView(filePath)
+    let { inView, ref } = useInView(fileAbsPath)
     data.inView = inView
     let isTreeActive = data == vueStore.activeItem
     const props = stylex.props(
