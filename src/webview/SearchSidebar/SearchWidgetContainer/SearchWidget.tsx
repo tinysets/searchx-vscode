@@ -1,6 +1,7 @@
 import { SearchToggles } from './LangSelect'
 import * as stylex from '@stylexjs/stylex'
 import Editor from 'react-simple-code-editor';
+import escape from 'escape-html';
 import { vueStore } from '../../store'
 import { useReactive } from 'react-use-vue-reactive';
 import { QueryTokenizer, QueryTokenType } from '../../../common/QueryTokenizer';
@@ -55,17 +56,14 @@ function SearchWidgetContainer() {
       for (const token of reslut) {
         if (token.type == QueryTokenType.FzfQueryWord || token.type == QueryTokenType.ExactQueryWord) {
           let text = token.token;
-          newStr += `${text.slice(0, -1)}<span class="keyword">${text.at(-1)}</span>`
+          newStr += `${escape(text.slice(0, -1))}<span class="keyword">${text.at(-1)}</span>`
         } else {
-          newStr += token.token
+          newStr += escape(token.token) // 解决xss攻击
         }
       }
       return newStr
     }
 
-    // @TODO <Editor></Editor> 在输入 program.option('-bs64, --base64 <base64>', 'your json2base64 string argument')
-    // 会有问题 <base64>被识别为html标签,属于xss攻击
-    // 所以需要对输入的内容进行转义
     let padding = { right: 70, left: 5, top: 3, bottom: 3 } as any
     return (
       <div {...stylex.props(styles.container)}>
