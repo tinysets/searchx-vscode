@@ -63,8 +63,10 @@ function SearchWidgetContainer() {
       return newStr
     }
 
+    // @TODO <Editor></Editor> 在输入 program.option('-bs64, --base64 <base64>', 'your json2base64 string argument')
+    // 会有问题 <base64>被识别为html标签,属于xss攻击
+    // 所以需要对输入的内容进行转义
     let padding = { right: 70, left: 5, top: 3, bottom: 3 } as any
-
     return (
       <div {...stylex.props(styles.container)}>
         <div {...stylex.props(styles.inputs)}>
