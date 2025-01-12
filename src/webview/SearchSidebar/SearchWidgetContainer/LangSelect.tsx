@@ -66,7 +66,7 @@ export function SearchToggles() {
           fullSearch ? null :
             < VSCodeButton
               appearance="icon"
-              title="In Order Search"
+              title="In Order"
               onClick={() => vueStore.forward = !forward}
               {...stylex.props(styles.button, forward && styles.activeButton)}
             >
