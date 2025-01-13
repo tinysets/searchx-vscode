@@ -1,4 +1,5 @@
 import { workspace } from 'vscode'
+import * as vscode from 'vscode'
 import { execFile } from 'node:child_process'
 import type { ChildProcessWithoutNullStreams } from 'node:child_process'
 
@@ -41,12 +42,27 @@ async function testBinaryExist(command: string) {
 				// for windows
 				shell: process.platform === 'win32',
 				cwd: uris[0],
+				env: {
+					...process.env,  // 继承当前环境变量
+					VSCODE_DEV: '',
+					ELECTRON_RUN_AS_NODE: '1'
+				}
 			},
 			err => {
 				r(!err)
 			},
 		)
 	})
+}
+
+let searchxJSPath = ''
+export function initSearchxJSPath(context: vscode.ExtensionContext) {
+    let path = vscode.Uri.joinPath(context.extensionUri, 'out', 'searchx.cjs');
+    searchxJSPath = path.fsPath;
+    console.log(`searchxJSPath: ${searchxJSPath}`)
+}
+export function resolveSearchxJSPath() {
+	return searchxJSPath
 }
 
 export function promisifyProc<T>(

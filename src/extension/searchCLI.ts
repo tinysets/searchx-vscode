@@ -1,5 +1,5 @@
 import { type ChildProcessWithoutNullStreams, spawn } from 'node:child_process'
-import { resolveBinary, promisifyProc } from './callcli'
+import { resolveBinary, promisifyProc, resolveSearchxJSPath } from './callcli'
 import { type SearchQuery, MessageType, WithId } from '../common/types'
 import { QueryArgs, QueryResult } from '../common/interfaces'
 import { Base64 } from '../common/base64'
@@ -36,12 +36,22 @@ async function uniqueProc(
 
 function spawnProc(query: QueryArgs) {
   const command = resolveBinary()
+  const codePath = process.execPath; // code bin
+  const jsPath = resolveSearchxJSPath()
+  let cmdStr = `"${codePath}" "${jsPath}"`;
+  // cmdStr = command;
+
   let base64 = Base64.jsonToBase64(query)
   console.log(base64)
   const args = ['--base64', base64]
-  return spawn(command, args, {
+  return spawn(cmdStr, args, {
     cwd: query.dir,
     shell: process.platform === 'win32', // it is safe because it is end user input
+    env: {
+      ...process.env,  // 继承当前环境变量
+      VSCODE_DEV: '',
+      ELECTRON_RUN_AS_NODE: '1'
+    }
   })
 }
 

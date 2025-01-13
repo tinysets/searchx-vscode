@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as vscode from 'vscode';
 import { initDecorations } from './decorations';
-import { detectCLIBinaryAtStart } from './callcli';
+import { detectCLIBinaryAtStart, initSearchxJSPath } from './callcli';
 import { registerWebview } from './webviewProvider';
 import { registerCommand } from './registerCommand';
 import { initContext } from './context';
@@ -20,6 +20,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	await detectCLIBinaryAtStart()
+	initSearchxJSPath(context)
 
 	initDecorations();
 	registerCommand(context)
