@@ -6,6 +6,7 @@ import { Base64 } from '../common/base64'
 import { parentPort } from './messageHub'
 import { buildQueryArgs, buildDisplayResult } from './searchUtil'
 import { onSearchResult } from './searchResult'
+import path from 'node:path'
 
 type StreamingHandler = (r: QueryResult[]) => void
 let child: ChildProcessWithoutNullStreams | undefined
@@ -34,11 +35,24 @@ async function uniqueProc(
   }
 }
 
+
+function getElectronPath() {
+  if (process.platform === 'darwin') {
+    const execPath = process.execPath;
+    const match = execPath.match(/(.*?\.app)/);
+    if (match) {
+      return path.join(match[1], 'Contents/MacOS/Electron');
+    }
+  }
+  return process.execPath;
+}
+
 function spawnProc(query: QueryArgs) {
   const command = resolveBinary()
-  const codePath = process.execPath; // code bin
+  const codePath = getElectronPath(); // code bin
   const jsPath = resolveSearchxJSPath()
   let cmdStr = `"${codePath}" "${jsPath}"`;
+  console.log(cmdStr)
   // cmdStr = command;
 
   let base64 = Base64.jsonToBase64(query)
@@ -46,7 +60,7 @@ function spawnProc(query: QueryArgs) {
   const args = ['--base64', base64]
   return spawn(cmdStr, args, {
     cwd: query.dir,
-    shell: process.platform === 'win32', // it is safe because it is end user input
+    shell: true, // it is safe because it is end user input
     env: {
       ...process.env,  // 继承当前环境变量
       VSCODE_DEV: '',

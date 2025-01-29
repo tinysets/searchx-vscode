@@ -40,7 +40,7 @@ async function testBinaryExist(command: string) {
 			['-h'],
 			{
 				// for windows
-				shell: process.platform === 'win32',
+				shell: true,
 				cwd: uris[0],
 				env: {
 					...process.env,  // 继承当前环境变量
