@@ -21,7 +21,6 @@ export function registerWebview(context: vscode.ExtensionContext) {
 class SearchSidebarProvider implements vscode.WebviewViewProvider {
   public static readonly ViewId = 'searchx.search.input'
 
-  // @ts-expect-error
   private _view?: vscode.WebviewView
 
   constructor(private readonly _extensionUri: vscode.Uri) { }

@@ -1,8 +1,8 @@
 {
   "name": "searchx-vscode",
-  "displayName": "SearchX",
+  "displayName": "SearchPro",
   "description": "Search by keywords.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "Leo76",
   "preview": false,
   "license": "MIT",
@@ -32,11 +32,11 @@
     "commands": [
       {
         "command": "searchx.searchInFolder",
-        "title": "SG: Find searchx Pattern in Folder"
+        "title": "SearchPro: Find Text in Folder"
       },
       {
         "command": "searchx.searchInFile",
-        "title": "SG: Find searchx Pattern in File"
+        "title": "SearchPro: Find Text in File"
       },
       {
         "command": "searchx.clearSearchResults",
@@ -117,7 +117,7 @@
       "activitybar": [
         {
           "id": "searchx-sidebar-view",
-          "title": "SearchX",
+          "title": "Search Pro",
           "icon": "media/fuzzy.svg"
         }
       ]
@@ -127,7 +127,7 @@
         {
           "type": "webview",
           "id": "searchx.search.input",
-          "name": "SearchX"
+          "name": "Search Pro"
         }
       ]
     }
