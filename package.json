@@ -23,6 +23,7 @@
   "icon": "media/favicon.png",
   "scripts": {
     "vscode:prepublish": "npm run build",
+    "b": "npm run build",
     "build": "node ./scripts/build.mjs",
     "dev": "node ./scripts/build.mjs --watch",
     "typecheck": "tsc --noEmit",
