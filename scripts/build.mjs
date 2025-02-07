@@ -18,7 +18,7 @@ const extension = {
 const webview = {
   entryPoints: ['src/webview/index.tsx'],
   bundle: true,
-  sourcemap: true,
+  sourcemap: false,
   outfile: 'out/webview.js',
   plugins: [
     stylexPlugin({
