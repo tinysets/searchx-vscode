@@ -1,7 +1,7 @@
 {
   "name": "searchx-vscode",
   "displayName": "Search Pro",
-  "description": "A powerful search tool with fuzzy matching and keyword support",
+  "description": "A powerful fuzzy search tool",
   "version": "0.0.1",
   "publisher": "Leo76",
   "preview": false,
@@ -35,13 +35,13 @@
   "main": "./out/extension.js",
   "icon": "media/favicon.png",
   "scripts": {
-    "vscode:prepublish": "npm run build",
     "b": "npm run build",
     "build": "node ./scripts/build.mjs",
     "dev": "node ./scripts/build.mjs --watch",
     "typecheck": "tsc --noEmit",
-    "publish": "vsce package --no-dependencies",
-    "p": "npm run publish"
+    "publish": "npm run b && npm run rmmap && vsce package --no-dependencies",
+    "p": "npm run publish",
+    "rmmap": "rimraf out/extension.js.map"
   },
   "contributes": {
     "commands": [
@@ -149,29 +149,30 @@
   },
   "devDependencies": {
     "@stylexjs/esbuild-plugin": "0.7.5",
+    "@stylexjs/stylex": "0.7.5",
     "@types/escape-html": "^1.0.4",
     "@types/node": "^20",
     "@types/react": "18.3.5",
     "@types/react-dom": "18.3.0",
     "@types/vscode": "^1.73.0",
     "@types/vscode-webview": "^1.57.0",
-    "esbuild": "0.23.1",
-    "tslib": "2.7.0",
-    "tsx": "4.19.0",
-    "typescript": "^5.6.2",
-    "unport": "0.6.0",
-    "vsce": "^2.15.0",
+    "@vscode/webview-ui-toolkit": "1.4.0",
     "chevrotain": "^11.0.3",
+    "esbuild": "0.23.1",
     "escape-html": "^1.0.3",
-    "react-use-vue-reactive": "latest",
-    "vue": "^3.5.12",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-icons": "5.3.0",
     "react-simple-code-editor": "^0.14.1",
     "react-use": "17.5.1",
+    "react-use-vue-reactive": "latest",
     "react-virtuoso": "4.10.1",
-    "@stylexjs/stylex": "0.7.5",
-    "@vscode/webview-ui-toolkit": "1.4.0"
+    "rimraf": "^6.0.1",
+    "tslib": "2.7.0",
+    "tsx": "4.19.0",
+    "typescript": "^5.6.2",
+    "unport": "0.6.0",
+    "vsce": "^2.15.0",
+    "vue": "^3.5.12"
   }
 }

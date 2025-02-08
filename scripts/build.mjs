@@ -6,6 +6,7 @@ const isWatch = process.argv.includes('--watch')
 const extension = {
   entryPoints: ['src/extension/index.ts'],
   bundle: true,
+  minify: false,
   sourcemap: true,
   external: ['vscode'],
   platform: 'node',
@@ -18,6 +19,7 @@ const extension = {
 const webview = {
   entryPoints: ['src/webview/index.tsx'],
   bundle: true,
+  minify: true,
   sourcemap: false,
   outfile: 'out/webview.js',
   plugins: [
