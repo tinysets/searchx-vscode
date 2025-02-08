@@ -6,13 +6,13 @@
   "publisher": "Leo76",
   "preview": false,
   "license": "SEE LICENSE IN LICENSE",
-  "homepage": "https://github.com/tinysets/search-pro-docs",
+  "homepage": "https://github.com/tinysets/searchx-vscode",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tinysets/search-pro-docs.git"
+    "url": "https://github.com/tinysets/searchx-vscode.git"
   },
   "bugs": {
-    "url": "https://github.com/tinysets/search-pro-docs/issues"
+    "url": "https://github.com/tinysets/searchx-vscode/issues"
   },
   "keywords": [
     "search",
