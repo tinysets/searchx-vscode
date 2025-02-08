@@ -20,7 +20,7 @@ extension fits your needs and enhances your development experience.
     the language server is running, and you are ready to go.
 
 <p align="center">
-<img src="docs/images/gettingstarted.gif" width=75%>
+<img src="docs/images/favicon.png" width=75%>
 <br/>
 <em>(Install Missing Tools)</em>
 </p>

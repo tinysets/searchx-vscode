@@ -39,9 +39,9 @@
     "build": "node ./scripts/build.mjs",
     "dev": "node ./scripts/build.mjs --watch",
     "typecheck": "tsc --noEmit",
-    "publish": "npm run b && npm run rmmap && vsce package --no-dependencies",
+    "publish": "npm run b && npm run rm-map && vsce package --no-dependencies",
     "p": "npm run publish",
-    "rmmap": "rimraf out/extension.js.map"
+    "rm-map": "rimraf out/extension.js.map"
   },
   "contributes": {
     "commands": [
