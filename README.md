@@ -4,28 +4,28 @@
 
 ### In-order Search:
 <p align="left">
-<img src="docs/images/0-order.png" width=70%>
+<img src="docs/images/0-order.png" width=70% style="padding-left: 20px;">
 <br/>
-<img src="docs/images/1-order.png" width=70%>
+<img src="docs/images/1-order.png" width=70% style="padding-left: 20px;">
 <br/>
-<img src="docs/images/2-order.png" width=70%>
+<img src="docs/images/2-order.png" width=70% style="padding-left: 20px;">
 </p>
 
 ### MultiLine In-order Search:
 <p align="left">
-<img src="docs/images/3-multiLine.png" width=70%>
+<img src="docs/images/3-multiLine.png" width=70% style="padding-left: 20px;">
 </p>
 
 ### Not-order Search:
 <p align="left">
-<img src="docs/images/4.png" width=70%>
+<img src="docs/images/4.png" width=70% style="padding-left: 20px;">
 <br/>
-<img src="docs/images/5.png" width=70%>
+<img src="docs/images/5.png" width=70% style="padding-left: 20px;">
 </p>
 
 ### Fuzzy Search: (end with ?)
 <p align="left">
-<img src="docs/images/6-fuzzy.png" width=70%>
+<img src="docs/images/6-fuzzy.png" width=70% style="padding-left: 20px;">
 </p>
 
 
